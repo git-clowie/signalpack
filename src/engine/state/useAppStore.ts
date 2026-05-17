@@ -19,6 +19,8 @@ interface AppStore {
   setShowTutorial: (show: boolean) => void;
   isMenuOpen: boolean;
   setIsMenuOpen: (isOpen: boolean) => void;
+  menuTab: 'nav' | 'settings' | 'about';
+  setMenuTab: (tab: 'nav' | 'settings' | 'about') => void;
 
   // Medical Profile
   medicalProfile: MedicalProfile;
@@ -53,6 +55,8 @@ export const useAppStore = create<AppStore>()(
       setShowTutorial: (showTutorial) => set({ showTutorial }),
       isMenuOpen: false,
       setIsMenuOpen: (isMenuOpen) => set({ isMenuOpen }),
+      menuTab: 'nav',
+      setMenuTab: (menuTab) => set({ menuTab }),
 
       // Medical Profile
       medicalProfile: initialMedicalProfile,

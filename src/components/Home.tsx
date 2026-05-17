@@ -5,6 +5,7 @@ import { useSettings } from '../SettingsContext';
 
 import { vibrate } from '../lib/utils';
 import { MapComponent } from './MapComponent';
+import { useAppStore } from '../engine/state/useAppStore';
 
 export function HomeScreen({ 
    onStartReport, 
@@ -20,6 +21,8 @@ export function HomeScreen({
    isLocalMode: boolean
 }) {
   const { openRouterApiKey, openRouterModel } = useSettings();
+  const setIsMenuOpen = useAppStore(state => state.setIsMenuOpen);
+  const setMenuTab = useAppStore(state => state.setMenuTab);
   const missingOpenRouterKey = !openRouterApiKey.trim();
   const openRouterOffline = isLocalMode;
   const statusLabel = missingOpenRouterKey
@@ -27,14 +30,28 @@ export function HomeScreen({
     : openRouterOffline
       ? 'Offline fallback'
       : 'Gemma 4 ready';
+  const openSettings = () => {
+    setMenuTab('settings');
+    setIsMenuOpen(true);
+  };
 
   return (
     <div className="flex min-h-[calc(100vh-4rem)] w-full max-w-2xl flex-col px-4 pb-6">
       <section className="pt-4 sm:pt-6">
         <div className="mb-3 flex items-center justify-between gap-3">
-          <Badge variant={missingOpenRouterKey || openRouterOffline ? 'warning' : 'blue'}>
-            {statusLabel}
-          </Badge>
+          {missingOpenRouterKey ? (
+            <button
+              onClick={openSettings}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-warning/25 bg-warning/5 px-2.5 py-1 text-[9px] font-bold uppercase tracking-widest text-warning transition-colors hover:bg-warning/10"
+            >
+              <KeyRound className="h-3 w-3" />
+              Setup Gemma Key
+            </button>
+          ) : (
+            <Badge variant={openRouterOffline ? 'warning' : 'blue'}>
+              {statusLabel}
+            </Badge>
+          )}
           <span className="hidden max-w-[15rem] truncate text-[10px] font-mono uppercase tracking-widest text-slate sm:block">
             {openRouterModel}
           </span>
@@ -67,13 +84,11 @@ export function HomeScreen({
           </div>
         </Card>
 
-        {(missingOpenRouterKey || openRouterOffline) && (
-          <div className="mt-3 flex items-start gap-2 rounded-xl border border-warning/30 bg-warning/10 px-3 py-2 text-left text-xs text-warning">
-            {missingOpenRouterKey ? <KeyRound className="mt-0.5 h-4 w-4 shrink-0" /> : <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />}
+        {openRouterOffline && (
+          <div className="mt-3 flex items-start gap-2 rounded-xl border border-warning/25 bg-warning/5 px-3 py-2 text-left text-xs text-warning">
+            <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
             <span className="leading-relaxed">
-              {missingOpenRouterKey
-                ? 'Add your OpenRouter key in Settings to use hosted Gemma 4. Until then, packets are clearly marked as fallback.'
-                : 'Network is offline. Hosted Gemma 4 calls will use marked fallback until the connection returns.'}
+              Network is offline. Hosted Gemma 4 calls will use marked fallback until the connection returns.
             </span>
           </div>
         )}

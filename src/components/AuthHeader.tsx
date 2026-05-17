@@ -2,10 +2,12 @@ import React from 'react';
 import { auth, signInWithGoogle } from '../firebase';
 import { LogIn, User as UserIcon, Menu } from 'lucide-react';
 import { useAppStore } from '../engine/state/useAppStore';
+import { Logo } from './Logo';
 
 export function AuthHeader() {
   const [user, setUser] = React.useState(auth.currentUser);
   const setIsMenuOpen = useAppStore(state => state.setIsMenuOpen);
+  const setMenuTab = useAppStore(state => state.setMenuTab);
 
   React.useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((u) => {
@@ -22,19 +24,25 @@ export function AuthHeader() {
     }
   };
 
+  const openMenu = () => {
+    setMenuTab('nav');
+    setIsMenuOpen(true);
+  };
+
   return (
     <div className="sticky top-0 z-[100] flex items-center justify-between border-b border-mist/20 bg-surface/45 px-4 pb-3 pt-9 backdrop-blur-md sm:pt-5">
       <div className="flex min-w-0 items-center gap-3">
         <button 
-          onClick={() => setIsMenuOpen(true)}
+          onClick={openMenu}
           className="-ml-2 rounded-lg p-2 text-slate transition-colors hover:bg-mist/20 hover:text-white md:hidden"
           title="Menu"
         >
           <Menu className="h-5 w-5" />
         </button>
+        <Logo size="sm" containerClassName="h-8 w-8 rounded-lg md:hidden" />
         <div className="min-w-0">
           <div className="flex items-center gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-cyan-brand shadow-[0_0_8px_var(--color-cyan-brand)]" />
+            <span className="hidden h-1.5 w-1.5 rounded-full bg-cyan-brand shadow-[0_0_8px_var(--color-cyan-brand)] md:block" />
             <span className="truncate text-sm font-bold tracking-tight text-white">SignalPack</span>
           </div>
           <p className="hidden text-[9px] font-mono uppercase tracking-widest text-slate sm:block">Gemma 4 crisis packets</p>
@@ -44,7 +52,7 @@ export function AuthHeader() {
       <div className="flex items-center gap-3">
         {user ? (
           <button 
-            onClick={() => setIsMenuOpen(true)}
+            onClick={openMenu}
             className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-lg border border-mist/50 bg-surface text-slate transition-colors hover:border-cyan-brand hover:text-cyan-brand"
             title="Menu"
           >

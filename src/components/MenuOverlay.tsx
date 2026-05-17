@@ -19,9 +19,8 @@ export function MenuOverlay({
   onShowTutorial: () => void;
 }) {
   const [user, setUser] = useState<FirebaseUser | null>(null);
-  const { setAppState, resetDraft, currentState } = useAppStore();
-  
-  const [activeTab, setActiveTab] = useState<'nav' | 'settings' | 'about'>('nav');
+  const { setAppState, resetDraft, currentState, menuTab, setMenuTab } = useAppStore();
+  const activeTab = menuTab;
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (u) => {
@@ -56,17 +55,14 @@ export function MenuOverlay({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[200] flex flex-col justify-end md:justify-center md:items-center p-0 md:p-6 bg-black/60 backdrop-blur-sm transition-opacity animate-in fade-in" onClick={onClose}>
+    <div className="fixed inset-0 z-[200] flex justify-end bg-black/60 backdrop-blur-sm transition-opacity animate-in fade-in" onClick={onClose}>
       <div 
         onClick={(e) => e.stopPropagation()}
-        className="w-full md:max-w-xl max-h-[90vh] md:max-h-[85vh] bg-surface md:border border-t border-mist md:rounded-2xl rounded-t-3xl flex flex-col overflow-hidden animate-in slide-in-from-bottom-full md:zoom-in-95 duration-300 shadow-2xl relative"
+        className="ml-auto flex h-full w-full max-w-[27rem] flex-col overflow-hidden border-l border-mist bg-surface shadow-2xl animate-in slide-in-from-right-full duration-300"
       >
-        {/* Mobile Drag Handle */}
-        <div className="w-12 h-1.5 bg-mist rounded-full absolute top-2 left-1/2 -translate-x-1/2 md:hidden" />
-
         {/* Header & Tabs */}
-        <div className="pt-6 md:pt-6 px-5 pb-0 border-b border-mist/50 bg-surface/50 backdrop-blur-md">
-           <div className="flex justify-between items-center mb-4 mt-2 md:mt-0">
+        <div className="border-b border-mist/50 bg-surface/70 px-5 pb-0 pt-[calc(env(safe-area-inset-top)+1rem)] backdrop-blur-md md:pt-5">
+           <div className="mb-4 flex items-center justify-between">
              <div className="flex items-center gap-3">
                {user ? (
                  user.photoURL ? (
@@ -102,26 +98,26 @@ export function MenuOverlay({
            </div>
 
            {/* Tabs */}
-           <div className="flex gap-4 border-b border-transparent">
+           <div className="grid grid-cols-3 gap-1 border-b border-transparent">
              <button
-               onClick={() => setActiveTab('nav')}
-               className={`pb-3 px-2 text-xs font-bold uppercase tracking-widest transition-colors relative ${activeTab === 'nav' ? 'text-white' : 'text-slate hover:text-white'}`}
+               onClick={() => setMenuTab('nav')}
+               className={`relative rounded-t-lg px-2 pb-3 pt-2 text-xs font-bold uppercase tracking-widest transition-colors ${activeTab === 'nav' ? 'text-white' : 'text-slate hover:text-white'}`}
              >
-               <span className="flex items-center gap-2"><Target className="w-4 h-4" /> Menu</span>
+               <span className="flex items-center justify-center gap-2"><Target className="w-4 h-4" /> Menu</span>
                {activeTab === 'nav' && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue rounded-t-full" />}
              </button>
              <button
-               onClick={() => setActiveTab('settings')}
-               className={`pb-3 px-2 text-xs font-bold uppercase tracking-widest transition-colors relative ${activeTab === 'settings' ? 'text-white' : 'text-slate hover:text-white'}`}
+               onClick={() => setMenuTab('settings')}
+               className={`relative rounded-t-lg px-2 pb-3 pt-2 text-xs font-bold uppercase tracking-widest transition-colors ${activeTab === 'settings' ? 'text-white' : 'text-slate hover:text-white'}`}
              >
-               <span className="flex items-center gap-2"><Sliders className="w-4 h-4" /> Settings</span>
+               <span className="flex items-center justify-center gap-2"><Sliders className="w-4 h-4" /> Settings</span>
                {activeTab === 'settings' && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue rounded-t-full" />}
              </button>
              <button
-               onClick={() => setActiveTab('about')}
-               className={`pb-3 px-2 text-xs font-bold uppercase tracking-widest transition-colors relative ${activeTab === 'about' ? 'text-white' : 'text-slate hover:text-white'}`}
+               onClick={() => setMenuTab('about')}
+               className={`relative rounded-t-lg px-2 pb-3 pt-2 text-xs font-bold uppercase tracking-widest transition-colors ${activeTab === 'about' ? 'text-white' : 'text-slate hover:text-white'}`}
              >
-               <span className="flex items-center gap-2"><HelpCircle className="w-4 h-4" /> About</span>
+               <span className="flex items-center justify-center gap-2"><HelpCircle className="w-4 h-4" /> About</span>
                {activeTab === 'about' && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-cyan-brand rounded-t-full" />}
              </button>
            </div>
@@ -131,7 +127,7 @@ export function MenuOverlay({
           
           {/* TAB: NAV */}
           {activeTab === 'nav' && (
-            <div className="space-y-6 animate-in fade-in slide-in-from-left-4 duration-300">
+            <div className="space-y-6 animate-in fade-in duration-200">
               <section className="space-y-2">
                 <button onClick={() => handleNav(resetDraft)} className={`w-full text-left px-4 py-3.5 rounded-xl transition-colors text-sm font-bold uppercase tracking-widest flex items-center gap-3 ${currentState === 'home' || currentState === 'new_report' || currentState === 'ai_review' || currentState === 'clarification' ? 'bg-mist text-white' : 'text-slate hover:text-white hover:bg-mist/30'}`}>
                    <LayoutDashboard className="w-5 h-5 flex-shrink-0" />

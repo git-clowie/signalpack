@@ -28,7 +28,7 @@ export function MenuSettings({
   const { logoShape, setLogoShape, mapStyle, setMapStyle, fastSendMode, setFastSendMode } = useSettings();
 
   return (
-    <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
+    <div className="space-y-6 animate-in fade-in duration-200">
       <AIProviderSettings setIsLocalMode={setIsLocalMode} />
 
       {userEmail === 'pixekxyz@gmail.com' && (
