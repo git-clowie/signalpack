@@ -1,12 +1,20 @@
 import React, { useState } from 'react';
 import { Card, Button, Badge } from '@/src/components/ui';
 import { CrisisPacket } from '@/src/types';
-import { ShieldAlert, Copy, Check, Globe, MessageSquare, Smartphone, Download, Mail, Printer, MapPin, RadioTower } from 'lucide-react';
+import { ShieldAlert, Copy, Check, Globe, MessageSquare, Smartphone, Download, Mail, Printer, MapPin, RadioTower, ArrowLeft, Maximize2, PlusCircle } from 'lucide-react';
 import Markdown from 'react-markdown';
 import { copyText, downloadAsFile, nativeShare, sendEmail, shareToWhatsApp } from '@/src/utils/export';
 import { PacketAITrace } from './PacketAITrace';
 
-export function PacketOutputScreen({ packet, onDone }: { packet?: CrisisPacket; onDone: () => void }) {
+export function PacketOutputScreen({
+  packet,
+  onDone,
+  onNewReport,
+}: {
+  packet?: CrisisPacket;
+  onDone: () => void;
+  onNewReport?: () => void;
+}) {
   const [copiedMsg, setCopiedMsg] = useState(false);
   const [language, setLanguage] = useState<'en' | 'ro'>('en');
 
@@ -20,8 +28,9 @@ export function PacketOutputScreen({ packet, onDone }: { packet?: CrisisPacket; 
 
   const isCritical = packet.severity === 'critical';
   const actions = language === 'en' ? packet.immediate_actions : (packet.immediate_actions_local || packet.immediate_actions);
-  const shareMsg = language === 'en' ? packet.share_message_short : (packet.share_message_short_local || packet.share_message_short);
-  const markdownReport = language === 'en' ? packet.structured_report_markdown : (packet.structured_report_markdown_local || packet.structured_report_markdown);
+  const safeActions = Array.isArray(actions) && actions.length > 0 ? actions : ['Review the incident details and call emergency services if anyone is in immediate danger.'];
+  const shareMsg = (language === 'en' ? packet.share_message_short : (packet.share_message_short_local || packet.share_message_short)) || 'SignalPack Crisis Packet generated. Review before sharing.';
+  const markdownReport = (language === 'en' ? packet.structured_report_markdown : (packet.structured_report_markdown_local || packet.structured_report_markdown)) || '# SignalPack Crisis Packet\n\nReview packet details before sharing.';
   const displayPacketId = packet.packet_id || packet.id || 'local-pending';
 
   const googleMapsLink = (packet.lat && packet.lng) ? `https://www.google.com/maps/search/?api=1&query=${packet.lat},${packet.lng}` : null;
@@ -43,11 +52,54 @@ export function PacketOutputScreen({ packet, onDone }: { packet?: CrisisPacket; 
      downloadAsFile(`SignalPack_Report_${Date.now()}.json`, JSON.stringify(packet, null, 2), 'application/json');
   };
 
+  const handleFullscreen = async () => {
+    const target = document.getElementById('signalpack-packet-report') || document.documentElement;
+    if (!document.fullscreenElement && target.requestFullscreen) {
+      await target.requestFullscreen().catch(() => {});
+      return;
+    }
+    if (document.fullscreenElement && document.exitFullscreen) {
+      await document.exitFullscreen().catch(() => {});
+    }
+  };
+
   return (
-    <div className="mx-auto flex min-h-screen w-full max-w-6xl flex-col bg-cloud px-4 pb-10 md:px-6 md:pt-6 lg:px-8">
+    <div className="mx-auto flex min-h-[calc(100vh-4rem)] w-full max-w-6xl flex-col bg-cloud px-4 pb-8 pt-4 md:px-6 md:pt-6 lg:px-8">
+      <div className="mb-4 flex flex-col gap-3 rounded-2xl border border-mist/40 bg-surface/65 p-3 print:hidden sm:flex-row sm:items-center sm:justify-between">
+        <div className="min-w-0">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-cyan-brand">Crisis Packet</p>
+          <h1 className="mt-1 truncate text-lg font-bold text-white sm:text-xl">Review before sharing</h1>
+        </div>
+        <div className="grid grid-cols-3 gap-2 sm:flex sm:shrink-0">
+          <button
+            type="button"
+            onClick={onDone}
+            className="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-mist/50 bg-cloud/70 px-3 text-[10px] font-bold uppercase tracking-widest text-slate transition-colors hover:border-cyan-brand/40 hover:text-white"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            <span className="hidden sm:inline">Dashboard</span>
+          </button>
+          <button
+            type="button"
+            onClick={onNewReport || onDone}
+            className="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-blue/30 bg-blue/10 px-3 text-[10px] font-bold uppercase tracking-widest text-blue transition-colors hover:bg-blue/15"
+          >
+            <PlusCircle className="h-4 w-4" />
+            <span className="hidden sm:inline">New</span>
+          </button>
+          <button
+            type="button"
+            onClick={handleFullscreen}
+            className="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-mist/50 bg-cloud/70 px-3 text-[10px] font-bold uppercase tracking-widest text-slate transition-colors hover:border-cyan-brand/40 hover:text-white"
+          >
+            <Maximize2 className="h-4 w-4" />
+            <span className="hidden sm:inline">Full</span>
+          </button>
+        </div>
+      </div>
       
       {/* Report Container */}
-      <div className="mx-auto w-full max-w-4xl flex-1 overflow-hidden bg-surface print:bg-white print:text-black md:rounded-b-3xl md:border md:border-mist/50 md:shadow-2xl">
+      <div id="signalpack-packet-report" className="mx-auto w-full max-w-4xl flex-1 overflow-hidden bg-surface print:bg-white print:text-black md:rounded-3xl md:border md:border-mist/50 md:shadow-2xl">
       
         {/* Header / Severity (Print friendly) */}
         <div className={`sticky top-0 z-10 border-b px-4 py-4 print:border-b-2 print:border-black sm:px-5 sm:py-5 ${isCritical ? 'bg-critical text-white border-critical' : packet.severity === 'high' ? 'bg-warning text-white border-warning' : 'bg-surface text-white border-mist'}`}>
@@ -135,7 +187,7 @@ export function PacketOutputScreen({ packet, onDone }: { packet?: CrisisPacket; 
            <section>
               <h2 className="text-[10px] text-slate uppercase font-bold tracking-widest mb-3 print:text-black">{language === 'en' ? 'Immediate Actions' : 'Acțiuni Imediate'}</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 print:grid-cols-1">
-                 {actions.map((action, idx) => (
+                 {safeActions.map((action, idx) => (
                     <Card key={idx} className={`flex items-start gap-3 p-4 bg-cloud rounded-2xl border ${isCritical ? 'border-critical/30 sm:border-l-critical' : 'border-blue/30 sm:border-l-blue'} print:border-black print:rounded-none`}>
                        <span className={`${isCritical ? 'text-critical' : 'text-blue'} font-mono text-lg leading-none print:text-black`}>0{idx + 1}</span>
                        <p className="text-sm font-medium text-white print:text-black">{action}</p>
@@ -226,9 +278,9 @@ export function PacketOutputScreen({ packet, onDone }: { packet?: CrisisPacket; 
         </div>
       </div>
 
-      <div className="mx-auto mt-auto w-full max-w-4xl px-5 pt-6 print:hidden">
+      <div className="mx-auto w-full max-w-4xl px-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-6 print:hidden">
          <Button fullWidth onClick={onDone} variant="outline" className="h-12 border-mist/60 text-slate hover:text-white uppercase tracking-widest font-bold text-xs bg-surface/50">
-            Create Another Report
+            Back to Dashboard
          </Button>
       </div>
 

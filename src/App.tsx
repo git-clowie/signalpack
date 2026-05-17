@@ -37,12 +37,14 @@ const ROUTE_TO_STATE: Record<string, AppState> = {
   toolkit: 'emergency_toolkit',
   'emergency-toolkit': 'emergency_toolkit',
   settings: 'settings',
+  packet: 'packet_output',
   demo: 'packet_output',
 };
 
 const STATE_TO_ROUTE: Partial<Record<AppState, string>> = {
   home: 'dashboard',
   new_report: 'capture',
+  packet_output: 'packet',
   history: 'history',
   safety_guide: 'safety',
   ask_gemma: 'ask-gemma',
@@ -110,6 +112,8 @@ export default function App() {
       if (!nextState) return;
 
       if (route === 'demo') {
+        updateDraft({ packet: demoPackets[0], stage: 'packet_output' });
+      } else if (nextState === 'packet_output' && !useAppStore.getState().draft.packet) {
         updateDraft({ packet: demoPackets[0], stage: 'packet_output' });
       } else if (nextState === 'new_report') {
         updateDraft({ stage: 'new_report' });
@@ -215,9 +219,9 @@ export default function App() {
     <div className="min-h-screen w-full bg-cloud font-sans antialiased selection:bg-blue/20">
       <div className="flex min-h-screen w-full flex-col">
         {/* Global Auth Header */}
-        {state !== 'packet_output' && <AuthHeader />}
+        <AuthHeader />
 
-        {appNotice && state !== 'packet_output' && (
+        {appNotice && (
           <div className="mx-auto mt-3 w-full max-w-6xl rounded-xl border border-warning/30 bg-warning/5 px-3 py-2 text-xs leading-relaxed text-warning md:px-4">
             <div className="flex items-start justify-between gap-3">
               <span>{appNotice}</span>
@@ -328,6 +332,11 @@ export default function App() {
                 <PacketOutputScreen 
                   packet={draft.packet as any}
                   onDone={resetDraft}
+                  onNewReport={() => {
+                    resetDraft();
+                    updateDraft({ stage: 'new_report' });
+                    setState('new_report');
+                  }}
                 />
               </motion.div>
             )}
@@ -344,7 +353,7 @@ export default function App() {
       {showTutorial && (
         <TutorialOverlay onClose={() => setShowTutorial(false)} />
       )}
-      {state !== 'packet_output' && <AppFooter />}
+      {state === 'home' && <AppFooter />}
     </div>
   );
 }

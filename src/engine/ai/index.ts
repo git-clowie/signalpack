@@ -37,6 +37,25 @@ interface PacketJson {
   lng?: number;
 }
 
+function asStringArray(value: unknown, fallback: string[] = []) {
+  if (Array.isArray(value)) {
+    return value.map((item) => String(item || '').trim()).filter(Boolean);
+  }
+  if (typeof value === 'string' && value.trim()) {
+    return [value.trim()];
+  }
+  return fallback;
+}
+
+function asString(value: unknown, fallback = '') {
+  return typeof value === 'string' ? value : fallback;
+}
+
+function asNumber(value: unknown, fallback = 0) {
+  const next = Number(value);
+  return Number.isFinite(next) ? next : fallback;
+}
+
 function buildUserContent(text: string, imageBase64?: string, audioBase64?: string) {
   const parts: any[] = [];
   if (imageBase64) {
@@ -86,14 +105,14 @@ Ask at most 3 short clarification questions.${profileContext}`;
     return {
       packet: {
         incident_type: data.incident_type || 'other',
-        hazards: data.hazards || [],
-        uncertainties: data.uncertainties || [],
+        hazards: asStringArray(data.hazards),
+        uncertainties: asStringArray(data.uncertainties),
         model_provider: result.trace.provider,
         model_name: result.trace.model,
         fallback_used: false,
         ai_trace: result.trace,
       },
-      questions: data.clarification_questions || [],
+      questions: asStringArray(data.clarification_questions).slice(0, 3),
     };
   } catch (error) {
     console.error('SignalPack analysis fallback:', error);
@@ -182,20 +201,20 @@ Context:
         injury_reported: false,
         trapped_reported: false,
       },
-      people_at_risk_count: data.people_at_risk_count || 0,
-      hazards: data.hazards || draft.packet?.hazards || [],
+      people_at_risk_count: asNumber(data.people_at_risk_count),
+      hazards: asStringArray(data.hazards, draft.packet?.hazards || []),
       evidence: buildEvidenceSummary(draft),
-      uncertainties: data.uncertainties || draft.packet?.uncertainties || [],
-      immediate_actions: data.immediate_actions || [],
-      immediate_actions_local: data.immediate_actions_local || [],
-      help_needed: data.help_needed || [],
-      share_message_short: data.share_message_short || '',
-      share_message_short_local: data.share_message_short_local || '',
-      share_message_detailed: data.share_message_detailed || '',
-      structured_report_markdown: data.structured_report_markdown || '',
-      structured_report_markdown_local: data.structured_report_markdown_local || '',
-      lat: data.lat || draft.location?.lat,
-      lng: data.lng || draft.location?.lng,
+      uncertainties: asStringArray(data.uncertainties, draft.packet?.uncertainties || []),
+      immediate_actions: asStringArray(data.immediate_actions),
+      immediate_actions_local: asStringArray(data.immediate_actions_local),
+      help_needed: asStringArray(data.help_needed),
+      share_message_short: asString(data.share_message_short),
+      share_message_short_local: asString(data.share_message_short_local),
+      share_message_detailed: asString(data.share_message_detailed),
+      structured_report_markdown: asString(data.structured_report_markdown),
+      structured_report_markdown_local: asString(data.structured_report_markdown_local),
+      lat: asNumber(data.lat, draft.location?.lat),
+      lng: asNumber(data.lng, draft.location?.lng),
       sources_used: ['User input', result.trace.provider === 'ollama' ? 'Local Ollama Gemma' : 'OpenRouter Gemma 4'],
       safety_sources: SAFETY_SOURCES,
       model_provider: result.trace.provider,
