@@ -38,23 +38,24 @@ export function HomeScreen({
   return (
     <div className="mx-auto flex min-h-[calc(100vh-4rem)] w-full max-w-6xl flex-col px-4 pb-6 md:px-6 lg:px-8">
       <section className="pt-4 sm:pt-6">
-        <Card className="glass-panel-strong relative overflow-hidden rounded-2xl p-5 sm:p-6 lg:p-7">
+        <Card className="glass-panel-strong hero-signal-panel relative overflow-hidden rounded-2xl p-5 pt-48 sm:p-6 sm:pt-56 md:min-h-[25rem] md:p-7 lg:p-8">
           <div className="absolute inset-x-4 top-0 h-px signal-sweep opacity-70" />
-          <div className="pointer-events-none absolute right-0 top-0 hidden h-full w-[38%] min-w-56 opacity-70 sm:block">
-            <div className="radar-grid absolute right-4 top-1/2 h-56 w-56 -translate-y-1/2 rounded-full" />
-            <img src="/brand/signalpack-flare.png" alt="" className="absolute right-8 top-1/2 h-44 w-44 -translate-y-1/2 rounded-full object-cover opacity-90 mix-blend-screen" />
+          <div className="pointer-events-none absolute right-0 top-0 h-56 w-full overflow-hidden opacity-95 sm:h-64 md:h-full md:w-[42%] lg:w-[44%]">
+            <div className="radar-grid absolute right-1/2 top-2 h-52 w-52 translate-x-1/2 rounded-full opacity-70 sm:h-60 sm:w-60 md:right-10 md:top-1/2 md:h-72 md:w-72 md:-translate-y-1/2 md:translate-x-0 lg:right-14 lg:h-80 lg:w-80" />
+            <div className="hero-logo-halo absolute right-1/2 top-4 h-48 w-48 translate-x-1/2 rounded-full sm:h-56 sm:w-56 md:right-12 md:top-1/2 md:h-64 md:w-64 md:-translate-y-1/2 md:translate-x-0 lg:right-16 lg:h-72 lg:w-72" />
+            <picture className="absolute right-1/2 top-8 block h-36 w-36 translate-x-1/2 sm:h-44 sm:w-44 md:right-20 md:top-1/2 md:h-48 md:w-48 md:-translate-y-1/2 md:translate-x-0 lg:right-28 lg:h-52 lg:w-52">
+              <source srcSet="/brand/signalpack-logo-loop.webp" type="image/webp" />
+              <img src="/brand/signalpack-flare.png" alt="" className="h-full w-full rounded-full object-cover object-center opacity-95 mix-blend-screen" />
+            </picture>
           </div>
-          <div className="relative z-10 max-w-2xl">
+          <div className="relative z-10 max-w-2xl md:max-w-[58%] lg:max-w-[62%]">
             <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-cyan-brand">Crisis Packet</p>
             <h1 className="font-display text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl">
               Turn chaos into a Crisis Packet.
             </h1>
-            <p className="mt-3 max-w-xl text-sm leading-relaxed text-slate sm:text-base">
-              Capture the signal. Gemma 4 structures the critical details. Review before sharing.
-            </p>
           </div>
 
-          <div className="relative z-10 mt-6 grid gap-3 sm:grid-cols-[1fr_0.72fr] lg:max-w-2xl">
+          <div className="relative z-10 mt-6 grid gap-3 sm:grid-cols-[1fr_0.72fr] md:max-w-[58%] lg:max-w-[62%]">
             <Button size="lg" fullWidth onClick={() => { vibrate([50]); onStartReport(); }} className="primary-button h-14 rounded-xl text-sm">
               <RadioTower className="mr-2 h-5 w-5" /> Start Alert
             </Button>
@@ -63,7 +64,7 @@ export function HomeScreen({
             </Button>
           </div>
 
-          <div className="relative z-10 mt-5 flex flex-wrap items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-slate">
+          <div className="relative z-10 mt-5 flex flex-wrap items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-slate md:max-w-[58%] lg:max-w-[62%]">
             {missingOpenRouterKey ? (
               <button onClick={openSettings} className="inline-flex items-center gap-1.5 rounded-lg border border-flare-orange/25 bg-flare-orange/5 px-2.5 py-1 text-flare-orange transition-colors hover:bg-flare-orange/10">
                 <KeyRound className="h-3 w-3" />
@@ -75,6 +76,9 @@ export function HomeScreen({
             <span className="rounded-lg border border-mist/40 bg-cloud/40 px-2.5 py-1">Review required</span>
             <span className="rounded-lg border border-mist/40 bg-cloud/40 px-2.5 py-1">Local-first history</span>
           </div>
+          <p className="relative z-10 mt-5 max-w-xl text-sm leading-relaxed text-slate sm:text-base md:max-w-[58%] lg:max-w-[62%]">
+            Capture the signal. Gemma 4 structures the critical details. Review before sharing.
+          </p>
         </Card>
 
         {openRouterOffline && (
