@@ -1,10 +1,38 @@
 # SignalPack
 
-![SignalPack Logo](public/brand/signalpack-flare.svg)
+<p align="center">
+  <img src="public/brand/signalpack-logo.png" alt="SignalPack" width="420" />
+</p>
 
-**AI emergency alerts and Crisis Packets powered by Gemma 4.**
+<p align="center">
+  <strong>Turn chaos into a Crisis Packet.</strong><br />
+  Gemma 4-powered emergency capture, structure, review, and sharing.
+</p>
 
-SignalPack turns emergency chaos into trusted alerts and structured action. It is a local-first PWA that helps users capture messy signals, ask only the critical follow-up questions, and generate a reviewable Crisis Packet they can copy, export, save, or share.
+<p align="center">
+  <a href="#demo-flow">Demo Flow</a> ·
+  <a href="#architecture">Architecture</a> ·
+  <a href="#gemma-4-ai-layer">Gemma 4 AI Layer</a> ·
+  <a href="#running-locally">Run Locally</a> ·
+  <a href="#competition-positioning">Competition</a>
+</p>
+
+---
+
+## What Is SignalPack?
+
+SignalPack is a local-first PWA for moments when people need to turn messy emergency information into a clear, reviewable packet.
+
+The app captures text, photo, voice notes, and GPS context, then uses **Gemma 4 through OpenRouter** to structure the critical details into a **Crisis Packet**:
+
+- what happened
+- who may be at risk
+- what hazards are visible
+- what is uncertain
+- what immediate actions are reasonable
+- what message can be shared safely
+
+SignalPack is not a dispatch system and does not replace emergency services. It is a human-controlled reporting layer: users review before sharing, and fallback mode is clearly marked when AI is unavailable.
 
 ## Product Frame
 
@@ -12,31 +40,157 @@ SignalPack turns emergency chaos into trusted alerts and structured action. It i
 Prepare -> Alert -> Understand -> Act
 ```
 
-- **Prepare:** Emergency Profile, Safety Guide, local-first history, PWA readiness.
-- **Alert:** quick text, photo, voice, GPS, and Rapid Packet Mode.
-- **Understand:** Gemma 4 structures messy input and detects missing critical details.
-- **Act:** Crisis Packet, share message, packet history, incident map, readiness toolkit.
+| Stage | SignalPack Surface | Purpose |
+| --- | --- | --- |
+| Prepare | Emergency Profile, Safety Guide, Settings, PWA install | Keep useful context ready before stress hits. |
+| Alert | Start Alert, Rapid Packet, Quick Capture | Capture the signal quickly by text, photo, audio, and GPS. |
+| Understand | Gemma 4 Analysis, clarification questions, AI trace | Structure risk, missing details, and uncertainty. |
+| Act | Crisis Packet, share text, export, map, history | Review, copy, export, or share a concise packet. |
 
-## AI Providers
+## Demo Flow
 
-SignalPack is API-first for the live PWA, focused on Gemma 4 through OpenRouter.
+Use this scenario for the competition demo:
 
-- **Hosted:** OpenRouter Chat Completions API
-- **Hosted default model:** `google/gemma-4-26b-a4b-it`
-- **Fallback:** deterministic safety fallback when the selected provider is unavailable
+```txt
+Water entered the ground floor. Two elderly people are inside. Exit may be blocked.
+```
 
-API keys are entered in **Settings -> AI Engine Routing** and stored only in browser `localStorage`. No demo key is committed to the repo.
+Recommended demo path:
 
-Advanced users can adapt the provider layer for their own on-device Gemma runtime, but the public PWA ships with OpenRouter as the functional path.
+1. Open SignalPack.
+2. Press **Start Alert**.
+3. Add the scenario text, optionally attach a photo or voice note.
+4. Send to **Gemma 4**.
+5. Review detected hazards and missing critical details.
+6. Answer clarification questions if shown.
+7. Generate the **Crisis Packet**.
+8. Show `model_provider`, `model_name`, `ai_trace`, `fallback_used`, and `safety_sources`.
+9. Export or share the packet.
 
-## Running The App
+## Architecture
+
+```mermaid
+flowchart TD
+  User["User in crisis context"] --> Capture["Capture Layer<br/>text · photo · audio · GPS"]
+  Capture --> Draft["DraftReport<br/>local app state"]
+  Draft --> Analysis["Gemma 4 Analysis<br/>incident type · hazards · uncertainties"]
+  Analysis --> Clarify{"Need critical details?"}
+  Clarify -- yes --> Questions["Clarification Chat<br/>at most 3 questions"]
+  Clarify -- no --> Packet
+  Questions --> Packet["Crisis Packet Generator"]
+  Packet --> Review["Human Review"]
+  Review --> Share["Share / Export<br/>WhatsApp · Email · native share · MD · JSON · PDF"]
+  Review --> History["Local History"]
+  History --> Sync["Optional Firebase Sync"]
+  Analysis -. unavailable .-> Fallback["Marked Safety Fallback"]
+  Fallback --> Review
+```
+
+## System Layers
+
+```txt
+src/
+  App.tsx                    # App state router and screen orchestration
+  SettingsContext.tsx         # Runtime settings stored in localStorage
+  components/
+    Home.tsx                  # Main Crisis Packet dashboard
+    NewReport.tsx             # Text/photo/audio/GPS capture
+    AIReview.tsx              # Gemma 4 analysis review
+    Clarification.tsx         # Follow-up question flow
+    PacketOutput.tsx          # Final Crisis Packet, export, share
+    SettingsScreen.tsx        # OpenRouter, workflow, map, local data
+    MenuOverlay.tsx           # Mobile navigation only
+  engine/
+    ai/
+      providers.ts            # OpenRouter Chat Completions provider
+      prompts.ts              # Safety and packet-generation prompts
+      fallback.ts             # Deterministic marked fallback
+      index.ts                # analyzeIncident, askGemma, generatePacket
+    location/                 # GPS helper
+    media/                    # Local image compression
+    state/                    # Zustand app state
+    sync/                     # Offline queue for optional cloud sync
+```
+
+## Gemma 4 AI Layer
+
+SignalPack is API-first for the live PWA and focused on Gemma 4.
+
+| Area | Current Implementation |
+| --- | --- |
+| Hosted provider | OpenRouter Chat Completions API |
+| Default model | `google/gemma-4-26b-a4b-it` |
+| API key storage | Browser `localStorage`, entered in Settings |
+| Public repo key | None. Users bring their own OpenRouter key. |
+| Fallback | Deterministic safety fallback, explicitly marked |
+| Traceability | Crisis Packet stores provider, model, AI trace, fallback flag, safety sources |
+
+The provider layer is intentionally narrow and swappable. Advanced users can adapt it for a user-owned local Gemma runtime, but the public app ships with the functional OpenRouter path.
+
+## Crisis Packet Schema
+
+The generated packet includes:
+
+- `packet_id`
+- `incident_type`
+- `severity`
+- `location_text`, `lat`, `lng`
+- `people_at_risk`
+- `hazards`
+- `uncertainties`
+- `immediate_actions`
+- `share_message_short`
+- `structured_report_markdown`
+- `model_provider`
+- `model_name`
+- `ai_trace`
+- `fallback_used`
+- `safety_sources`
+- `review_required`
+
+## UX Principles
+
+- **Action first:** the first screen is the working dashboard, not a landing page.
+- **Human-controlled:** Gemma 4 structures; the user reviews.
+- **Local-first:** useful without login, with local history and PWA install.
+- **Transparent failure:** fallback is visible and never presented as model output.
+- **Mobile-ready:** the capture flow is designed for stressful, one-handed use.
+- **Premium tactical clarity:** dark radar-inspired interface, restrained glow, strong hierarchy.
+
+## Technology Stack
+
+| Layer | Technology |
+| --- | --- |
+| App | React 19, TypeScript, Vite |
+| Styling | Tailwind CSS v4, General Sans, JetBrains Mono |
+| State | Zustand with persisted local app state |
+| AI | OpenRouter Chat Completions, Gemma 4 default model |
+| Maps | Leaflet, React Leaflet |
+| Auth / sync | Firebase optional auth and Firestore sync |
+| Offline | Vite PWA, localStorage history, offline queue |
+| Motion | Motion for React |
+| Icons | Lucide React |
+
+## Running Locally
 
 ```bash
 npm ci
 npm run dev
 ```
 
-Build for production/PWA:
+Open:
+
+```txt
+http://localhost:3000
+```
+
+If another dev server is already using 3000:
+
+```bash
+npm run dev -- --port 3007
+```
+
+Build:
 
 ```bash
 npm run build
@@ -48,33 +202,85 @@ Type-check:
 npm run lint
 ```
 
-## Repository Layout
+## OpenRouter Setup
+
+1. Create an OpenRouter API key.
+2. Run the app.
+3. Open **Settings**.
+4. Paste the key into **OpenRouter API Key**.
+5. Keep the default model or change it:
 
 ```txt
-/src
-  /components        # UI screens, Signal Flare logo, report output, provider settings
-  /engine/ai         # OpenRouter provider, prompts, fallback, packet generation
-  /engine/state      # App state and local workflow coordination
-  /engine/sync       # Offline packet queue for authenticated sync
-  /types.ts          # Crisis Packet and app types
-/docs
-  SignalPack_Competition_Presentation_Pack.md
-/public/brand
-  signalpack-flare.svg
+google/gemma-4-26b-a4b-it
 ```
 
-## Competition Materials
+The key is stored only in the current browser. It is not committed, bundled, or sent anywhere except OpenRouter API calls.
 
-The working presentation, Kaggle write-up draft, demo script, and checklist live in:
+## Optional Firebase Sync
 
-[docs/SignalPack_Competition_Presentation_Pack.md](docs/SignalPack_Competition_Presentation_Pack.md)
+SignalPack works without Firebase. When Firebase env vars are absent, the app remains local-first.
 
-Core demo scenario:
+To enable optional cloud sync/auth, copy `.env.example` and provide:
 
-```txt
-Water entered the ground floor. Two elderly people are inside. Exit may be blocked.
+```bash
+VITE_FIREBASE_API_KEY=
+VITE_FIREBASE_AUTH_DOMAIN=
+VITE_FIREBASE_PROJECT_ID=
+VITE_FIREBASE_STORAGE_BUCKET=
+VITE_FIREBASE_MESSAGING_SENDER_ID=
+VITE_FIREBASE_APP_ID=
+VITE_FIREBASE_MEASUREMENT_ID=
+VITE_FIREBASE_FIRESTORE_DATABASE_ID=
 ```
+
+## Competition Positioning
+
+SignalPack is built for the Gemma 4 Good Hackathon as a practical crisis-intelligence layer:
+
+- uses Gemma 4 to structure messy emergency signals
+- keeps humans in the review loop
+- marks uncertainty and fallback behavior
+- supports low-friction mobile capture
+- produces shareable, exportable, auditable Crisis Packets
+- avoids committing demo secrets or pretending fallback is AI output
 
 ## Safety Position
 
-SignalPack is not a replacement for emergency services, a dispatch system, or a medical diagnosis tool. It marks uncertainty, keeps outputs reviewable, and prepares messages that users can share with trusted contacts, volunteers, or emergency services.
+SignalPack does not diagnose, dispatch, or replace emergency services.
+
+If someone is in immediate danger, call local emergency services first. SignalPack is a tool for organizing and sharing information after or alongside that decision.
+
+## Brand Assets
+
+Current visual direction and assets live in:
+
+```txt
+public/brand/
+  signalpack-flare.png
+  signalpack-logo.png
+  signalpack-brand.png
+  SignalPack_Final_UIUX_Direction.md
+```
+
+When an animated logo is available, add it here:
+
+```txt
+public/brand/signalpack-logo-loop.mp4
+public/brand/signalpack-logo-loop.webm
+public/brand/signalpack-logo-loop.webp
+```
+
+Use MP4/WebM for the app header and WebP/GIF for GitHub README previews.
+
+## Roadmap
+
+- Hosted demo deployment
+- Final Kaggle write-up and demo video
+- Optional local Gemma runtime adapter
+- Richer demo packets with mapped incident examples
+- Code-splitting for smaller production chunks
+- More polished packet timeline and responder handoff view
+
+---
+
+Built by **pixek.xyz**.
