@@ -21,6 +21,7 @@ import { BrandWordmark } from './components/BrandWordmark';
 import { useAppStore } from './engine/state/useAppStore';
 import { SyncEngine } from './engine/sync';
 import { DraftReport } from './types';
+import { demoPackets } from './demoData';
 
 export default function App() {
   const { 
@@ -215,6 +216,10 @@ export default function App() {
                   onViewHistory={() => setState('history')} 
                   onViewSafety={() => setState('safety_guide')}
                   onAskGemma={() => setState('ask_gemma')}
+                  onOpenDemo={() => {
+                    updateDraft({ packet: demoPackets[0], stage: 'packet_output' });
+                    setState('packet_output');
+                  }}
                   isLocalMode={effectiveLocalMode}
                 />
               </motion.div>

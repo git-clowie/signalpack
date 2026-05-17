@@ -1,10 +1,12 @@
 import React from 'react';
-import { Card } from '@/src/components/ui';
-import { Cloud, KeyRound, ShieldCheck } from 'lucide-react';
+import { Button, Card } from '@/src/components/ui';
+import { AlertTriangle, CheckCircle2, Cloud, KeyRound, Loader2, ShieldCheck } from 'lucide-react';
 import { DEFAULT_OPENROUTER_MODEL } from '../engine/ai/settings';
 import { useSettings } from '../SettingsContext';
 
 export function AIProviderSettings({ setIsLocalMode }: { setIsLocalMode: (value: boolean) => void }) {
+  const [testState, setTestState] = React.useState<'idle' | 'testing' | 'ok' | 'error'>('idle');
+  const [testMessage, setTestMessage] = React.useState('');
   const {
     openRouterApiKey,
     setOpenRouterApiKey,
@@ -21,6 +23,51 @@ export function AIProviderSettings({ setIsLocalMode }: { setIsLocalMode: (value:
   const maskedKey = openRouterApiKey
     ? `${openRouterApiKey.slice(0, 8)}...${openRouterApiKey.slice(-4)}`
     : 'No key saved';
+
+  const handleTestConnection = async () => {
+    if (!openRouterApiKey.trim()) {
+      setTestState('error');
+      setTestMessage('Add an OpenRouter key first.');
+      return;
+    }
+
+    setTestState('testing');
+    setTestMessage('');
+
+    try {
+      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${openRouterApiKey.trim()}`,
+          'Content-Type': 'application/json',
+          'HTTP-Referer': window.location.origin,
+          'X-Title': 'SignalPack',
+        },
+        body: JSON.stringify({
+          model: openRouterModel,
+          messages: [
+            { role: 'system', content: 'Reply with exactly: SignalPack Gemma ready' },
+            { role: 'user', content: 'Connection test' },
+          ],
+          temperature: 0,
+          max_tokens: 12,
+        }),
+      });
+
+      if (!response.ok) {
+        const detail = await response.text().catch(() => '');
+        throw new Error(detail || `OpenRouter returned ${response.status}`);
+      }
+
+      const data = await response.json();
+      const reply = data?.choices?.[0]?.message?.content || 'Connected.';
+      setTestState('ok');
+      setTestMessage(reply.slice(0, 80));
+    } catch (error: any) {
+      setTestState('error');
+      setTestMessage((error?.message || 'Connection failed.').slice(0, 140));
+    }
+  };
 
   return (
     <section>
@@ -64,6 +111,25 @@ export function AIProviderSettings({ setIsLocalMode }: { setIsLocalMode: (value:
           <p className="text-[11px] leading-relaxed text-slate">
             Key is saved only in this browser. The public repo ships without demo secrets.
           </p>
+          <div className="flex flex-col gap-2 border-t border-mist/30 pt-3">
+            <Button
+              type="button"
+              size="sm"
+              variant={testState === 'ok' ? 'secondary' : 'outline'}
+              onClick={handleTestConnection}
+              disabled={testState === 'testing'}
+              className="h-9 justify-center rounded-lg"
+            >
+              {testState === 'testing' ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Cloud className="mr-2 h-4 w-4" />}
+              Test Gemma Connection
+            </Button>
+            {testState !== 'idle' && (
+              <div className={`flex items-start gap-2 rounded-lg border px-3 py-2 text-xs ${testState === 'ok' ? 'border-success/30 bg-success/5 text-success' : testState === 'error' ? 'border-warning/30 bg-warning/5 text-warning' : 'border-mist/40 bg-surface text-slate'}`}>
+                {testState === 'ok' ? <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" /> : <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />}
+                <span className="break-words leading-relaxed">{testState === 'testing' ? 'Checking OpenRouter...' : testMessage}</span>
+              </div>
+            )}
+          </div>
         </Card>
       </div>
     </section>

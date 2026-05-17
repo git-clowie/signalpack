@@ -1,6 +1,6 @@
 import React from 'react';
 import { Badge, Button, Card } from '@/src/components/ui';
-import { AlertTriangle, BookOpen, Bot, Camera, Cloud, FileText, History, KeyRound, MapPinned, Mic, RadioTower, ShieldCheck, Zap } from 'lucide-react';
+import { AlertTriangle, BookOpen, Bot, Camera, Cloud, FileText, History, KeyRound, MapPinned, Mic, PlayCircle, RadioTower, ShieldCheck, Zap } from 'lucide-react';
 import { useSettings } from '../SettingsContext';
 
 import { vibrate } from '../lib/utils';
@@ -12,12 +12,14 @@ export function HomeScreen({
    onViewHistory, 
    onViewSafety,
    onAskGemma,
+   onOpenDemo,
    isLocalMode 
 }: { 
    onStartReport: (isPanic?: boolean) => void, 
    onViewHistory: (packet?: any) => void,
    onViewSafety: () => void,
    onAskGemma: () => void,
+   onOpenDemo: () => void,
    isLocalMode: boolean
 }) {
   const { openRouterApiKey, openRouterModel } = useSettings();
@@ -121,7 +123,7 @@ export function HomeScreen({
 
       <section className="mt-5">
         <h2 className="mb-3 px-1 text-[10px] font-bold uppercase tracking-widest text-slate">Review & Prepare</h2>
-        <div className="grid grid-cols-3 gap-2.5 sm:gap-3">
+        <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 sm:gap-3">
           <Card className="group flex cursor-pointer flex-col items-center justify-center rounded-xl border-mist/30 bg-surface/55 p-3 text-center shadow-sm transition-all hover:border-slate/80 sm:p-4" onClick={onViewHistory}>
             <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-mist/30 text-slate transition-transform group-hover:scale-105">
                <History className="h-5 w-5" />
@@ -139,6 +141,12 @@ export function HomeScreen({
                <Bot className="h-5 w-5" />
             </div>
             <span className="text-[10px] font-bold uppercase tracking-widest text-slate transition-colors group-hover:text-white">Gemma</span>
+          </Card>
+          <Card className="group flex cursor-pointer flex-col items-center justify-center rounded-xl border-mist/30 bg-surface/55 p-3 text-center shadow-sm transition-all hover:border-violet-brand/50 hover:bg-violet-brand/5 sm:p-4" onClick={onOpenDemo}>
+            <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-violet-brand/15 text-violet-brand transition-transform group-hover:scale-105">
+               <PlayCircle className="h-5 w-5" />
+            </div>
+            <span className="text-[10px] font-bold uppercase tracking-widest text-slate transition-colors group-hover:text-white">Demo</span>
           </Card>
         </div>
       </section>
