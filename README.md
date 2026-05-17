@@ -1,11 +1,11 @@
 # SignalPack
 
 <p align="center">
-  <img src="public/brand/signalpack-logo-loop.webp" alt="SignalPack animated logo" width="420" />
+  <img src="public/brand/signalpack-logo-loop.webp" alt="SignalPack animated logo" width="100%" />
 </p>
 
 <p align="center">
-  <strong>Turn chaos into a Crisis Packet.</strong><br />
+  <strong>Turn chaos into clarity.</strong><br />
   Gemma 4-powered emergency capture, structure, review, and sharing.
 </p>
 

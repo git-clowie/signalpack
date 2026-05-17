@@ -1,5 +1,6 @@
 import { ArrowLeft } from 'lucide-react';
 import { MenuSettings } from './MenuSettings';
+import { PWAInstall } from './PWAInstall';
 
 export function SettingsScreen({
   onBack,
@@ -18,13 +19,16 @@ export function SettingsScreen({
             Gemma 4, workflow, map, local data
           </p>
         </div>
-        <button
-          onClick={onBack}
-          className="inline-flex items-center gap-2 rounded-xl border border-mist/50 bg-surface/70 px-3 py-2 text-[10px] font-bold uppercase tracking-widest text-slate transition-colors hover:border-cyan-brand/40 hover:text-white"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Home
-        </button>
+        <div className="flex items-center gap-2">
+          <PWAInstall />
+          <button
+            onClick={onBack}
+            className="inline-flex items-center gap-2 rounded-xl border border-mist/50 bg-surface/70 px-3 py-2 text-[10px] font-bold uppercase tracking-widest text-slate transition-colors hover:border-cyan-brand/40 hover:text-white"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Home
+          </button>
+        </div>
       </div>
 
       <div className="flex-1 overflow-y-auto">

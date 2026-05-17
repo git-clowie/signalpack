@@ -47,7 +47,7 @@ export function PWAInstall() {
         className="inline-flex h-9 items-center gap-2 rounded-lg border border-cyan-brand/25 bg-cyan-brand/10 px-2.5 text-[10px] font-bold uppercase tracking-widest text-cyan-brand transition-colors hover:bg-cyan-brand/15 sm:px-3"
       >
         <Download className="h-3.5 w-3.5" />
-        <span className="hidden sm:inline">Install</span>
+        <span>Install</span>
       </button>
 
       {showTip && (

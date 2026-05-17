@@ -63,15 +63,18 @@ export function AskGemmaScreen({ onBack }: { onBack: () => void }) {
     <div className="mx-auto flex h-[calc(100vh-4rem)] w-full max-w-6xl flex-col bg-cloud px-4 pb-6 pt-4 md:px-6 lg:px-8">
       <div className="glass-panel-strong flex-none rounded-2xl p-4">
         <div className="flex items-center gap-3">
-          <button onClick={onBack} className="p-2 -ml-2 rounded-full hover:bg-mist/30 text-slate transition-colors">
+          <button onClick={onBack} aria-label="Back to dashboard" className="p-2 -ml-2 rounded-full hover:bg-mist/30 text-slate transition-colors">
             <ArrowLeft className="w-5 h-5" />
           </button>
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-cyan-brand/20 bg-cyan-brand/10 text-cyan-brand">
             <MessageCircle className="h-5 w-5" />
           </div>
-          <div>
-            <h1 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">Ask Gemma <span className="text-[10px] bg-cyan-brand/20 text-cyan-brand px-2 py-0.5 rounded-full uppercase tracking-widest font-mono">Chat</span></h1>
-            <p className="text-[10px] text-slate font-mono uppercase tracking-widest mt-1">
+          <div className="min-w-0">
+            <h1 className="flex items-center gap-2 text-lg font-bold tracking-tight text-white sm:text-xl">
+              Ask Gemma
+              <span className="hidden rounded-full bg-cyan-brand/20 px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest text-cyan-brand sm:inline-flex">Chat</span>
+            </h1>
+            <p className="mt-1 truncate text-[10px] font-mono uppercase tracking-widest text-slate">
               OpenRouter / {openRouterModel}
             </p>
           </div>
@@ -119,7 +122,7 @@ export function AskGemmaScreen({ onBack }: { onBack: () => void }) {
 
       <div className="flex-none rounded-2xl border border-mist/40 bg-surface p-3">
         {messages.length === 1 && (
-          <div className="mb-3 grid grid-cols-3 gap-2">
+          <div className="mb-3 grid grid-cols-1 gap-2 sm:grid-cols-3">
             {['Flood help', 'First aid', 'What to capture?'].map((prompt) => (
               <button
                 key={prompt}

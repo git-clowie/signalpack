@@ -5,7 +5,7 @@ import { useSettings } from '../SettingsContext';
 import { AIProviderSettings } from './AIProviderSettings';
 
 const mapStyles: { id: 'tactical' | 'satellite' | 'streets'; label: string }[] = [
-  { id: 'tactical', label: 'Tactical (Dark)' },
+  { id: 'tactical', label: 'Tactical' },
   { id: 'satellite', label: 'Satellite' },
   { id: 'streets', label: 'Streets' },
 ];

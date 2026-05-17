@@ -45,17 +45,10 @@ export function AuthHeader() {
   ];
 
   return (
-    <div className="sticky top-0 z-[100] border-b border-cyan-brand/10 bg-[#07080B]/78 px-4 pb-3 pt-9 backdrop-blur-md sm:pt-5">
-      <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4">
-        <div className="flex min-w-0 items-center gap-3">
-          <button 
-            onClick={openMenu}
-            className="-ml-2 rounded-lg p-2 text-slate transition-colors hover:bg-mist/20 hover:text-white md:hidden"
-            title="Menu"
-          >
-            <Menu className="h-5 w-5" />
-          </button>
-          <Logo size="sm" animated containerClassName="h-11 w-11 rounded-xl" />
+    <div className="sticky top-0 z-[100] border-b border-cyan-brand/10 bg-[#040404] px-2.5 pb-3 pt-9 sm:px-4 sm:pt-5">
+      <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-2 sm:gap-4">
+        <div className="flex min-w-0 items-center gap-2 sm:gap-3">
+          <Logo size="sm" containerClassName="h-8 w-8 rounded-lg border-cyan-brand/15 shadow-none sm:h-10 sm:w-10" />
           <div className="hidden min-w-0 md:block">
             <div className="flex items-center gap-2">
               <span className="truncate text-sm font-bold tracking-tight text-white">SignalPack</span>
@@ -76,8 +69,10 @@ export function AuthHeader() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-2">
-          <PWAInstall />
+        <div className="flex shrink-0 items-center gap-1 sm:gap-2">
+          <div className="hidden md:block">
+            <PWAInstall />
+          </div>
           <button
             onClick={openSettings}
             className={`hidden h-9 items-center gap-2 rounded-lg border px-3 text-[10px] font-bold uppercase tracking-widest transition-colors md:flex ${currentState === 'settings' ? 'border-cyan-brand/30 bg-cyan-brand/10 text-cyan-brand' : 'border-mist/40 bg-surface/70 text-slate hover:border-cyan-brand/40 hover:text-cyan-brand'}`}
@@ -88,7 +83,7 @@ export function AuthHeader() {
           {user ? (
             <button 
               onClick={openMenu}
-              className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-lg border border-mist/50 bg-surface text-slate transition-colors hover:border-cyan-brand hover:text-cyan-brand"
+              className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-lg border border-mist/50 bg-surface text-slate transition-colors hover:border-cyan-brand hover:text-cyan-brand sm:h-9 sm:w-9"
               title="Menu"
             >
               {user.photoURL ? (
@@ -100,17 +95,31 @@ export function AuthHeader() {
           ) : hasFirebaseConfig ? (
             <button 
               onClick={handleSignIn}
-              className="flex items-center gap-2 rounded-lg border border-blue/30 bg-blue/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-blue transition-all hover:bg-blue/20"
+              className="flex h-8 w-8 items-center justify-center rounded-lg border border-blue/30 bg-blue/10 text-[10px] font-bold uppercase tracking-widest text-blue transition-all hover:bg-blue/20 sm:h-9 sm:w-auto sm:gap-2 sm:px-3 sm:py-1.5"
             >
               <LogIn className="h-3 w-3" />
-              Sign In
+              <span className="hidden sm:inline">Sign In</span>
             </button>
           ) : (
-            <span className="hidden items-center gap-2 rounded-lg border border-mist/40 bg-surface/70 px-3 py-2 text-[10px] font-bold uppercase tracking-widest text-slate sm:inline-flex">
-              <Database className="h-3 w-3" />
-              Local
-            </span>
+            <button
+              type="button"
+              onClick={openSettings}
+              aria-label="Open local settings"
+              title="Local settings"
+              className="inline-flex h-8 w-7 items-center justify-center rounded-lg text-cyan-brand transition-colors hover:bg-cyan-brand/10 hover:text-white sm:h-9 sm:w-auto sm:border sm:border-mist/40 sm:bg-surface/70 sm:px-3 sm:py-2 sm:text-slate sm:hover:border-cyan-brand/40"
+            >
+              <UserIcon className="h-3.5 w-3.5 sm:hidden" />
+              <Database className="hidden h-3 w-3 sm:block" />
+              <span className="hidden text-[10px] font-bold uppercase tracking-widest sm:inline">Local</span>
+            </button>
           )}
+          <button
+            onClick={openMenu}
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-mist/40 bg-surface/70 text-slate transition-colors hover:border-cyan-brand/40 hover:text-white sm:h-9 sm:w-9 md:hidden"
+            title="Menu"
+          >
+            <Menu className="h-5 w-5" />
+          </button>
         </div>
       </div>
     </div>

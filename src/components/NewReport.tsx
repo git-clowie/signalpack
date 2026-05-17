@@ -129,7 +129,7 @@ export function NewReportScreen({
             </div>
           )}
           {shouldFastSend && (
-            <div className="bg-critical/10 border border-critical/30 text-critical text-[10px] font-mono font-bold uppercase tracking-widest px-2 py-1 rounded flex items-center gap-1.5">
+            <div className="bg-flare-orange/10 border border-flare-orange/30 text-flare-orange text-[10px] font-mono font-bold uppercase tracking-widest px-2 py-1 rounded flex items-center gap-1.5">
               <Zap className="w-3.5 h-3.5" />
               Fast Send
             </div>

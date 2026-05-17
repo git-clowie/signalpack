@@ -190,14 +190,14 @@ export function SafetyGuideScreen({ onBack }: { onBack: () => void }) {
   return (
     <div className="mx-auto flex h-[calc(100vh-4rem)] w-full max-w-6xl flex-col bg-cloud px-4 pb-6 pt-4 md:px-6 lg:px-8">
       {/* Header */}
-      <div className="mb-4 flex items-center justify-between">
-        <button onClick={onBack} className="flex items-center gap-2 text-slate hover:text-white transition-colors group">
+      <div className="mb-4 flex items-center justify-between gap-3">
+        <button onClick={onBack} className="flex items-center gap-2 rounded-xl border border-mist/40 bg-surface/50 px-3 py-2 text-slate transition-colors hover:border-cyan-brand/40 hover:text-white group">
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-          <span className="text-[10px] font-bold uppercase tracking-[0.2em]">Exit Manual</span>
+          <span className="text-[10px] font-bold uppercase tracking-[0.18em]">Home</span>
         </button>
-        <div className="text-right">
-          <h1 className="text-xl font-black text-white italic tracking-tighter uppercase">Protocol <span className="text-blue text-glow">Manual</span></h1>
-          <p className="text-[8px] text-slate font-mono uppercase tracking-widest">Version 2.4 / Tactical Info</p>
+        <div className="min-w-0 text-right">
+          <h1 className="truncate text-xl font-bold tracking-tight text-white">Safety Guide</h1>
+          <p className="text-[9px] text-slate font-mono uppercase tracking-widest">Offline emergency basics</p>
         </div>
       </div>
 
@@ -207,7 +207,7 @@ export function SafetyGuideScreen({ onBack }: { onBack: () => void }) {
         </div>
         <input
           type="text"
-          placeholder="SEARCH PROTOCOLS (e.g. Flood, Cyber, Fire)..."
+          placeholder="Search protocols..."
           className="w-full bg-surface/80 border border-mist hover:border-cyan-brand/50 focus:border-cyan-brand focus:outline-none text-white text-xs font-mono uppercase tracking-widest rounded-xl py-3 pl-10 pr-4 transition-colors"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
