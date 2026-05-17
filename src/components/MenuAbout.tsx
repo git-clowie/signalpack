@@ -1,8 +1,6 @@
 import React from 'react';
 import { Button } from '@/src/components/ui';
 import { Cpu, Globe, HeartPulse, Play, ShieldAlert } from 'lucide-react';
-import { useSettings } from '../SettingsContext';
-import { Logo } from './Logo';
 
 export function MenuAbout({
   onClose,
@@ -11,12 +9,12 @@ export function MenuAbout({
   onClose: () => void;
   onShowTutorial: () => void;
 }) {
-  const { logoShape } = useSettings();
-
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-300 pb-8">
       <div className="text-center pt-2">
-        <Logo shape={logoShape} size="lg" containerClassName="mx-auto mb-4" />
+        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-cyan-brand/25 bg-cyan-brand/10 text-cyan-brand shadow-[0_0_20px_rgba(80,178,198,0.18)]">
+          <ShieldAlert className="h-7 w-7" />
+        </div>
         <h2 className="text-2xl font-bold text-white tracking-widest uppercase">SignalPack</h2>
         <p className="text-xs text-slate font-mono uppercase tracking-widest mt-2 border-t border-mist/30 pt-2 inline-block">App Version 1.0.0</p>
       </div>

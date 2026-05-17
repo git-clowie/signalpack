@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
-import { Auth, getAuth, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
-import { getFirestore, collection, doc, setDoc, getDocs, query, orderBy, serverTimestamp, enableIndexedDbPersistence } from 'firebase/firestore';
+import { Auth, getAuth, GoogleAuthProvider, NextOrObserver, signInWithPopup, signOut, User } from 'firebase/auth';
+import { Firestore, getFirestore, collection, doc, setDoc, getDocs, query, orderBy, serverTimestamp, enableIndexedDbPersistence } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY || '',
@@ -14,19 +14,29 @@ const firebaseConfig = {
 
 const firestoreDatabaseId = import.meta.env.VITE_FIREBASE_FIRESTORE_DATABASE_ID || '';
 export const hasFirebaseConfig = Boolean(firebaseConfig.apiKey && firebaseConfig.projectId && firebaseConfig.appId);
-const app = initializeApp(firebaseConfig);
-export const db = firestoreDatabaseId ? getFirestore(app, firestoreDatabaseId) : getFirestore(app);
+const app = hasFirebaseConfig ? initializeApp(firebaseConfig) : null;
+export const db: Firestore | null = app ? (firestoreDatabaseId ? getFirestore(app, firestoreDatabaseId) : getFirestore(app)) : null;
+
+const localAuth = {
+  currentUser: null,
+  onAuthStateChanged: (callback: NextOrObserver<User>) => {
+    if (typeof callback === 'function') callback(null);
+    return () => {};
+  },
+} as Auth;
 
 // Enable offline persistence
-enableIndexedDbPersistence(db).catch((err) => {
-  if (err.code == 'failed-precondition') {
-    console.warn('Multiple tabs open, persistence can only be enabled in one tab at a a time.');
-  } else if (err.code == 'unimplemented') {
-    console.warn('The current browser does not support all of the features required to enable persistence');
-  }
-});
+if (db) {
+  enableIndexedDbPersistence(db).catch((err) => {
+    if (err.code == 'failed-precondition') {
+      console.warn('Multiple tabs open, persistence can only be enabled in one tab at a a time.');
+    } else if (err.code == 'unimplemented') {
+      console.warn('The current browser does not support all of the features required to enable persistence');
+    }
+  });
+}
 
-export const auth: Auth = getAuth(app);
+export const auth: Auth = app ? getAuth(app) : localAuth;
 export const googleProvider = new GoogleAuthProvider();
 
 export const signInWithGoogle = async () => {
@@ -43,6 +53,7 @@ export const signInWithGoogle = async () => {
 };
 
 export const logout = async () => {
+    if (!hasFirebaseConfig) return;
     try {
         await signOut(auth);
     } catch (error) {
@@ -87,7 +98,7 @@ function handleFirestoreError(error: unknown, operationType: OperationType, path
 export const savePacket = async (packet: any) => {
     try {
         const user = auth.currentUser;
-        if (!user) return; // Only save to firestore if logged in
+        if (!user || !db) return; // Only save to firestore if logged in and configured
 
         const packetId = Date.now().toString();
         const path = `users/${user.uid}/packets/${packetId}`;
@@ -106,7 +117,7 @@ export const savePacket = async (packet: any) => {
 export const getPackets = async () => {
     try {
         const user = auth.currentUser;
-        if (!user) return [];
+        if (!user || !db) return [];
 
         const path = `users/${user.uid}/packets`;
         const q = query(collection(db, path), orderBy('createdAt', 'desc'));

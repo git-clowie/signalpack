@@ -3,14 +3,6 @@ import { Card } from '@/src/components/ui';
 import { Database } from 'lucide-react';
 import { useSettings } from '../SettingsContext';
 import { AIProviderSettings } from './AIProviderSettings';
-import { Logo, LogoShape } from './Logo';
-
-const logoShapes: { id: LogoShape; label: string }[] = [
-  { id: 'Flare', label: 'Signal Flare' },
-  { id: 'S', label: 'Classic S' },
-  { id: 'Shield', label: 'Shield' },
-  { id: 'Hexagon', label: 'Hexagon' },
-];
 
 const mapStyles: { id: 'tactical' | 'satellite' | 'streets'; label: string }[] = [
   { id: 'tactical', label: 'Tactical (Dark)' },
@@ -19,37 +11,15 @@ const mapStyles: { id: 'tactical' | 'satellite' | 'streets'; label: string }[] =
 ];
 
 export function MenuSettings({
-  userEmail,
   setIsLocalMode,
 }: {
-  userEmail?: string | null;
   setIsLocalMode: (value: boolean) => void;
 }) {
-  const { logoShape, setLogoShape, mapStyle, setMapStyle, fastSendMode, setFastSendMode } = useSettings();
+  const { mapStyle, setMapStyle, fastSendMode, setFastSendMode } = useSettings();
 
   return (
     <div className="space-y-6 animate-in fade-in duration-200">
       <AIProviderSettings setIsLocalMode={setIsLocalMode} />
-
-      {userEmail === 'pixekxyz@gmail.com' && (
-        <section>
-          <h3 className="text-[10px] text-slate uppercase font-bold tracking-widest mb-3">Visual Identity (Admin)</h3>
-          <div className="grid grid-cols-4 gap-2">
-            {logoShapes.map((shape) => (
-              <button
-                key={shape.id}
-                onClick={() => setLogoShape(shape.id)}
-                className={`flex flex-col items-center justify-center gap-2 py-3 rounded-xl border transition-all ${logoShape === shape.id ? 'bg-blue/10 border-blue scale-105' : 'bg-surface border-mist hover:border-slate hover:scale-105'}`}
-              >
-                <Logo shape={shape.id} size="sm" containerClassName="pointer-events-none" />
-                <span className={`text-[8px] font-bold uppercase tracking-widest ${logoShape === shape.id ? 'text-blue' : 'text-slate'}`}>
-                  {shape.label.split(' ')[0]}
-                </span>
-              </button>
-            ))}
-          </div>
-        </section>
-      )}
 
       <section>
         <h3 className="text-[10px] text-slate uppercase font-bold tracking-widest mb-3">Map & Workflow</h3>

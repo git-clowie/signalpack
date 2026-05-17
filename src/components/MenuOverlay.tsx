@@ -19,6 +19,7 @@ export function MenuOverlay({
   onShowTutorial: () => void;
 }) {
   const [user, setUser] = useState<FirebaseUser | null>(null);
+  const [authError, setAuthError] = useState('');
   const { setAppState, resetDraft, currentState, menuTab, setMenuTab } = useAppStore();
   const activeTab = menuTab;
 
@@ -31,9 +32,11 @@ export function MenuOverlay({
 
   const handleSignIn = async () => {
     try {
+      setAuthError('');
       await signInWithGoogle();
     } catch (error) {
       console.error(error);
+      setAuthError('Cloud sync is not configured here. You can keep using SignalPack locally.');
     }
   };
 
@@ -97,6 +100,12 @@ export function MenuOverlay({
              </div>
            </div>
 
+           {authError && (
+             <div className="mb-4 rounded-xl border border-warning/30 bg-warning/5 px-3 py-2 text-xs leading-relaxed text-warning">
+               {authError}
+             </div>
+           )}
+
            {/* Tabs */}
            <div className="grid grid-cols-3 gap-1 border-b border-transparent">
              <button
@@ -159,7 +168,7 @@ export function MenuOverlay({
 
           {/* TAB: SETTINGS */}
           {activeTab === 'settings' && (
-            <MenuSettings userEmail={user?.email} setIsLocalMode={setIsLocalMode} />
+            <MenuSettings setIsLocalMode={setIsLocalMode} />
           )}
 
           {/* TAB: ABOUT (Merged Presentation Modal) */}

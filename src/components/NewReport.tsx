@@ -19,6 +19,7 @@ export function NewReportScreen({
   const [text, setText] = useState('');
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [isCompressing, setIsCompressing] = useState(false);
+  const [captureError, setCaptureError] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [isRecording, setIsRecording] = useState(false);
@@ -45,7 +46,7 @@ export function NewReportScreen({
         setPreviewImage(compressedBase64);
       } catch (error) {
         console.error("Error compressing image:", error);
-        alert("Failed to process image. Please try again.");
+        setCaptureError('Could not process that image. Try a smaller photo or continue with text/audio.');
       } finally {
         setIsCompressing(false);
       }
@@ -54,6 +55,11 @@ export function NewReportScreen({
 
   const startRecording = async () => {
     try {
+      setCaptureError('');
+      if (!navigator.mediaDevices?.getUserMedia) {
+        setCaptureError('Voice capture is not available in this browser. Add a short text note instead.');
+        return;
+      }
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const mediaRecorder = new MediaRecorder(stream);
       mediaRecorderRef.current = mediaRecorder;
@@ -81,7 +87,7 @@ export function NewReportScreen({
       setIsRecording(true);
     } catch (error) {
       console.error('Error accessing microphone', error);
-      alert('Could not access microphone.');
+      setCaptureError('Microphone access was blocked. You can still send a text note or photo.');
     }
   };
 
@@ -130,6 +136,12 @@ export function NewReportScreen({
           )}
         </div>
       </div>
+
+      {captureError && (
+        <div className="mb-4 rounded-xl border border-warning/30 bg-warning/5 px-3 py-2 text-xs leading-relaxed text-warning">
+          {captureError}
+        </div>
+      )}
 
       <div className="space-y-4 flex-1 overflow-y-auto">
         <Card className="p-1 border-mist/50 bg-cloud overflow-hidden">

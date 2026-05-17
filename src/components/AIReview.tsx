@@ -1,9 +1,7 @@
 import React from 'react';
 import { Card, Button, Badge } from '@/src/components/ui';
-import { ArrowRight, AlertTriangle } from 'lucide-react';
+import { ArrowRight, AlertTriangle, Cpu } from 'lucide-react';
 import { DraftReport } from '@/src/types';
-import { Logo } from './Logo';
-import { useSettings } from '../SettingsContext';
 
 export function AIReviewScreen({ 
   report, 
@@ -13,7 +11,6 @@ export function AIReviewScreen({
   onNext: () => void;
 }) {
   const isAnalyzing = !report.packet;
-  const { logoShape } = useSettings();
   const providerLabel = report.packet?.model_provider === 'openrouter'
     ? 'OpenRouter'
     : report.packet?.model_provider === 'fallback'
@@ -56,12 +53,12 @@ export function AIReviewScreen({
           <div className="relative">
             <div className="absolute inset-0 bg-blue rounded-full animate-pulse blur-xl opacity-40 scale-125"></div>
             <div className="absolute inset-0 bg-blue rounded-full animate-ping opacity-10 scale-150"></div>
-            <div className="relative z-10 block rounded-full bg-surface border border-blue/50 p-1 shadow-[0_0_20px_rgba(59,130,246,0.5)]">
-              <Logo shape={logoShape} size="lg" />
+            <div className="relative z-10 flex h-16 w-16 items-center justify-center rounded-2xl border border-blue/50 bg-surface text-blue shadow-[0_0_20px_rgba(59,130,246,0.5)]">
+              <Cpu className="h-8 w-8" />
             </div>
           </div>
           <div className="space-y-2">
-             <h2 className="text-white font-bold tracking-widest uppercase">Structuring Signal...</h2>
+             <h2 className="text-white font-bold tracking-widest uppercase">Structuring report</h2>
              <p className="text-xs text-blue font-bold font-mono uppercase tracking-widest animate-pulse h-4">{loadingText}</p>
           </div>
           <div className="w-full flex items-center justify-center gap-1 mt-4">

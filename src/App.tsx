@@ -24,6 +24,7 @@ import { DraftReport } from './types';
 import { demoPackets } from './demoData';
 
 export default function App() {
+  const [appNotice, setAppNotice] = React.useState('');
   const { 
     currentState: state, 
     setAppState: setState, 
@@ -144,7 +145,8 @@ export default function App() {
       setState('packet_output');
     } catch (e: any) {
       console.error(e);
-      alert('Error generating packet: ' + (e.message || String(e)));
+      setAppNotice('Could not finalize the packet. Your draft is still here; try again or use Rapid Packet mode.');
+      setState('new_report');
     }
   };
 
@@ -203,6 +205,15 @@ export default function App() {
       <div className="flex-1 flex flex-col w-full max-w-2xl mx-auto relative md:border-x md:border-mist/20 md:bg-surface/10 md:shadow-2xl">
         {/* Global Auth Header */}
         {state !== 'packet_output' && <AuthHeader />}
+
+        {appNotice && state !== 'packet_output' && (
+          <div className="mx-4 mt-3 rounded-xl border border-warning/30 bg-warning/5 px-3 py-2 text-xs leading-relaxed text-warning">
+            <div className="flex items-start justify-between gap-3">
+              <span>{appNotice}</span>
+              <button onClick={() => setAppNotice('')} className="shrink-0 text-warning/70 hover:text-warning">Dismiss</button>
+            </div>
+          </div>
+        )}
 
         <main className="w-full flex-1 overflow-x-hidden overflow-y-auto relative">
           <AnimatePresence mode="wait">
