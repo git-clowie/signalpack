@@ -15,10 +15,13 @@ export function MedicalIDScreen({ onBack }: { onBack: () => void }) {
   return (
     <div className="mx-auto flex h-[calc(100vh-4rem)] w-full max-w-6xl flex-col bg-cloud px-4 pb-6 pt-4 md:px-6 lg:px-8 relative">
       <div className="flex items-center gap-3 mb-6">
-        <button onClick={onBack} className="p-2 rounded-full hover:bg-mist/30 text-slate hover:text-white transition-colors">
+        <button onClick={onBack} aria-label="Back to dashboard" className="p-2 rounded-full hover:bg-mist/30 text-slate hover:text-white transition-colors">
           <ArrowLeft className="w-5 h-5" />
         </button>
-        <h1 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">Emergency Profile <span className="text-[10px] bg-critical/20 text-critical px-2 py-0.5 rounded-full uppercase tracking-widest font-mono">Optional</span></h1>
+        <h1 className="min-w-0 text-xl font-bold tracking-tight text-white">
+          Emergency Profile
+          <span className="ml-2 hidden rounded-full bg-critical/20 px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest text-critical sm:inline-flex">Optional</span>
+        </h1>
       </div>
 
       <p className="text-sm text-slate mb-6">

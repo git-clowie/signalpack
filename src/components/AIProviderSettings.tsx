@@ -9,6 +9,7 @@ import {
 } from '../engine/ai/settings';
 import { useSettings } from '../SettingsContext';
 import { copyText } from '../utils/export';
+import { callOpenRouter } from '../engine/ai/providers';
 
 export function AIProviderSettings({ setIsLocalMode }: { setIsLocalMode: (value: boolean) => void }) {
   const [testState, setTestState] = React.useState<'idle' | 'testing' | 'ok' | 'error'>('idle');
@@ -48,32 +49,21 @@ export function AIProviderSettings({ setIsLocalMode }: { setIsLocalMode: (value:
     setTestMessage('');
 
     try {
-      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${openRouterApiKey.trim()}`,
-          'Content-Type': 'application/json',
-          'HTTP-Referer': window.location.origin,
-          'X-Title': 'SignalPack',
+      const result = await callOpenRouter(
+        {
+          provider: 'openrouter',
+          openRouterApiKey,
+          openRouterModel,
         },
-        body: JSON.stringify({
-          model: openRouterModel,
-          messages: [
-            { role: 'system', content: 'Reply with exactly: SignalPack Gemma ready' },
-            { role: 'user', content: 'Connection test' },
-          ],
-          temperature: 0,
-          max_tokens: 12,
-        }),
-      });
-
-      if (!response.ok) {
-        const detail = await response.text().catch(() => '');
-        throw new Error(detail || `OpenRouter returned ${response.status}`);
-      }
-
-      const data = await response.json();
-      const reply = data?.choices?.[0]?.message?.content || 'Connected.';
+        [
+          { role: 'system', content: 'Reply with exactly: SignalPack Gemma ready' },
+          { role: 'user', content: 'Connection test' },
+        ],
+        { jsonMode: false },
+      );
+      const reply = result.trace.model !== openRouterModel
+        ? `Connected via fallback: ${result.trace.model}`
+        : result.text || 'Connected.';
       setTestState('ok');
       setTestMessage(reply.slice(0, 80));
     } catch (error: any) {
@@ -104,9 +94,9 @@ export function AIProviderSettings({ setIsLocalMode }: { setIsLocalMode: (value:
             </span>
             <input
               type="password"
-              value={openRouterApiKey}
+              value={isDemoKeyActive ? '' : openRouterApiKey}
               onChange={(event) => setOpenRouterApiKey(event.target.value.trim())}
-              placeholder="Paste OpenRouter key"
+              placeholder={isDemoKeyActive ? 'Demo key active - paste your key to override' : 'Paste OpenRouter key'}
               className="w-full bg-surface border border-mist/50 rounded-xl px-3 py-2 text-sm text-white placeholder:text-slate/50 focus:outline-none focus:border-blue"
             />
           </label>

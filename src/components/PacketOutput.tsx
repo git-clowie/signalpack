@@ -77,7 +77,7 @@ export function PacketOutputScreen({ packet, onDone }: { packet?: CrisisPacket; 
                  className="flex items-center text-[10px] font-bold text-slate bg-mist/30 px-3 py-2 rounded-lg uppercase tracking-widest hover:bg-mist transition-colors"
               >
                  <Globe className="w-4 h-4 mr-1.5" />
-                 {language === 'en' ? `EN / ${navigator.language?.split('-')[0].toUpperCase() || 'LOCAL'}` : `${navigator.language?.split('-')[0].toUpperCase() || 'LOCAL'} / EN`}
+                 {language === 'en' ? 'EN / RO' : 'RO / EN'}
               </button>
            </div>
 

@@ -72,8 +72,15 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   };
 
   const setOpenRouterApiKey = (key: string) => {
-    setOpenRouterApiKeyState(key);
-    localStorage.setItem(AI_STORAGE_KEYS.openRouterApiKey, key);
+    const normalizedKey = key.trim();
+    if (normalizedKey) {
+      setOpenRouterApiKeyState(normalizedKey);
+      localStorage.setItem(AI_STORAGE_KEYS.openRouterApiKey, normalizedKey);
+      return;
+    }
+
+    localStorage.removeItem(AI_STORAGE_KEYS.openRouterApiKey);
+    setOpenRouterApiKeyState(DEMO_OPENROUTER_API_KEY);
   };
 
   const setOpenRouterModel = (model: string) => {

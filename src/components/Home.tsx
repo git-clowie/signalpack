@@ -38,7 +38,7 @@ export function HomeScreen({
   return (
     <div className="mx-auto flex min-h-[calc(100vh-4rem)] w-full max-w-6xl flex-col px-4 pb-6 md:px-6 lg:px-8">
       <section className="pt-4 sm:pt-6">
-        <Card className="glass-panel-strong hero-signal-panel relative overflow-hidden rounded-2xl p-4 pt-52 sm:p-6 sm:pt-64 md:min-h-[27rem] md:p-8 lg:p-9">
+        <Card className="glass-panel-strong hero-signal-panel relative flex flex-col overflow-hidden rounded-2xl p-4 pt-52 sm:p-6 sm:pt-64 md:min-h-[27rem] md:p-8 lg:p-9">
           <div className="absolute inset-x-4 top-0 h-px signal-sweep opacity-70" />
           <div className="pointer-events-none absolute right-0 top-0 h-60 w-full overflow-hidden bg-[#040404] opacity-100 sm:h-72 md:h-full md:w-[45%] lg:w-[46%]">
             <picture className="hero-logo-frame absolute right-1/2 top-3 block h-52 w-52 translate-x-1/2 sm:top-4 sm:h-60 sm:w-60 md:right-12 md:top-1/2 md:h-80 md:w-80 md:-translate-y-1/2 md:translate-x-0 lg:right-16 lg:h-[22rem] lg:w-[22rem]">
@@ -47,11 +47,11 @@ export function HomeScreen({
             </picture>
           </div>
 
-          <div className="relative z-10 max-w-2xl md:max-w-[56%] lg:max-w-[58%]">
+          <div className="relative z-10 order-1 max-w-2xl md:max-w-[56%] lg:max-w-[58%]">
             <p className="mb-3 text-[10px] font-bold uppercase tracking-widest text-cyan-brand">Crisis Packet</p>
           </div>
 
-          <div className="relative z-10 grid gap-3 sm:grid-cols-[1fr_0.72fr] md:max-w-[56%] lg:max-w-[58%]">
+          <div className="relative z-10 order-2 grid gap-3 sm:grid-cols-[1fr_0.72fr] md:order-4 md:mt-auto md:max-w-[56%] md:pt-8 lg:max-w-[58%]">
             <Button size="lg" fullWidth onClick={() => { vibrate([50]); onStartReport(); }} className="primary-button h-14 rounded-xl text-sm">
               <RadioTower className="mr-2 h-5 w-5" /> Start Alert
             </Button>
@@ -60,7 +60,7 @@ export function HomeScreen({
             </Button>
           </div>
 
-          <div className="relative z-10 mt-4 max-w-2xl md:mt-6 md:max-w-[56%] lg:max-w-[58%]">
+          <div className="relative z-10 order-3 mt-4 max-w-2xl md:order-2 md:mt-6 md:max-w-[56%] lg:max-w-[58%]">
             <h1 className="font-display text-xl font-bold leading-tight text-white sm:text-3xl lg:text-4xl">
               Turn chaos into clarity.
             </h1>
@@ -69,7 +69,7 @@ export function HomeScreen({
             </p>
           </div>
 
-          <div className="relative z-10 mt-3 flex flex-wrap items-center gap-1.5 text-[9px] font-mono uppercase tracking-widest text-slate sm:mt-5 sm:gap-2 sm:text-[10px] md:max-w-[56%] lg:max-w-[58%]">
+          <div className="relative z-10 order-4 mt-3 flex flex-wrap items-center gap-1.5 text-[9px] font-mono uppercase tracking-widest text-slate sm:mt-5 sm:gap-2 sm:text-[10px] md:order-3 md:max-w-[56%] lg:max-w-[58%]">
             {missingOpenRouterKey ? (
               <button onClick={openSettings} className="inline-flex items-center gap-1.5 rounded-lg border border-flare-orange/25 bg-flare-orange/5 px-2.5 py-1 text-flare-orange transition-colors hover:bg-flare-orange/10">
                 <KeyRound className="h-3 w-3" />
@@ -96,70 +96,70 @@ export function HomeScreen({
       <section className="mt-5">
         <h2 className="mb-3 px-1 text-[10px] font-bold uppercase tracking-widest text-slate">Quick Capture</h2>
         <div className="grid grid-cols-3 gap-2.5 sm:gap-3">
-          <Card className="glass-panel group flex h-28 cursor-pointer flex-col items-center justify-center rounded-xl px-2 py-3 text-center transition-all hover:border-blue/50 hover:bg-blue/5 sm:h-32 sm:p-4" onClick={() => onStartReport()}>
+          <button type="button" className="glass-panel group flex h-28 cursor-pointer flex-col items-center justify-center rounded-xl px-2 py-3 text-center transition-all hover:border-blue/50 hover:bg-blue/5 sm:h-32 sm:p-4" onClick={() => onStartReport()}>
             <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-blue/10 text-blue transition-transform group-hover:scale-105 sm:h-11 sm:w-11">
               <Camera className="h-5 w-5" />
             </div>
             <span className="text-[10px] font-bold uppercase tracking-widest text-slate transition-colors group-hover:text-white">Photo</span>
             <span className="mt-1 hidden text-[10px] leading-snug text-slate/80 sm:block">Upload a scene or hazard.</span>
-          </Card>
-          <Card className="glass-panel group flex h-28 cursor-pointer flex-col items-center justify-center rounded-xl px-2 py-3 text-center transition-all hover:border-flare-orange/50 hover:bg-flare-orange/5 sm:h-32 sm:p-4" onClick={() => onStartReport()}>
+          </button>
+          <button type="button" className="glass-panel group flex h-28 cursor-pointer flex-col items-center justify-center rounded-xl px-2 py-3 text-center transition-all hover:border-flare-orange/50 hover:bg-flare-orange/5 sm:h-32 sm:p-4" onClick={() => onStartReport()}>
             <div className="relative mb-2 flex h-10 w-10 items-center justify-center overflow-hidden rounded-lg bg-flare-orange/10 text-flare-orange transition-transform group-hover:scale-105 sm:h-11 sm:w-11">
                <div className="absolute inset-0 bg-gradient-to-t from-flare-orange/20 to-transparent" />
                <Mic className="relative z-10 h-5 w-5" />
             </div>
             <span className="text-[10px] font-bold uppercase tracking-widest text-slate transition-colors group-hover:text-white">Audio</span>
             <span className="mt-1 hidden text-[10px] leading-snug text-slate/80 sm:block">Record a short voice note.</span>
-          </Card>
-          <Card className="glass-panel group flex h-28 cursor-pointer flex-col items-center justify-center rounded-xl px-2 py-3 text-center transition-all hover:border-blue/50 hover:bg-blue/5 sm:h-32 sm:p-4" onClick={onAskGemma}>
+          </button>
+          <button type="button" className="glass-panel group flex h-28 cursor-pointer flex-col items-center justify-center rounded-xl px-2 py-3 text-center transition-all hover:border-blue/50 hover:bg-blue/5 sm:h-32 sm:p-4" onClick={onAskGemma}>
             <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-blue/10 text-blue transition-transform group-hover:scale-105 sm:h-11 sm:w-11">
               <MessageCircle className="h-5 w-5" />
             </div>
             <span className="text-[10px] font-bold uppercase tracking-widest text-slate transition-colors group-hover:text-white">Message</span>
             <span className="mt-1 hidden text-[10px] leading-snug text-slate/80 sm:block">Chat with Gemma 4.</span>
-          </Card>
+          </button>
         </div>
       </section>
 
       <section className="mt-5">
         <h2 className="mb-3 px-1 text-[10px] font-bold uppercase tracking-widest text-slate">Review & Prepare</h2>
         <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-6 sm:gap-3">
-          <Card className="glass-panel group flex h-24 cursor-pointer flex-col items-center justify-center rounded-xl px-2 py-3 text-center transition-all hover:border-slate/80 sm:h-28 sm:p-4" onClick={onViewHistory}>
+          <button type="button" className="glass-panel group flex h-24 cursor-pointer flex-col items-center justify-center rounded-xl px-2 py-3 text-center transition-all hover:border-slate/80 sm:h-28 sm:p-4" onClick={onViewHistory}>
             <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-mist/30 text-slate transition-transform group-hover:scale-105">
                <History className="h-5 w-5" />
             </div>
             <span className="text-[10px] font-bold uppercase tracking-widest text-slate transition-colors group-hover:text-white">History</span>
-          </Card>
-          <Card className="glass-panel group flex h-24 cursor-pointer flex-col items-center justify-center rounded-xl px-2 py-3 text-center transition-all hover:border-critical/50 hover:bg-critical/5 sm:h-28 sm:p-4" onClick={onViewMedical}>
+          </button>
+          <button type="button" className="glass-panel group flex h-24 cursor-pointer flex-col items-center justify-center rounded-xl px-2 py-3 text-center transition-all hover:border-critical/50 hover:bg-critical/5 sm:h-28 sm:p-4" onClick={onViewMedical}>
             <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-critical/10 text-critical transition-transform group-hover:scale-105">
                <HeartPulse className="h-5 w-5" />
             </div>
             <span className="text-[10px] font-bold uppercase tracking-widest text-slate transition-colors group-hover:text-white">Profile</span>
-          </Card>
-          <Card className="glass-panel group flex h-24 cursor-pointer flex-col items-center justify-center rounded-xl px-2 py-3 text-center transition-all hover:border-flare-orange/50 hover:bg-flare-orange/5 sm:h-28 sm:p-4" onClick={onViewToolkit}>
+          </button>
+          <button type="button" className="glass-panel group flex h-24 cursor-pointer flex-col items-center justify-center rounded-xl px-2 py-3 text-center transition-all hover:border-flare-orange/50 hover:bg-flare-orange/5 sm:h-28 sm:p-4" onClick={onViewToolkit}>
             <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-flare-orange/10 text-flare-orange transition-transform group-hover:scale-105">
                <AlertTriangle className="h-5 w-5" />
             </div>
             <span className="text-[10px] font-bold uppercase tracking-widest text-slate transition-colors group-hover:text-white">Toolkit</span>
-          </Card>
-          <Card className="glass-panel group flex h-24 cursor-pointer flex-col items-center justify-center rounded-xl px-2 py-3 text-center transition-all hover:border-cyan-brand/50 sm:h-28 sm:p-4" onClick={onViewSafety}>
+          </button>
+          <button type="button" className="glass-panel group flex h-24 cursor-pointer flex-col items-center justify-center rounded-xl px-2 py-3 text-center transition-all hover:border-cyan-brand/50 sm:h-28 sm:p-4" onClick={onViewSafety}>
             <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-cyan-brand/10 text-cyan-brand transition-transform group-hover:scale-105">
                <BookOpen className="h-5 w-5" />
             </div>
             <span className="text-[10px] font-bold uppercase tracking-widest text-slate transition-colors group-hover:text-white">Safety</span>
-          </Card>
-          <Card className="glass-panel group flex h-24 cursor-pointer flex-col items-center justify-center rounded-xl px-2 py-3 text-center transition-all hover:border-cyan-brand/50 sm:h-28 sm:p-4" onClick={onAskGemma}>
+          </button>
+          <button type="button" className="glass-panel group flex h-24 cursor-pointer flex-col items-center justify-center rounded-xl px-2 py-3 text-center transition-all hover:border-cyan-brand/50 sm:h-28 sm:p-4" onClick={onAskGemma}>
             <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-cyan-brand/20 text-cyan-brand transition-transform group-hover:scale-105">
                <Bot className="h-5 w-5" />
             </div>
             <span className="text-[10px] font-bold uppercase tracking-widest text-slate transition-colors group-hover:text-white">Ask Gemma</span>
-          </Card>
-          <Card className="glass-panel group flex h-24 cursor-pointer flex-col items-center justify-center rounded-xl px-2 py-3 text-center transition-all hover:border-violet-brand/50 hover:bg-violet-brand/5 sm:h-28 sm:p-4" onClick={onOpenDemo}>
+          </button>
+          <button type="button" className="glass-panel group flex h-24 cursor-pointer flex-col items-center justify-center rounded-xl px-2 py-3 text-center transition-all hover:border-violet-brand/50 hover:bg-violet-brand/5 sm:h-28 sm:p-4" onClick={onOpenDemo}>
             <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-violet-brand/15 text-violet-brand transition-transform group-hover:scale-105">
                <PlayCircle className="h-5 w-5" />
             </div>
             <span className="text-[10px] font-bold uppercase tracking-widest text-slate transition-colors group-hover:text-white">Demo</span>
-          </Card>
+          </button>
         </div>
       </section>
 
