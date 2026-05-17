@@ -100,6 +100,13 @@ export function MapComponent({ onSelectPacket, height = '300px', className = '' 
 
   return (
     <div className={`w-full bg-surface border border-mist/30 rounded-2xl overflow-hidden relative z-0 ${className}`} style={{ height }}>
+      {!loading && packets.length === 0 && (
+        <div className="pointer-events-none absolute inset-x-4 top-4 z-[900] rounded-xl border border-cyan-brand/15 bg-cloud/70 px-3 py-2 text-left backdrop-blur-sm">
+          <p className="text-[10px] font-mono uppercase tracking-widest text-cyan-brand">No mapped packets yet</p>
+          <p className="mt-1 text-xs text-slate">Add location to a Crisis Packet to place it on the tactical map.</p>
+        </div>
+      )}
+
       {loading && (
         <div className="absolute inset-0 flex items-center justify-center bg-cloud/50 backdrop-blur-sm z-[1000]">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue"></div>

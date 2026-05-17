@@ -22,9 +22,9 @@ export function Logo({ shape = 'Flare', size = 'md', className, containerClassNa
 
   const renderFlare = () => (
     <img
-      src="/brand/signalpack-flare.svg"
+      src="/brand/signalpack-flare.png"
       alt="SignalPack signal flare logo"
-      className={cn('h-[82%] w-[82%] object-contain drop-shadow-[0_0_10px_rgba(34,211,238,0.55)]', className)}
+      className={cn('h-full w-full object-cover object-center', className)}
     />
   );
 
@@ -46,7 +46,7 @@ export function Logo({ shape = 'Flare', size = 'md', className, containerClassNa
 
   return (
     <div className={cn(
-      "flex items-center justify-center shrink-0 bg-[#070B14] border border-blue/20 shadow-[inset_0_0_18px_rgba(59,130,246,0.18),0_0_22px_rgba(59,130,246,0.25)]",
+      "flex items-center justify-center shrink-0 overflow-hidden bg-[#07080B] border border-cyan-brand/20 shadow-[inset_0_0_18px_rgba(0,230,255,0.08),0_0_22px_rgba(37,99,255,0.22)]",
       currentSize.container,
       containerClassName
     )}>

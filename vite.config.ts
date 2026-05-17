@@ -21,14 +21,14 @@ export default defineConfig(({mode}) => {
           display: 'standalone',
           icons: [
             {
-              src: '/icon.svg',
+              src: '/icon.png',
               sizes: '192x192',
-              type: 'image/svg+xml'
+              type: 'image/png'
             },
             {
-              src: '/icon.svg',
+              src: '/icon.png',
               sizes: '512x512',
-              type: 'image/svg+xml',
+              type: 'image/png',
               purpose: 'any maskable'
             }
           ]

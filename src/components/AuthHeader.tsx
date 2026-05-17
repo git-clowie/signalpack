@@ -2,6 +2,7 @@ import React from 'react';
 import { auth, signInWithGoogle } from '../firebase';
 import { LogIn, User as UserIcon, Menu } from 'lucide-react';
 import { useAppStore } from '../engine/state/useAppStore';
+import { Logo } from './Logo';
 
 export function AuthHeader() {
   const [user, setUser] = React.useState(auth.currentUser);
@@ -29,7 +30,7 @@ export function AuthHeader() {
   };
 
   return (
-    <div className="sticky top-0 z-[100] flex items-center justify-between border-b border-mist/20 bg-surface/45 px-4 pb-3 pt-9 backdrop-blur-md sm:pt-5">
+    <div className="sticky top-0 z-[100] flex items-center justify-between border-b border-cyan-brand/10 bg-[#07080B]/72 px-4 pb-3 pt-9 backdrop-blur-md sm:pt-5 md:px-8">
       <div className="flex min-w-0 items-center gap-3">
         <button 
           onClick={openMenu}
@@ -38,6 +39,7 @@ export function AuthHeader() {
         >
           <Menu className="h-5 w-5" />
         </button>
+        <Logo size="sm" containerClassName="h-8 w-8 rounded-lg md:hidden" />
         <div className="min-w-0">
           <div className="flex items-center gap-2">
             <span className="h-2 w-2 rounded-full bg-cyan-brand shadow-[0_0_8px_var(--color-cyan-brand)]" />
