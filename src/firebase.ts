@@ -1,10 +1,21 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
+import { Auth, getAuth, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
 import { getFirestore, collection, doc, setDoc, getDocs, query, orderBy, serverTimestamp, enableIndexedDbPersistence } from 'firebase/firestore';
-import firebaseConfig from '../firebase-applet-config.json';
 
+const firebaseConfig = {
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || '',
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || '',
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || '',
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || '',
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '',
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || '',
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || '',
+};
+
+const firestoreDatabaseId = import.meta.env.VITE_FIREBASE_FIRESTORE_DATABASE_ID || '';
+export const hasFirebaseConfig = Boolean(firebaseConfig.apiKey && firebaseConfig.projectId && firebaseConfig.appId);
 const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
+export const db = firestoreDatabaseId ? getFirestore(app, firestoreDatabaseId) : getFirestore(app);
 
 // Enable offline persistence
 enableIndexedDbPersistence(db).catch((err) => {
@@ -15,10 +26,13 @@ enableIndexedDbPersistence(db).catch((err) => {
   }
 });
 
-export const auth = getAuth(app);
+export const auth: Auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
 
 export const signInWithGoogle = async () => {
+    if (!hasFirebaseConfig) {
+        throw new Error('Firebase is not configured. Add VITE_FIREBASE_* values to your local environment.');
+    }
     try {
         const result = await signInWithPopup(auth, googleProvider);
         return result.user;
