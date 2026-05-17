@@ -10,6 +10,10 @@ interface ModelCallOptions {
   jsonMode?: boolean;
 }
 
+function wait(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 function extractTextContent(content: any): string {
   if (typeof content === 'string') return content;
   if (Array.isArray(content)) {
@@ -45,16 +49,23 @@ export async function callOpenRouter(
     body.response_format = { type: 'json_object' };
   }
 
-  const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${settings.openRouterApiKey.trim()}`,
-      'Content-Type': 'application/json',
-      'HTTP-Referer': typeof window !== 'undefined' ? window.location.origin : 'https://signalpack.local',
-      'X-Title': 'SignalPack',
-    },
-    body: JSON.stringify(body),
-  });
+  const request = () =>
+    fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${settings.openRouterApiKey.trim()}`,
+        'Content-Type': 'application/json',
+        'HTTP-Referer': typeof window !== 'undefined' ? window.location.origin : 'https://signalpack.local',
+        'X-Title': 'SignalPack',
+      },
+      body: JSON.stringify(body),
+    });
+
+  let response = await request();
+  if (response.status === 429) {
+    await wait(900);
+    response = await request();
+  }
 
   if (!response.ok) {
     const detail = await response.text().catch(() => '');
