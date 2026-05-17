@@ -40,10 +40,9 @@ export default function App() {
   const effectiveLocalMode = isLocalMode;
 
   useEffect(() => {
-    // Check if first visit
+    // Keep first launch action-first; the tutorial stays available from Settings.
     const hasSeenTutorial = localStorage.getItem('signalpack_tutorial');
     if (!hasSeenTutorial) {
-      setShowTutorial(true);
       localStorage.setItem('signalpack_tutorial', 'true');
     }
 
@@ -298,11 +297,6 @@ export default function App() {
             )}
           </AnimatePresence>
         </main>
-        
-        {/* Mobile footer for 'Built by' */}
-        <div className="md:hidden w-full p-4 text-center border-t border-mist/20 bg-surface/50 mt-auto flex-none">
-          <p className="text-[10px] text-blue font-mono opacity-80 uppercase tracking-widest">Built by pixek.xyz</p>
-        </div>
       </div>
 
       <MenuOverlay 

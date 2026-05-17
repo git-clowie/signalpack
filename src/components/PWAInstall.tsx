@@ -62,34 +62,31 @@ export function PWAInstall() {
   if (isStandalone || !showPrompt) return null;
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 z-50 animate-in slide-in-from-bottom-5">
-      <Card className="p-4 border-blue/30 bg-surface/95 backdrop-blur-md shadow-2xl relative">
+    <div className="fixed inset-x-3 bottom-3 z-50 animate-in slide-in-from-bottom-4 sm:left-auto sm:right-4 sm:w-[22rem]">
+      <Card className="relative rounded-xl border-blue/25 bg-surface/95 p-3 shadow-2xl backdrop-blur-md">
         <button 
           onClick={handleDismiss}
-          className="absolute top-2 right-2 p-1 text-slate hover:text-white transition-colors"
+          className="absolute right-2 top-2 rounded-md p-1 text-slate transition-colors hover:bg-mist/30 hover:text-white"
+          aria-label="Dismiss install prompt"
         >
-          <X className="w-4 h-4" />
+          <X className="h-4 w-4" />
         </button>
         
-        <div className="flex items-start gap-4">
-          <div className="bg-blue/20 p-3 rounded-xl shrink-0">
-            <Download className="w-6 h-6 text-blue" />
+        <div className="flex items-center gap-3 pr-6">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue/15 text-blue">
+            <Download className="h-4 w-4" />
           </div>
-          <div className="flex-1">
-            <h3 className="text-sm font-bold text-white mb-1">Install Offline App</h3>
+          <div className="min-w-0 flex-1">
+            <h3 className="mb-0.5 text-sm font-bold text-white">Install for offline access</h3>
             {isIOS ? (
-              <div className="text-xs text-slate space-y-2">
-                <p>SignalPack works offline during emergencies. Install it to your home screen:</p>
-                <ol className="list-decimal list-inside space-y-1 font-medium text-white/80">
-                  <li>Tap the <Share className="inline w-3 h-3 mx-1" /> <strong>Share</strong> button</li>
-                  <li>Scroll down and select <PlusSquare className="inline w-3 h-3 mx-1" /> <strong>Add to Home Screen</strong></li>
-                </ol>
-              </div>
+              <p className="text-xs leading-relaxed text-slate">
+                Tap <Share className="mx-0.5 inline h-3 w-3" /> Share, then <PlusSquare className="mx-0.5 inline h-3 w-3" /> Add to Home Screen.
+              </p>
             ) : (
-              <div className="text-xs text-slate space-y-2">
-                <p>Install SignalPack to use it offline when networks go down.</p>
-                <Button onClick={handleInstallClick} size="sm" className="w-full mt-2 bg-blue text-white hover:bg-blue/90 border-0">
-                  Install Now
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+                <p className="text-xs leading-relaxed text-slate sm:flex-1">Use cached tools when networks are unstable.</p>
+                <Button onClick={handleInstallClick} size="sm" className="h-8 shrink-0 rounded-lg border-0 bg-blue px-3 text-white hover:bg-blue/90">
+                  Install
                 </Button>
               </div>
             )}

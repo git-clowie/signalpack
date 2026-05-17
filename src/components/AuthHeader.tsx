@@ -1,7 +1,6 @@
 import React from 'react';
-import { auth, signInWithGoogle, logout } from '../firebase';
+import { auth, signInWithGoogle } from '../firebase';
 import { LogIn, User as UserIcon, Menu } from 'lucide-react';
-import { BrandWordmark } from './BrandWordmark';
 import { useAppStore } from '../engine/state/useAppStore';
 
 export function AuthHeader() {
@@ -24,23 +23,29 @@ export function AuthHeader() {
   };
 
   return (
-    <div className="flex items-center justify-between px-4 pt-12 pb-4 sm:pt-8 sm:pb-3 bg-surface/30 border-b border-mist/20 backdrop-blur-md sticky top-0 z-[100]">
-      <div className="flex items-center gap-4">
+    <div className="sticky top-0 z-[100] flex items-center justify-between border-b border-mist/20 bg-surface/45 px-4 pb-3 pt-9 backdrop-blur-md sm:pt-5">
+      <div className="flex min-w-0 items-center gap-3">
         <button 
           onClick={() => setIsMenuOpen(true)}
-          className="p-2 -ml-2 text-slate hover:text-white transition-colors rounded-full hover:bg-mist/20 md:hidden"
+          className="-ml-2 rounded-lg p-2 text-slate transition-colors hover:bg-mist/20 hover:text-white md:hidden"
           title="Menu"
         >
-          <Menu className="w-6 h-6" />
+          <Menu className="h-5 w-5" />
         </button>
-        <BrandWordmark compact />
+        <div className="min-w-0">
+          <div className="flex items-center gap-2">
+            <span className="h-1.5 w-1.5 rounded-full bg-cyan-brand shadow-[0_0_8px_var(--color-cyan-brand)]" />
+            <span className="truncate text-sm font-bold tracking-tight text-white">SignalPack</span>
+          </div>
+          <p className="hidden text-[9px] font-mono uppercase tracking-widest text-slate sm:block">Gemma 4 crisis packets</p>
+        </div>
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3">
         {user ? (
           <button 
             onClick={() => setIsMenuOpen(true)}
-            className="w-10 h-10 rounded-full border border-mist/50 hover:border-cyan-brand transition-colors bg-surface text-slate hover:text-cyan-brand flex items-center justify-center overflow-hidden"
+            className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-lg border border-mist/50 bg-surface text-slate transition-colors hover:border-cyan-brand hover:text-cyan-brand"
             title="Menu"
           >
             {user.photoURL ? (
@@ -52,9 +57,9 @@ export function AuthHeader() {
         ) : (
           <button 
             onClick={handleSignIn}
-            className="flex items-center gap-2 px-3 py-1.5 bg-blue/10 border border-blue/30 rounded-lg text-blue hover:bg-blue/20 transition-all text-[10px] font-bold uppercase tracking-widest"
+            className="flex items-center gap-2 rounded-lg border border-blue/30 bg-blue/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-blue transition-all hover:bg-blue/20"
           >
-            <LogIn className="w-3 h-3" />
+            <LogIn className="h-3 w-3" />
             Sign In
           </button>
         )}
