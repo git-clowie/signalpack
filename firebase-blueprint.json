@@ -1,0 +1,31 @@
+{
+  "entities": {
+    "CrisisPacket": {
+      "title": "Crisis Packet",
+      "description": "A structured emergency reporting document",
+      "type": "object",
+      "properties": {
+        "packet_id": { "type": "string" },
+        "userId": { "type": "string" },
+        "incident_type": { "type": "string" },
+        "severity": { "type": "string", "enum": ["low", "moderate", "high", "critical"] },
+        "location_text": { "type": "string" },
+        "lat": { "type": "number" },
+        "lng": { "type": "number" },
+        "time_observed": { "type": "string" },
+        "hazards": { "type": "array", "items": { "type": "string" } },
+        "immediate_actions": { "type": "array", "items": { "type": "string" } },
+        "share_message_short": { "type": "string" },
+        "structured_report_markdown": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "incident_type", "severity", "location_text", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}/packets/{packetId}": {
+      "schema": "CrisisPacket",
+      "description": "Individual emergency reports for a specific user"
+    }
+  }
+}

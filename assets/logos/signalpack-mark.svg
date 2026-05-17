@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="SignalPack Signal Flare mark">
+  <defs>
+    <linearGradient id="arc" x1="72" x2="440" y1="140" y2="392" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#50B2C6"/>
+      <stop offset=".52" stop-color="#3B82F6"/>
+      <stop offset=".84" stop-color="#9059F3"/>
+      <stop offset="1" stop-color="#E29357"/>
+    </linearGradient>
+    <linearGradient id="alert" x1="382" x2="462" y1="178" y2="346" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E29357"/>
+      <stop offset="1" stop-color="#FF5D5D"/>
+    </linearGradient>
+    <radialGradient id="core" cx="210" cy="330" r="112" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF"/>
+      <stop offset=".25" stop-color="#A5F3FC"/>
+      <stop offset=".62" stop-color="#3B82F6"/>
+      <stop offset="1" stop-color="#1D4ED8"/>
+    </radialGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="#040404"/>
+  <circle cx="210" cy="330" r="118" fill="#081527" stroke="#2563EB" stroke-width="9"/>
+  <circle cx="210" cy="330" r="78" fill="url(#core)"/>
+  <circle cx="210" cy="330" r="33" fill="#E0F2FE"/>
+  <path d="M118 293a139 139 0 0 1 139-139" fill="none" stroke="#50B2C6" stroke-width="16" stroke-linecap="round" opacity=".92"/>
+  <path d="M86 266a193 193 0 0 1 193-193" fill="none" stroke="#0EA5E9" stroke-width="8" stroke-linecap="round" opacity=".72"/>
+  <path d="M56 241A246 246 0 0 1 302-5" fill="none" stroke="#2563EB" stroke-width="6" stroke-linecap="round" opacity=".5"/>
+  <path d="M210 56c117 0 212 95 212 212H290c0-44-36-80-80-80V56Z" fill="url(#arc)"/>
+  <path d="M308 270h118c0-46-13-91-37-130" fill="none" stroke="url(#alert)" stroke-width="29" stroke-linecap="round"/>
+  <path d="M210 56c90 0 169 57 199 140" fill="none" stroke="#50B2C6" stroke-width="8" stroke-linecap="round" opacity=".82"/>
+  <path d="M210 156c57 0 107 36 126 88" fill="none" stroke="#A78BFA" stroke-width="31" stroke-linecap="round" opacity=".58"/>
+  <path d="M222 310 410 121" stroke="#040404" stroke-width="59" stroke-linecap="round" opacity=".88"/>
+  <path d="M229 303 418 114" stroke="#1E40AF" stroke-width="37" stroke-linecap="round"/>
+  <path d="M229 303 418 114" stroke="#50B2C6" stroke-width="13" stroke-linecap="round" opacity=".82"/>
+</svg>

@@ -1,0 +1,43 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 0. Default Deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() { return request.auth != null; }
+    function isOwner(userId) { return isSignedIn() && request.auth.uid == userId; }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+
+    // Validation for CrisisPacket
+    function isValidCrisisPacket(data) {
+      return data.keys().hasAll(['userId', 'incident_type', 'severity', 'location_text', 'createdAt'])
+        && data.userId == request.auth.uid
+        && data.severity in ['low', 'moderate', 'high', 'critical']
+        && data.location_text is string && data.location_text.size() <= 1000
+        && data.incident_type is string && data.incident_type.size() <= 100
+        && data.createdAt == request.time;
+    }
+
+    // User Data match block
+    match /users/{userId} {
+      // Allow user to read/write their own profile
+      allow get: if isOwner(userId);
+      
+      match /packets/{packetId} {
+        allow list: if isOwner(userId);
+        allow get: if isOwner(userId);
+        allow create: if isOwner(userId) 
+          && isValidId(packetId)
+          && isValidCrisisPacket(incoming());
+        
+        // Packets are immutable for now in the UI, but we allow delete
+        allow delete: if isOwner(userId);
+      }
+    }
+  }
+}

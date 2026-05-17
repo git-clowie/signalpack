@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="980" viewBox="0 0 900 980" role="img" aria-label="SignalPack stacked logo">
+  <defs>
+    <linearGradient id="word" x1="412" x2="674" y1="0" y2="0" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#50B2C6"/>
+      <stop offset=".48" stop-color="#3B82F6"/>
+      <stop offset="1" stop-color="#9059F3"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="980" rx="48" fill="#040404"/>
+  <image href="signalpack-mark.svg" x="194" y="72" width="512" height="512"/>
+  <text x="450" y="704" text-anchor="middle" font-family="General Sans, Inter, Arial, sans-serif" font-size="112" font-weight="700" fill="#F2F2F1">Signal</text>
+  <text x="640" y="704" text-anchor="middle" font-family="General Sans, Inter, Arial, sans-serif" font-size="112" font-weight="700" fill="url(#word)">Pack</text>
+  <text x="450" y="784" text-anchor="middle" font-family="JetBrains Mono, ui-monospace, monospace" font-size="28" letter-spacing="12" fill="#888888">TRUSTED ALERTS</text>
+  <text x="450" y="840" text-anchor="middle" font-family="JetBrains Mono, ui-monospace, monospace" font-size="28" letter-spacing="12" fill="#E29357">STRUCTURED ACTION</text>
+</svg>

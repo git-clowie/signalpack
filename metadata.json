@@ -1,0 +1,10 @@
+{
+  "name": "SignalPack",
+  "description": "SignalPack is a Gemma 4-powered emergency reporting assistant that turns uncertainty into a clear response.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ],
+  "majorCapabilities": []
+}
