@@ -15,6 +15,7 @@
   <a href="#architecture">Architecture</a> ·
   <a href="#gemma-4-ai-layer">Gemma 4 AI Layer</a> ·
   <a href="#share--export">Share & Export</a> ·
+  <a href="docs/FINAL_PRESENTATION.md">Presentation Kit</a> ·
   <a href="#running-locally">Run Locally</a> ·
   <a href="#competition-positioning">Competition</a>
 </p>
@@ -293,6 +294,8 @@ SignalPack is built for the Gemma 4 Good Hackathon as a practical crisis-intelli
 - supports low-friction mobile capture
 - produces shareable, exportable, auditable Crisis Packets
 - avoids committing demo secrets or pretending fallback is AI output
+
+The final pitch, 8-slide outline, 3-minute video script, and Kaggle write-up draft live in [`docs/FINAL_PRESENTATION.md`](docs/FINAL_PRESENTATION.md).
 
 ## Safety Position
 
