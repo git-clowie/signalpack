@@ -1,7 +1,25 @@
 import { CrisisPacket, DraftReport, MedicalProfile } from '../../types';
 import { classifyIncident, buildEvidenceSummary, makePacketId, nowIso, SAFETY_SOURCES } from './utils';
 
+function readableFallbackReason(reason: string) {
+  const lower = reason.toLowerCase();
+  if (lower.includes('429') || lower.includes('rate-limit') || lower.includes('rate limited')) {
+    return 'Gemma 4 is temporarily rate-limited upstream. Retry shortly or use another OpenRouter key/model.';
+  }
+  if (lower.includes('missing openrouter api key')) {
+    return 'OpenRouter key is missing. Add a key in Settings to use hosted Gemma 4.';
+  }
+  if (lower.includes('401') || lower.includes('403') || lower.includes('unauthorized')) {
+    return 'OpenRouter rejected the key or model access. Check Settings and try again.';
+  }
+  if (lower.includes('failed to fetch') || lower.includes('network')) {
+    return 'Network connection to the hosted Gemma 4 provider failed.';
+  }
+  return 'Hosted Gemma 4 provider was unavailable. Review manually or retry.';
+}
+
 export function fallbackAnalysis(text: string, reason: string) {
+  const publicReason = readableFallbackReason(reason);
   const incidentType = classifyIncident(text);
   const hazards = incidentType === 'flood'
     ? ['Possible floodwater, debris, and electrical hazard']
@@ -15,7 +33,7 @@ export function fallbackAnalysis(text: string, reason: string) {
     packet: {
       incident_type: incidentType,
       hazards,
-      uncertainties: ['AI provider unavailable: ' + reason, 'Confirm people at risk and immediate danger.'],
+      uncertainties: [publicReason, 'Confirm people at risk and immediate danger.'],
       model_provider: 'fallback' as const,
       model_name: 'deterministic-safety-fallback',
       fallback_used: true,
@@ -36,6 +54,7 @@ export function fallbackAnalysis(text: string, reason: string) {
 }
 
 export function fallbackPacket(draft: DraftReport, reason: string, medicalProfile?: MedicalProfile): CrisisPacket {
+  const publicReason = readableFallbackReason(reason);
   const incidentType = draft.packet?.incident_type || classifyIncident(draft.text);
   const locationText = draft.location
     ? `${draft.location.lat.toFixed(5)}, ${draft.location.lng.toFixed(5)}`
@@ -64,7 +83,7 @@ export function fallbackPacket(draft: DraftReport, reason: string, medicalProfil
     people_at_risk_count: 0,
     hazards: draft.packet?.hazards || ['Unverified hazard; review manually'],
     evidence: buildEvidenceSummary(draft),
-    uncertainties: draft.packet?.uncertainties || ['AI provider unavailable: ' + reason],
+    uncertainties: draft.packet?.uncertainties || [publicReason],
     immediate_actions: [
       'Call emergency services now if anyone is in immediate danger.',
       'Move away from fire, floodwater, gas smell, smoke, or downed power if safe to do so.',
@@ -79,8 +98,8 @@ export function fallbackPacket(draft: DraftReport, reason: string, medicalProfil
     share_message_short: `Emergency report near ${locationText}. Situation type: ${incidentType}. Details need manual review.`,
     share_message_short_local: `Raport de urgență la ${locationText}. Tip situație: ${incidentType}. Detaliile necesită verificare manuală.`,
     share_message_detailed: `SignalPack fallback packet. ${draft.text || 'No text description provided.'}${medicalNote}`,
-    structured_report_markdown: `# SignalPack Crisis Packet\n\n**Fallback used:** ${reason}\n\n**Incident type:** ${incidentType}\n\n**Location:** ${locationText}\n\n**User notes:** ${draft.text || 'No text provided.'}${medicalNote}`,
-    structured_report_markdown_local: `# SignalPack Crisis Packet\n\n**Fallback folosit:** ${reason}\n\n**Tip incident:** ${incidentType}\n\n**Locație:** ${locationText}\n\n**Notițe user:** ${draft.text || 'Fără text.'}${medicalNote}`,
+    structured_report_markdown: `# SignalPack Crisis Packet\n\n**Fallback used:** ${publicReason}\n\n**Incident type:** ${incidentType}\n\n**Location:** ${locationText}\n\n**User notes:** ${draft.text || 'No text provided.'}${medicalNote}`,
+    structured_report_markdown_local: `# SignalPack Crisis Packet\n\n**Fallback folosit:** ${publicReason}\n\n**Tip incident:** ${incidentType}\n\n**Locație:** ${locationText}\n\n**Notițe user:** ${draft.text || 'Fără text.'}${medicalNote}`,
     sources_used: ['User input', 'Deterministic fallback rules'],
     safety_sources: SAFETY_SOURCES,
     model_provider: 'fallback',

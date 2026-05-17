@@ -2,7 +2,7 @@ import { CrisisPacket } from './types';
 
 const demoTrace = {
   provider: 'openrouter' as const,
-  model: 'google/gemma-4-26b-a4b-it',
+  model: 'google/gemma-4-31b-it:free@preset/signalpack',
   started_at: '2026-05-17T10:00:00.000Z',
   completed_at: '2026-05-17T10:00:03.000Z',
   request_id: 'demo-openrouter-gemma-4',
@@ -41,7 +41,7 @@ export const demoPackets: CrisisPacket[] = [
     hazards: ["Electrocution risk", "Rapid water rising"],
     help_needed: ["Evacuation team", "Medical unit"],
     model_provider: "openrouter",
-    model_name: "google/gemma-4-26b-a4b-it",
+    model_name: "google/gemma-4-31b-it:free@preset/signalpack",
     ai_trace: demoTrace,
     fallback_used: false,
     safety_sources: safetySources,
@@ -73,7 +73,7 @@ export const demoPackets: CrisisPacket[] = [
     hazards: ["Smoke inhalation", "Potential explosion"],
     help_needed: ["Fire Department", "Traffic Police"],
     model_provider: "openrouter",
-    model_name: "google/gemma-4-26b-a4b-it",
+    model_name: "google/gemma-4-31b-it:free@preset/signalpack",
     ai_trace: demoTrace,
     fallback_used: false,
     safety_sources: safetySources,

@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { LogoShape } from './components/Logo';
 import {
   AI_STORAGE_KEYS,
+  DEMO_OPENROUTER_API_KEY,
   DEFAULT_OPENROUTER_MODEL,
   RuntimeAiProvider,
 } from './engine/ai/settings';
@@ -28,7 +29,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const [mapStyle, setMapStyleState] = useState<'tactical' | 'satellite' | 'streets'>('tactical');
   const [fastSendMode, setFastSendModeState] = useState(false);
   const [aiProvider, setAiProviderState] = useState<RuntimeAiProvider>('openrouter');
-  const [openRouterApiKey, setOpenRouterApiKeyState] = useState('');
+  const [openRouterApiKey, setOpenRouterApiKeyState] = useState(DEMO_OPENROUTER_API_KEY);
   const [openRouterModel, setOpenRouterModelState] = useState(DEFAULT_OPENROUTER_MODEL);
 
   useEffect(() => {
@@ -46,7 +47,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     }
     setAiProviderState('openrouter');
     localStorage.setItem(AI_STORAGE_KEYS.provider, 'openrouter');
-    setOpenRouterApiKeyState(localStorage.getItem(AI_STORAGE_KEYS.openRouterApiKey) || '');
+    setOpenRouterApiKeyState(localStorage.getItem(AI_STORAGE_KEYS.openRouterApiKey) || DEMO_OPENROUTER_API_KEY);
     setOpenRouterModelState(localStorage.getItem(AI_STORAGE_KEYS.openRouterModel) || DEFAULT_OPENROUTER_MODEL);
   }, []);
 

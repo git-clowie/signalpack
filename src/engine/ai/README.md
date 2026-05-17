@@ -2,7 +2,7 @@
 
 This directory is responsible for routing SignalPack's **Gemma 4** calls.
 
-Primary hosted provider: **OpenRouter** using the browser-saved key from Settings.
+Primary hosted provider: **OpenRouter** using the browser-saved key from Settings, or a deploy-time demo key when the hosted build provides one.
 
 Local Gemma runtimes are intentionally user-owned extensions; the public PWA ships with OpenRouter as the functional path.
 
@@ -16,4 +16,5 @@ Local Gemma runtimes are intentionally user-owned extensions; the public PWA shi
 
 - `signalpack_ai_provider`: `openrouter`
 - `signalpack_openrouter_api_key`: local-only API key
-- `signalpack_openrouter_model`: default `google/gemma-4-26b-a4b-it`
+- `signalpack_openrouter_model`: default `google/gemma-4-31b-it:free@preset/signalpack`
+- `VITE_SIGNALPACK_DEMO_OPENROUTER_KEY`: optional hosted-demo key injected by deployment, never committed

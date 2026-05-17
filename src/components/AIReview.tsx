@@ -81,7 +81,7 @@ export function AIReviewScreen({
                 <AlertTriangle className="w-4 h-4" /> Fallback Mode
               </h3>
               <p className="text-xs text-slate leading-relaxed">
-                The configured AI provider was unavailable, so SignalPack used deterministic safety rules. Add an OpenRouter key in Settings to generate a model-backed packet.
+                The configured Gemma 4 provider was unavailable, so SignalPack used deterministic safety rules. Check the key, model, or rate limit in Settings, then retry for a model-backed packet.
               </p>
             </Card>
           )}

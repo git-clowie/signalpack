@@ -1,7 +1,12 @@
 import React from 'react';
 import { Button, Card } from '@/src/components/ui';
-import { AlertTriangle, CheckCircle2, Cloud, KeyRound, Loader2, ShieldCheck } from 'lucide-react';
-import { DEFAULT_OPENROUTER_MODEL } from '../engine/ai/settings';
+import { AlertTriangle, CheckCircle2, Cloud, Copy, Download, ExternalLink, KeyRound, Loader2, ShieldCheck } from 'lucide-react';
+import {
+  DEMO_OPENROUTER_API_KEY,
+  DEFAULT_OPENROUTER_MODEL,
+  LOCAL_GEMMA_MODEL_ID,
+  LOCAL_GEMMA_MODEL_URL,
+} from '../engine/ai/settings';
 import { useSettings } from '../SettingsContext';
 
 export function AIProviderSettings({ setIsLocalMode }: { setIsLocalMode: (value: boolean) => void }) {
@@ -20,9 +25,16 @@ export function AIProviderSettings({ setIsLocalMode }: { setIsLocalMode: (value:
     setIsLocalMode(!navigator.onLine);
   }, [setAiProvider, setIsLocalMode]);
 
-  const maskedKey = openRouterApiKey
+  const isDemoKeyActive = Boolean(DEMO_OPENROUTER_API_KEY && openRouterApiKey === DEMO_OPENROUTER_API_KEY);
+  const maskedKey = isDemoKeyActive
+    ? 'Demo key active'
+    : openRouterApiKey
     ? `${openRouterApiKey.slice(0, 8)}...${openRouterApiKey.slice(-4)}`
     : 'No key saved';
+
+  const copyLocalSnippet = async () => {
+    await navigator.clipboard.writeText(`from transformers import AutoProcessor, AutoModelForImageTextToText\n\nprocessor = AutoProcessor.from_pretrained("${LOCAL_GEMMA_MODEL_ID}")\nmodel = AutoModelForImageTextToText.from_pretrained("${LOCAL_GEMMA_MODEL_ID}")`);
+  };
 
   const handleTestConnection = async () => {
     if (!openRouterApiKey.trim()) {
@@ -93,7 +105,7 @@ export function AIProviderSettings({ setIsLocalMode }: { setIsLocalMode: (value:
               type="password"
               value={openRouterApiKey}
               onChange={(event) => setOpenRouterApiKey(event.target.value.trim())}
-              placeholder="sk-or-v1..."
+              placeholder="Paste OpenRouter key"
               className="w-full bg-surface border border-mist/50 rounded-xl px-3 py-2 text-sm text-white placeholder:text-slate/50 focus:outline-none focus:border-blue"
             />
           </label>
@@ -109,7 +121,9 @@ export function AIProviderSettings({ setIsLocalMode }: { setIsLocalMode: (value:
             />
           </label>
           <p className="text-[11px] leading-relaxed text-slate">
-            Key is saved only in this browser. The public repo ships without demo secrets.
+            {isDemoKeyActive
+              ? 'This demo build has a hosted OpenRouter key injected at deploy time. Add your own key to override it in this browser.'
+              : 'Key is saved only in this browser. The public repo ships without demo secrets.'}
           </p>
           <div className="flex flex-col gap-2 border-t border-mist/30 pt-3">
             <Button
@@ -129,6 +143,40 @@ export function AIProviderSettings({ setIsLocalMode }: { setIsLocalMode: (value:
                 <span className="break-words leading-relaxed">{testState === 'testing' ? 'Checking OpenRouter...' : testMessage}</span>
               </div>
             )}
+          </div>
+        </Card>
+
+        <Card className="space-y-3 rounded-xl border-cyan-brand/20 bg-cyan-brand/5 p-4">
+          <div className="flex items-start gap-3">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-cyan-brand/10 text-cyan-brand">
+              <Download className="h-4 w-4" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-bold text-white">Local Gemma 4 E2B</p>
+              <p className="mt-1 text-[10px] font-mono uppercase tracking-widest text-slate">{LOCAL_GEMMA_MODEL_ID}</p>
+              <p className="mt-2 text-[11px] leading-relaxed text-slate">
+                User-owned local model path for devices that can run Gemma locally. The PWA opens the official model page; the runtime install depends on the user's device.
+              </p>
+            </div>
+          </div>
+          <div className="grid gap-2 sm:grid-cols-2">
+            <a
+              href={LOCAL_GEMMA_MODEL_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex h-9 items-center justify-center gap-2 rounded-lg border border-cyan-brand/25 bg-cyan-brand/10 px-3 text-[10px] font-bold uppercase tracking-widest text-cyan-brand transition-colors hover:bg-cyan-brand/15"
+            >
+              <ExternalLink className="h-4 w-4" />
+              Download Model
+            </a>
+            <button
+              type="button"
+              onClick={copyLocalSnippet}
+              className="inline-flex h-9 items-center justify-center gap-2 rounded-lg border border-mist/40 bg-surface/70 px-3 text-[10px] font-bold uppercase tracking-widest text-slate transition-colors hover:border-cyan-brand/30 hover:text-white"
+            >
+              <Copy className="h-4 w-4" />
+              Copy Setup Snippet
+            </button>
           </div>
         </Card>
       </div>

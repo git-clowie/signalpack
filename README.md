@@ -10,6 +10,7 @@
 </p>
 
 <p align="center">
+  <strong>Demo:</strong> <a href="https://pixek.xyz/signalpack">pixek.xyz/signalpack</a><br />
   <a href="#demo-flow">Demo Flow</a> ·
   <a href="#architecture">Architecture</a> ·
   <a href="#gemma-4-ai-layer">Gemma 4 AI Layer</a> ·
@@ -48,6 +49,12 @@ Prepare -> Alert -> Understand -> Act
 | Act | Crisis Packet, share text, export, map, history | Review, copy, export, or share a concise packet. |
 
 ## Demo Flow
+
+Hosted demo target:
+
+```txt
+https://pixek.xyz/signalpack
+```
 
 Use this scenario for the competition demo:
 
@@ -119,13 +126,15 @@ SignalPack is API-first for the live PWA and focused on Gemma 4.
 | Area | Current Implementation |
 | --- | --- |
 | Hosted provider | OpenRouter Chat Completions API |
-| Default model | `google/gemma-4-26b-a4b-it` |
-| API key storage | Browser `localStorage`, entered in Settings |
+| Default model | `google/gemma-4-31b-it:free@preset/signalpack` |
+| OpenRouter preset | `@preset/signalpack` |
+| API key storage | Browser `localStorage`, entered in Settings; hosted demo can inject a deploy-time key |
 | Public repo key | None. Users bring their own OpenRouter key. |
+| Local model target | `google/gemma-4-E2B` from Hugging Face |
 | Fallback | Deterministic safety fallback, explicitly marked |
 | Traceability | Crisis Packet stores provider, model, AI trace, fallback flag, safety sources |
 
-The provider layer is intentionally narrow and swappable. Advanced users can adapt it for a user-owned local Gemma runtime, but the public app ships with the functional OpenRouter path.
+The provider layer is intentionally narrow and swappable. The hosted demo path uses OpenRouter; the local path points users to the official Gemma 4 E2B model page so they can run a user-owned runtime on capable devices.
 
 ## Crisis Packet Schema
 
@@ -211,10 +220,34 @@ npm run lint
 5. Keep the default model or change it:
 
 ```txt
-google/gemma-4-26b-a4b-it
+google/gemma-4-31b-it:free@preset/signalpack
 ```
 
-The key is stored only in the current browser. It is not committed, bundled, or sent anywhere except OpenRouter API calls.
+The user-entered key is stored only in the current browser. It is not committed and is sent only to OpenRouter API calls.
+
+For the hosted demo at `https://pixek.xyz/signalpack`, deploy with:
+
+```bash
+VITE_SIGNALPACK_DEMO_OPENROUTER_KEY=<restricted-demo-key>
+```
+
+This makes the demo functional without requiring judges to paste a key first. Because SignalPack is a frontend PWA, any `VITE_` demo key is visible in the shipped browser bundle; use a restricted/rotatable demo key and do not commit it to Git. A server-side proxy is the cleaner long-term upgrade.
+
+## Local Gemma Setup
+
+SignalPack exposes the local target model in Settings:
+
+```txt
+google/gemma-4-E2B
+```
+
+Official model page:
+
+```txt
+https://huggingface.co/google/gemma-4-E2B
+```
+
+The web app can open the model page and copy a setup snippet, but it cannot silently install a multi-GB native model runtime from the browser. Local inference is therefore a user-owned setup path; hosted OpenRouter remains the one-click functional demo path.
 
 ## Optional Firebase Sync
 
