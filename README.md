@@ -1,7 +1,7 @@
 # SignalPack
 
 <p align="center">
-  <img src="public/brand/signalpack-logo.png" alt="SignalPack" width="420" />
+  <img src="public/brand/signalpack-logo-loop.webp" alt="SignalPack animated logo" width="420" />
 </p>
 
 <p align="center">

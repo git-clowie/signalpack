@@ -1,6 +1,6 @@
 import React from 'react';
-import { auth, signInWithGoogle } from '../firebase';
-import { LogIn, User as UserIcon, Menu, Settings } from 'lucide-react';
+import { auth, hasFirebaseConfig, signInWithGoogle } from '../firebase';
+import { Database, LogIn, User as UserIcon, Menu, Settings } from 'lucide-react';
 import { useAppStore } from '../engine/state/useAppStore';
 import { Logo } from './Logo';
 import { PWAInstall } from './PWAInstall';
@@ -55,7 +55,7 @@ export function AuthHeader() {
           >
             <Menu className="h-5 w-5" />
           </button>
-          <Logo size="sm" containerClassName="h-10 w-10 rounded-xl" />
+          <Logo size="sm" animated containerClassName="h-11 w-11 rounded-xl" />
           <div className="hidden min-w-0 md:block">
             <div className="flex items-center gap-2">
               <span className="truncate text-sm font-bold tracking-tight text-white">SignalPack</span>
@@ -97,7 +97,7 @@ export function AuthHeader() {
                 <UserIcon className="w-5 h-5" />
               )}
             </button>
-          ) : (
+          ) : hasFirebaseConfig ? (
             <button 
               onClick={handleSignIn}
               className="flex items-center gap-2 rounded-lg border border-blue/30 bg-blue/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-blue transition-all hover:bg-blue/20"
@@ -105,6 +105,11 @@ export function AuthHeader() {
               <LogIn className="h-3 w-3" />
               Sign In
             </button>
+          ) : (
+            <span className="hidden items-center gap-2 rounded-lg border border-mist/40 bg-surface/70 px-3 py-2 text-[10px] font-bold uppercase tracking-widest text-slate sm:inline-flex">
+              <Database className="h-3 w-3" />
+              Local
+            </span>
           )}
         </div>
       </div>

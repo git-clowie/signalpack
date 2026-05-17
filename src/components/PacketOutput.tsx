@@ -3,7 +3,7 @@ import { Card, Button, Badge } from '@/src/components/ui';
 import { CrisisPacket } from '@/src/types';
 import { ShieldAlert, Copy, Check, Globe, MessageSquare, Smartphone, Download, Mail, Printer, MapPin, RadioTower } from 'lucide-react';
 import Markdown from 'react-markdown';
-import { downloadAsFile, nativeShare, sendEmail, shareToWhatsApp } from '@/src/utils/export';
+import { copyText, downloadAsFile, nativeShare, sendEmail, shareToWhatsApp } from '@/src/utils/export';
 import { PacketAITrace } from './PacketAITrace';
 
 export function PacketOutputScreen({ packet, onDone }: { packet?: CrisisPacket; onDone: () => void }) {
@@ -12,8 +12,8 @@ export function PacketOutputScreen({ packet, onDone }: { packet?: CrisisPacket; 
 
   if (!packet) return null;
 
-  const handleCopyMessage = () => {
-    navigator.clipboard.writeText(language === 'en' ? packet.share_message_short : (packet.share_message_short_local || packet.share_message_short));
+  const handleCopyMessage = async () => {
+    await copyText(language === 'en' ? packet.share_message_short : (packet.share_message_short_local || packet.share_message_short));
     setCopiedMsg(true);
     setTimeout(() => setCopiedMsg(false), 2000);
   };

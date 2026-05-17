@@ -8,9 +8,10 @@ interface LogoProps {
   size?: 'sm' | 'md' | 'lg' | 'xl';
   className?: string;
   containerClassName?: string;
+  animated?: boolean;
 }
 
-export function Logo({ shape = 'Flare', size = 'md', className, containerClassName }: LogoProps) {
+export function Logo({ shape = 'Flare', size = 'md', className, containerClassName, animated = false }: LogoProps) {
   const sizeMap = {
     sm: { container: 'w-8 h-8 rounded-lg', text: 'text-sm' },
     md: { container: 'w-12 h-12 rounded-xl', text: 'text-xl' },
@@ -21,11 +22,14 @@ export function Logo({ shape = 'Flare', size = 'md', className, containerClassNa
   const currentSize = sizeMap[size];
 
   const renderFlare = () => (
-    <img
-      src="/brand/signalpack-flare.png"
-      alt="SignalPack signal flare logo"
-      className={cn('h-full w-full object-cover object-center', className)}
-    />
+    <picture className="block h-full w-full">
+      {animated && <source srcSet="/brand/signalpack-logo-loop.webp" type="image/webp" />}
+      <img
+        src="/brand/signalpack-flare.png"
+        alt="SignalPack signal flare logo"
+        className={cn('h-full w-full object-cover object-center', className)}
+      />
+    </picture>
   );
 
   const renderShape = () => {

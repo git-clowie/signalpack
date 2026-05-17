@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/src/components/ui';
 import { Bot, ArrowLeft, Send, AlertTriangle, MessageCircle } from 'lucide-react';
 import { motion } from 'motion/react';
+import Markdown from 'react-markdown';
 import { useSettings } from '../SettingsContext';
 
 interface Message {
@@ -95,8 +96,8 @@ export function AskGemmaScreen({ onBack }: { onBack: () => void }) {
           >
             <div className={`max-w-[85%] rounded-2xl p-4 flex gap-3 ${msg.role === 'user' ? 'bg-blue text-white rounded-br-sm' : 'bg-surface border border-mist/30 text-slate rounded-bl-sm'}`}>
               {msg.role === 'model' && <Bot className="w-5 h-5 shrink-0 mt-0.5 text-cyan-brand" />}
-              <div className="text-sm prose prose-invert max-w-none text-white whitespace-pre-wrap">
-                {msg.content}
+              <div className="prose prose-sm prose-invert max-w-none text-white prose-p:my-0 prose-ul:my-2 prose-li:my-0">
+                <Markdown>{msg.content}</Markdown>
               </div>
             </div>
           </motion.div>

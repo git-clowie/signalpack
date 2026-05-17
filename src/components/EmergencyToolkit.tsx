@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, Button } from '@/src/components/ui';
 import { ArrowLeft, BellRing, Navigation, Flashlight, MapPin, Share2, Activity } from 'lucide-react';
 import { useAppStore } from '../engine/state/useAppStore';
+import { copyText } from '../utils/export';
 
 export function EmergencyToolkitScreen({ onBack }: { onBack: () => void }) {
   const [isSirenActive, setIsSirenActive] = useState(false);
@@ -10,6 +11,7 @@ export function EmergencyToolkitScreen({ onBack }: { onBack: () => void }) {
   const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
   const [oscillator, setOscillator] = useState<OscillatorNode | null>(null);
   const [strobeState, setStrobeState] = useState(false);
+  const sirenSweepRef = React.useRef<number | null>(null);
 
   const [location, setLocation] = useState<{lat: number, lng: number, acc: number} | null>(null);
 
@@ -121,6 +123,10 @@ export function EmergencyToolkitScreen({ onBack }: { onBack: () => void }) {
         oscillator.stop();
         oscillator.disconnect();
       }
+      if (sirenSweepRef.current) {
+        window.clearInterval(sirenSweepRef.current);
+        sirenSweepRef.current = null;
+      }
       setIsSirenActive(false);
     } else {
       setIsMorseActive(false); // disable morse
@@ -134,7 +140,7 @@ export function EmergencyToolkitScreen({ onBack }: { onBack: () => void }) {
         osc.frequency.setValueAtTime(400, ctx.currentTime);
         
         let up = true;
-        setInterval(() => {
+        sirenSweepRef.current = window.setInterval(() => {
            if (up) {
               osc.frequency.linearRampToValueAtTime(800, ctx.currentTime + 0.5);
            } else {
@@ -172,7 +178,7 @@ export function EmergencyToolkitScreen({ onBack }: { onBack: () => void }) {
          console.error('Share failed', e);
       }
     } else {
-      navigator.clipboard.writeText(text);
+      copyText(text);
       alert('Location copied to clipboard.');
     }
   };
@@ -183,6 +189,9 @@ export function EmergencyToolkitScreen({ onBack }: { onBack: () => void }) {
       if (oscillator) {
         oscillator.stop();
         oscillator.disconnect();
+      }
+      if (sirenSweepRef.current) {
+        window.clearInterval(sirenSweepRef.current);
       }
       if (audioContext) {
         audioContext.close();

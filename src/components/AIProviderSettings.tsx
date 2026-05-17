@@ -8,6 +8,7 @@ import {
   LOCAL_GEMMA_MODEL_URL,
 } from '../engine/ai/settings';
 import { useSettings } from '../SettingsContext';
+import { copyText } from '../utils/export';
 
 export function AIProviderSettings({ setIsLocalMode }: { setIsLocalMode: (value: boolean) => void }) {
   const [testState, setTestState] = React.useState<'idle' | 'testing' | 'ok' | 'error'>('idle');
@@ -33,7 +34,7 @@ export function AIProviderSettings({ setIsLocalMode }: { setIsLocalMode: (value:
     : 'No key saved';
 
   const copyLocalSnippet = async () => {
-    await navigator.clipboard.writeText(`from transformers import AutoProcessor, AutoModelForImageTextToText\n\nprocessor = AutoProcessor.from_pretrained("${LOCAL_GEMMA_MODEL_ID}")\nmodel = AutoModelForImageTextToText.from_pretrained("${LOCAL_GEMMA_MODEL_ID}")`);
+    await copyText(`from transformers import AutoProcessor, AutoModelForImageTextToText\n\nprocessor = AutoProcessor.from_pretrained("${LOCAL_GEMMA_MODEL_ID}")\nmodel = AutoModelForImageTextToText.from_pretrained("${LOCAL_GEMMA_MODEL_ID}")`);
   };
 
   const handleTestConnection = async () => {
