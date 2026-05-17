@@ -13,7 +13,6 @@ import { AskGemmaScreen } from './components/AskGemma';
 import { MedicalIDScreen } from './components/MedicalID';
 import { EmergencyToolkitScreen } from './components/EmergencyToolkit';
 import { SettingsScreen } from './components/SettingsScreen';
-import { PWAInstall } from './components/PWAInstall';
 import { AppFooter } from './components/AppFooter';
 import { analyzeIncident, generatePacket } from './engine/ai';
 import { savePacket } from './firebase';
@@ -283,7 +282,6 @@ export default function App() {
         <TutorialOverlay onClose={() => setShowTutorial(false)} />
       )}
       {state !== 'packet_output' && <AppFooter />}
-      <PWAInstall />
     </div>
   );
 }

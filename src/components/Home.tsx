@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Card } from '@/src/components/ui';
-import { AlertTriangle, BookOpen, Bot, Camera, FileText, HeartPulse, History, KeyRound, MapPinned, Mic, PlayCircle, RadioTower, Zap } from 'lucide-react';
+import { AlertTriangle, BookOpen, Bot, Camera, HeartPulse, History, KeyRound, MapPinned, MessageCircle, Mic, PlayCircle, RadioTower, Zap } from 'lucide-react';
 import { useSettings } from '../SettingsContext';
 
 import { vibrate } from '../lib/utils';
@@ -105,12 +105,12 @@ export function HomeScreen({
             <span className="text-[10px] font-bold uppercase tracking-widest text-slate transition-colors group-hover:text-white">Audio</span>
             <span className="mt-1 hidden text-[10px] leading-snug text-slate/80 sm:block">Record a short voice note.</span>
           </Card>
-          <Card className="glass-panel group flex h-28 cursor-pointer flex-col items-center justify-center rounded-xl px-2 py-3 text-center transition-all hover:border-blue/50 hover:bg-blue/5 sm:h-32 sm:p-4" onClick={() => onStartReport()}>
+          <Card className="glass-panel group flex h-28 cursor-pointer flex-col items-center justify-center rounded-xl px-2 py-3 text-center transition-all hover:border-blue/50 hover:bg-blue/5 sm:h-32 sm:p-4" onClick={onAskGemma}>
             <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-blue/10 text-blue transition-transform group-hover:scale-105 sm:h-11 sm:w-11">
-              <FileText className="h-5 w-5" />
+              <MessageCircle className="h-5 w-5" />
             </div>
             <span className="text-[10px] font-bold uppercase tracking-widest text-slate transition-colors group-hover:text-white">Message</span>
-            <span className="mt-1 hidden text-[10px] leading-snug text-slate/80 sm:block">Describe what happened.</span>
+            <span className="mt-1 hidden text-[10px] leading-snug text-slate/80 sm:block">Chat with Gemma 4.</span>
           </Card>
         </div>
       </section>
@@ -146,7 +146,7 @@ export function HomeScreen({
             <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-cyan-brand/20 text-cyan-brand transition-transform group-hover:scale-105">
                <Bot className="h-5 w-5" />
             </div>
-            <span className="text-[10px] font-bold uppercase tracking-widest text-slate transition-colors group-hover:text-white">Gemma</span>
+            <span className="text-[10px] font-bold uppercase tracking-widest text-slate transition-colors group-hover:text-white">Ask Gemma</span>
           </Card>
           <Card className="glass-panel group flex h-24 cursor-pointer flex-col items-center justify-center rounded-xl px-2 py-3 text-center transition-all hover:border-violet-brand/50 hover:bg-violet-brand/5 sm:h-28 sm:p-4" onClick={onOpenDemo}>
             <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-violet-brand/15 text-violet-brand transition-transform group-hover:scale-105">

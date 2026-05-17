@@ -3,6 +3,7 @@ import { auth, signInWithGoogle } from '../firebase';
 import { LogIn, User as UserIcon, Menu, Settings } from 'lucide-react';
 import { useAppStore } from '../engine/state/useAppStore';
 import { Logo } from './Logo';
+import { PWAInstall } from './PWAInstall';
 
 export function AuthHeader() {
   const [user, setUser] = React.useState(auth.currentUser);
@@ -40,7 +41,7 @@ export function AuthHeader() {
     { label: 'Dashboard', active: ['home', 'new_report', 'ai_review', 'clarification'].includes(currentState), action: resetDraft },
     { label: 'History', active: currentState === 'history', action: () => setAppState('history') },
     { label: 'Safety', active: currentState === 'safety_guide', action: () => setAppState('safety_guide') },
-    { label: 'Gemma', active: currentState === 'ask_gemma', action: () => setAppState('ask_gemma') },
+    { label: 'Ask Gemma', active: currentState === 'ask_gemma', action: () => setAppState('ask_gemma') },
   ];
 
   return (
@@ -76,6 +77,7 @@ export function AuthHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
+          <PWAInstall />
           <button
             onClick={openSettings}
             className={`hidden h-9 items-center gap-2 rounded-lg border px-3 text-[10px] font-bold uppercase tracking-widest transition-colors md:flex ${currentState === 'settings' ? 'border-cyan-brand/30 bg-cyan-brand/10 text-cyan-brand' : 'border-mist/40 bg-surface/70 text-slate hover:border-cyan-brand/40 hover:text-cyan-brand'}`}

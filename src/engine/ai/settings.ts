@@ -1,4 +1,11 @@
 export const DEFAULT_OPENROUTER_MODEL = 'google/gemma-4-31b-it:free@preset/signalpack';
+export const OPENROUTER_GEMMA_MODEL_FALLBACKS = [
+  DEFAULT_OPENROUTER_MODEL,
+  'google/gemma-4-26b-a4b-it:free@preset/signalpack',
+  'google/gemma-4-31b-it@preset/signalpack',
+  'google/gemma-4-26b-a4b-it@preset/signalpack',
+  '@preset/signalpack',
+] as const;
 export const LOCAL_GEMMA_MODEL_ID = 'google/gemma-4-E2B';
 export const LOCAL_GEMMA_MODEL_URL = 'https://huggingface.co/google/gemma-4-E2B';
 export const DEMO_OPENROUTER_API_KEY = import.meta.env.VITE_SIGNALPACK_DEMO_OPENROUTER_KEY || '';

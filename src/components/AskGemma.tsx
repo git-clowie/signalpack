@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/src/components/ui';
-import { Bot, ArrowLeft, Send, AlertTriangle } from 'lucide-react';
+import { Bot, ArrowLeft, Send, AlertTriangle, MessageCircle } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useSettings } from '../SettingsContext';
 
@@ -18,7 +18,7 @@ export function AskGemmaScreen({ onBack }: { onBack: () => void }) {
     {
       id: 'welcome',
       role: 'model',
-      content: 'I am your SignalPack Safety Assistant. Describe what is happening or ask for first aid and safety instructions.'
+      content: 'Ask me what to do next. I can help structure a safety question, first-aid basics, or what details to capture for a Crisis Packet.'
     }
   ]);
   const [input, setInput] = useState('');
@@ -60,13 +60,16 @@ export function AskGemmaScreen({ onBack }: { onBack: () => void }) {
 
   return (
     <div className="mx-auto flex h-[calc(100vh-4rem)] w-full max-w-6xl flex-col bg-cloud px-4 pb-6 pt-4 md:px-6 lg:px-8">
-      <div className="flex-none rounded-2xl border border-mist/40 bg-surface/70 p-4 backdrop-blur-md">
+      <div className="glass-panel-strong flex-none rounded-2xl p-4">
         <div className="flex items-center gap-3">
           <button onClick={onBack} className="p-2 -ml-2 rounded-full hover:bg-mist/30 text-slate transition-colors">
             <ArrowLeft className="w-5 h-5" />
           </button>
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-cyan-brand/20 bg-cyan-brand/10 text-cyan-brand">
+            <MessageCircle className="h-5 w-5" />
+          </div>
           <div>
-            <h1 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">Guided Help <span className="text-[10px] bg-cyan-brand/20 text-cyan-brand px-2 py-0.5 rounded-full uppercase tracking-widest font-mono">Gemma 4</span></h1>
+            <h1 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">Ask Gemma <span className="text-[10px] bg-cyan-brand/20 text-cyan-brand px-2 py-0.5 rounded-full uppercase tracking-widest font-mono">Chat</span></h1>
             <p className="text-[10px] text-slate font-mono uppercase tracking-widest mt-1">
               OpenRouter / {openRouterModel}
             </p>
@@ -114,13 +117,27 @@ export function AskGemmaScreen({ onBack }: { onBack: () => void }) {
       </div>
 
       <div className="flex-none rounded-2xl border border-mist/40 bg-surface p-3">
+        {messages.length === 1 && (
+          <div className="mb-3 grid grid-cols-3 gap-2">
+            {['Flood help', 'First aid', 'What to capture?'].map((prompt) => (
+              <button
+                key={prompt}
+                type="button"
+                onClick={() => handleSend(prompt)}
+                className="rounded-xl border border-mist/40 bg-cloud/60 px-2 py-2 text-[10px] font-bold uppercase tracking-widest text-slate transition-colors hover:border-cyan-brand/40 hover:text-cyan-brand"
+              >
+                {prompt}
+              </button>
+            ))}
+          </div>
+        )}
         <div className="flex items-center gap-2">
           <input 
             type="text" 
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend(input)}
-            placeholder="Describe issue or ask..."
+            placeholder="Message Gemma 4..."
             className="flex-1 bg-cloud border border-mist/50 rounded-xl px-4 py-3 text-sm text-white placeholder:text-slate focus:outline-none focus:border-blue transition-colors"
           />
           <Button variant="primary" onClick={() => handleSend(input)} disabled={!input.trim()} className="w-12 h-12 p-0 flex items-center justify-center shrink-0 rounded-xl">
