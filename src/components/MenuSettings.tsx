@@ -18,16 +18,16 @@ export function MenuSettings({
   const { mapStyle, setMapStyle, fastSendMode, setFastSendMode } = useSettings();
 
   return (
-    <div className="grid gap-5 animate-in fade-in duration-200 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.75fr)]">
+    <div className="grid min-w-0 gap-5 animate-in fade-in duration-200 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.75fr)]">
       <AIProviderSettings setIsLocalMode={setIsLocalMode} />
 
-      <div className="space-y-6">
-        <section>
+      <div className="min-w-0 space-y-6">
+        <section className="min-w-0">
           <h3 className="text-[10px] text-slate uppercase font-bold tracking-widest mb-3">Map & Workflow</h3>
           <div className="space-y-4">
             <div>
               <p className="text-xs text-white font-bold mb-2">Map Style</p>
-              <div className="flex bg-cloud rounded-lg p-1 border border-mist">
+              <div className="flex min-w-0 rounded-lg border border-mist bg-cloud p-1">
                 {mapStyles.map((style) => (
                   <button
                     key={style.id}
@@ -39,14 +39,14 @@ export function MenuSettings({
                 ))}
               </div>
             </div>
-            <div className="flex items-center justify-between p-4 bg-surface border border-mist rounded-xl">
-              <div>
+            <div className="flex min-w-0 items-center justify-between gap-3 rounded-xl border border-mist bg-surface p-4">
+              <div className="min-w-0">
                 <p className="text-sm font-bold text-white">Fast Send Mode</p>
                 <p className="text-[10px] text-slate mt-1">Skip preview and send report immediately.</p>
               </div>
               <button
                 onClick={() => setFastSendMode(!fastSendMode)}
-                className={`w-12 h-6 rounded-full transition-colors relative ${fastSendMode ? 'bg-blue' : 'bg-mist'}`}
+                className={`relative h-6 w-12 shrink-0 rounded-full transition-colors ${fastSendMode ? 'bg-blue' : 'bg-mist'}`}
               >
                 <span className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-transform ${fastSendMode ? 'left-7' : 'left-1'}`} />
               </button>
@@ -54,7 +54,7 @@ export function MenuSettings({
           </div>
         </section>
 
-        <section>
+        <section className="min-w-0">
           <h3 className="text-[10px] text-slate uppercase font-bold tracking-widest mb-3">Data</h3>
           <Card className="divide-y divide-mist bg-surface border-mist overflow-hidden rounded-xl">
             <button

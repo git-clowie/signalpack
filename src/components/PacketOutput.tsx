@@ -50,27 +50,27 @@ export function PacketOutputScreen({ packet, onDone }: { packet?: CrisisPacket; 
       <div className="mx-auto w-full max-w-4xl flex-1 overflow-hidden bg-surface print:bg-white print:text-black md:rounded-b-3xl md:border md:border-mist/50 md:shadow-2xl">
       
         {/* Header / Severity (Print friendly) */}
-        <div className={`sticky top-0 z-10 px-5 py-5 border-b print:border-b-2 print:border-black ${isCritical ? 'bg-critical text-white border-critical' : packet.severity === 'high' ? 'bg-warning text-white border-warning' : 'bg-surface text-white border-mist'}`}>
-           <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                 <ShieldAlert className="w-6 h-6" />
-                 <span className="font-bold font-display uppercase tracking-widest text-lg">{packet.severity} SEVERITY REPORT</span>
+        <div className={`sticky top-0 z-10 border-b px-4 py-4 print:border-b-2 print:border-black sm:px-5 sm:py-5 ${isCritical ? 'bg-critical text-white border-critical' : packet.severity === 'high' ? 'bg-warning text-white border-warning' : 'bg-surface text-white border-mist'}`}>
+           <div className="flex min-w-0 items-center justify-between gap-3">
+              <div className="flex min-w-0 items-center gap-3">
+                 <ShieldAlert className="h-5 w-5 shrink-0 sm:h-6 sm:w-6" />
+                 <span className="min-w-0 text-sm font-bold uppercase tracking-widest sm:text-lg">{packet.severity} severity report</span>
               </div>
               {isCritical && (
-                 <Badge className="bg-white text-critical border-none print:hidden">Call 112</Badge>
+                 <Badge className="shrink-0 border-none bg-white text-critical print:hidden">Call 112</Badge>
               )}
            </div>
         </div>
 
         <div className="px-5 py-8 space-y-8 flex-1 print:p-0 print:py-4">
            
-           <div className="flex justify-between items-start print:hidden">
-              <div>
-                <h1 className="text-3xl font-bold tracking-tight text-white mb-1 flex items-center gap-2">
+           <div className="flex min-w-0 items-start justify-between gap-3 print:hidden">
+              <div className="min-w-0">
+                <h1 className="mb-1 flex min-w-0 items-center gap-2 text-2xl font-bold tracking-tight text-white sm:text-3xl">
                   <span className={`w-2 h-8 ${isCritical ? 'bg-critical' : 'bg-blue'}`}></span>
                   CRISIS PACKET
                 </h1>
-                <p className="text-slate font-mono text-xs uppercase tracking-widest ml-4">ID: {displayPacketId} • {new Date().toISOString().split('T')[0]}</p>
+                <p className="ml-4 truncate font-mono text-[10px] uppercase tracking-widest text-slate sm:text-xs">ID: {displayPacketId} • {new Date().toISOString().split('T')[0]}</p>
               </div>
               <button 
                  onClick={() => setLanguage(l => l === 'en' ? 'ro' : 'en')}

@@ -11,7 +11,7 @@ The core application code. Adheres to strict agentic coding rules.
 1. **User input** in `/components/NewReport.tsx` updates Zustand state in `/engine/state`.
 2. **AI Analysis** in `/engine/ai` uses Gemma 4 via OpenRouter to extract entities and structure Crisis Packets.
 3. If the selected provider is unavailable, `/engine/ai` returns a marked deterministic fallback packet.
-4. **Packet rendering** is handled in `/components/PacketOutput.tsx`.
+4. **Packet rendering and share/export** are handled in `/components/PacketOutput.tsx` and `/utils/export.ts`.
 5. Syncing is abstracted through `/engine/sync`.
 
 ## Adding new UI features

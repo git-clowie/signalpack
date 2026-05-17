@@ -14,6 +14,7 @@
   <a href="#demo-flow">Demo Flow</a> ·
   <a href="#architecture">Architecture</a> ·
   <a href="#gemma-4-ai-layer">Gemma 4 AI Layer</a> ·
+  <a href="#share--export">Share & Export</a> ·
   <a href="#running-locally">Run Locally</a> ·
   <a href="#competition-positioning">Competition</a>
 </p>
@@ -134,7 +135,9 @@ SignalPack is API-first for the live PWA and focused on Gemma 4.
 | Fallback | Deterministic safety fallback, explicitly marked |
 | Traceability | Crisis Packet stores provider, model, AI trace, fallback flag, safety sources |
 
-The provider layer is intentionally narrow and swappable. The hosted demo path uses OpenRouter; the local path points users to the official Gemma 4 E2B model page so they can run a user-owned runtime on capable devices.
+The provider layer is intentionally narrow and swappable. The hosted demo path uses OpenRouter and can use a restricted demo key injected at deploy time. Settings masks the hosted demo key and lets users paste their own OpenRouter key to override it. If the free model is rate-limited upstream, SignalPack retries through the configured preset/fallback chain and records the actual route in `ai_trace`.
+
+The local path points users to the official Gemma 4 E2B model page so they can run a user-owned runtime on capable devices.
 
 ## Crisis Packet Schema
 
@@ -156,6 +159,20 @@ The generated packet includes:
 - `fallback_used`
 - `safety_sources`
 - `review_required`
+
+## Share & Export
+
+Final Crisis Packets can be:
+
+- copied as a quick share message
+- opened in WhatsApp
+- opened in the user's email client
+- shared through the native mobile share sheet when supported
+- printed or saved as PDF
+- exported as Markdown
+- exported as JSON for audit/reuse
+
+Export runs in the browser using local Blob downloads; no server is required.
 
 ## UX Principles
 
@@ -289,6 +306,7 @@ Current visual direction and assets live in:
 
 ```txt
 public/brand/
+  signalpack-logo-loop.webp
   signalpack-flare.png
   signalpack-logo.png
   signalpack-brand.png
@@ -304,6 +322,10 @@ public/brand/signalpack-logo-loop.webp
 ```
 
 Use MP4/WebM for the app header and WebP/GIF for GitHub README previews.
+
+## QA Notes
+
+See [`docs/FUNCTIONAL_QA.md`](docs/FUNCTIONAL_QA.md) for the latest smoke test notes covering responsive fit, Ask Gemma, packet output, and browser export helpers.
 
 ## Roadmap
 

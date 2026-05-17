@@ -60,16 +60,16 @@ export function AskGemmaScreen({ onBack }: { onBack: () => void }) {
   };
 
   return (
-    <div className="mx-auto flex h-[calc(100vh-4rem)] w-full max-w-6xl flex-col bg-cloud px-4 pb-6 pt-4 md:px-6 lg:px-8">
+    <div className="mx-auto flex h-[calc(100vh-4rem)] w-full max-w-6xl min-w-0 flex-col overflow-x-hidden bg-cloud px-4 pb-6 pt-4 md:px-6 lg:px-8">
       <div className="glass-panel-strong flex-none rounded-2xl p-4">
-        <div className="flex items-center gap-3">
+        <div className="flex min-w-0 items-center gap-3">
           <button onClick={onBack} aria-label="Back to dashboard" className="p-2 -ml-2 rounded-full hover:bg-mist/30 text-slate transition-colors">
             <ArrowLeft className="w-5 h-5" />
           </button>
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-cyan-brand/20 bg-cyan-brand/10 text-cyan-brand">
             <MessageCircle className="h-5 w-5" />
           </div>
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             <h1 className="flex items-center gap-2 text-lg font-bold tracking-tight text-white sm:text-xl">
               Ask Gemma
               <span className="hidden rounded-full bg-cyan-brand/20 px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest text-cyan-brand sm:inline-flex">Chat</span>
@@ -89,7 +89,7 @@ export function AskGemmaScreen({ onBack }: { onBack: () => void }) {
         )}
       </div>
 
-      <div className="my-4 flex-1 space-y-4 overflow-y-auto rounded-2xl border border-mist/30 bg-cloud/35 p-4">
+      <div className="my-4 min-w-0 flex-1 space-y-4 overflow-y-auto overflow-x-hidden rounded-2xl border border-mist/30 bg-cloud/35 p-4">
         {messages.map((msg) => (
           <motion.div 
             initial={{ opacity: 0, y: 10 }}
@@ -97,9 +97,9 @@ export function AskGemmaScreen({ onBack }: { onBack: () => void }) {
             key={msg.id} 
             className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
           >
-            <div className={`max-w-[85%] rounded-2xl p-4 flex gap-3 ${msg.role === 'user' ? 'bg-blue text-white rounded-br-sm' : 'bg-surface border border-mist/30 text-slate rounded-bl-sm'}`}>
+            <div className={`flex max-w-[85%] min-w-0 gap-3 rounded-2xl p-4 ${msg.role === 'user' ? 'bg-blue text-white rounded-br-sm' : 'bg-surface border border-mist/30 text-slate rounded-bl-sm'}`}>
               {msg.role === 'model' && <Bot className="w-5 h-5 shrink-0 mt-0.5 text-cyan-brand" />}
-              <div className="prose prose-sm prose-invert max-w-none text-white prose-p:my-0 prose-ul:my-2 prose-li:my-0">
+              <div className="prose prose-sm prose-invert min-w-0 max-w-none break-words text-white prose-p:my-0 prose-ul:my-2 prose-li:my-0">
                 <Markdown>{msg.content}</Markdown>
               </div>
             </div>
@@ -135,16 +135,23 @@ export function AskGemmaScreen({ onBack }: { onBack: () => void }) {
             ))}
           </div>
         )}
-        <div className="flex items-center gap-2">
+        <div className="flex min-w-0 items-center gap-2">
           <input 
             type="text" 
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend(input)}
             placeholder="Message Gemma 4..."
-            className="flex-1 bg-cloud border border-mist/50 rounded-xl px-4 py-3 text-sm text-white placeholder:text-slate focus:outline-none focus:border-blue transition-colors"
+            className="min-w-0 flex-1 rounded-xl border border-mist/50 bg-cloud px-4 py-3 text-sm text-white transition-colors placeholder:text-slate focus:border-blue focus:outline-none"
           />
-          <Button variant="primary" onClick={() => handleSend(input)} disabled={!input.trim()} className="w-12 h-12 p-0 flex items-center justify-center shrink-0 rounded-xl">
+          <Button
+            variant="primary"
+            onClick={() => handleSend(input)}
+            disabled={!input.trim()}
+            aria-label="Send message to Gemma"
+            title="Send message"
+            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl p-0"
+          >
              <Send className="w-5 h-5" />
           </Button>
         </div>

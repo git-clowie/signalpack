@@ -73,10 +73,10 @@ export function AIProviderSettings({ setIsLocalMode }: { setIsLocalMode: (value:
   };
 
   return (
-    <section>
+    <section className="min-w-0">
       <h3 className="text-[10px] text-slate uppercase font-bold tracking-widest mb-3">Gemma 4 Engine</h3>
-      <div className="space-y-3">
-        <div className="flex items-center gap-3 rounded-xl border border-blue/25 bg-blue/5 p-3">
+      <div className="min-w-0 space-y-3">
+        <div className="flex min-w-0 items-center gap-3 overflow-hidden rounded-xl border border-blue/25 bg-blue/5 p-3">
           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue/10 text-blue">
             <Cloud className="h-4 w-4" />
           </div>
@@ -87,9 +87,9 @@ export function AIProviderSettings({ setIsLocalMode }: { setIsLocalMode: (value:
           <ShieldCheck className="h-4 w-4 shrink-0 text-blue" />
         </div>
 
-        <Card className="space-y-3 rounded-xl border-mist/40 bg-cloud/40 p-4">
+        <Card className="min-w-0 space-y-3 overflow-hidden rounded-xl border-mist/40 bg-cloud/40 p-4">
           <label className="block">
-            <span className="text-[10px] text-slate uppercase font-bold tracking-widest flex items-center gap-2 mb-2">
+            <span className="mb-2 flex min-w-0 items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-slate">
               <KeyRound className="w-3.5 h-3.5" /> OpenRouter API Key
             </span>
             <input
@@ -97,7 +97,7 @@ export function AIProviderSettings({ setIsLocalMode }: { setIsLocalMode: (value:
               value={isDemoKeyActive ? '' : openRouterApiKey}
               onChange={(event) => setOpenRouterApiKey(event.target.value.trim())}
               placeholder={isDemoKeyActive ? 'Demo key active - paste your key to override' : 'Paste OpenRouter key'}
-              className="w-full bg-surface border border-mist/50 rounded-xl px-3 py-2 text-sm text-white placeholder:text-slate/50 focus:outline-none focus:border-blue"
+              className="w-full min-w-0 rounded-xl border border-mist/50 bg-surface px-3 py-2 text-sm text-white placeholder:text-slate/50 focus:border-blue focus:outline-none"
             />
           </label>
           <div className="text-[10px] font-mono text-slate uppercase tracking-widest">
@@ -108,7 +108,7 @@ export function AIProviderSettings({ setIsLocalMode }: { setIsLocalMode: (value:
             <input
               value={openRouterModel}
               onChange={(event) => setOpenRouterModel(event.target.value.trim() || DEFAULT_OPENROUTER_MODEL)}
-              className="w-full bg-surface border border-mist/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue"
+              className="w-full min-w-0 rounded-xl border border-mist/50 bg-surface px-3 py-2 font-mono text-xs text-white focus:border-blue focus:outline-none sm:text-sm"
             />
           </label>
           <p className="text-[11px] leading-relaxed text-slate">
@@ -137,14 +137,14 @@ export function AIProviderSettings({ setIsLocalMode }: { setIsLocalMode: (value:
           </div>
         </Card>
 
-        <Card className="space-y-3 rounded-xl border-cyan-brand/20 bg-cyan-brand/5 p-4">
-          <div className="flex items-start gap-3">
+        <Card className="min-w-0 space-y-3 overflow-hidden rounded-xl border-cyan-brand/20 bg-cyan-brand/5 p-4">
+          <div className="flex min-w-0 items-start gap-3">
             <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-cyan-brand/10 text-cyan-brand">
               <Download className="h-4 w-4" />
             </div>
             <div className="min-w-0 flex-1">
               <p className="text-sm font-bold text-white">Local Gemma 4 E2B</p>
-              <p className="mt-1 text-[10px] font-mono uppercase tracking-widest text-slate">{LOCAL_GEMMA_MODEL_ID}</p>
+              <p className="mt-1 truncate text-[10px] font-mono uppercase tracking-widest text-slate">{LOCAL_GEMMA_MODEL_ID}</p>
               <p className="mt-2 text-[11px] leading-relaxed text-slate">
                 User-owned local model path for devices that can run Gemma locally. The PWA opens the official model page; the runtime install depends on the user's device.
               </p>
