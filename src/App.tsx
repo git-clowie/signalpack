@@ -13,11 +13,9 @@ import { AskGemmaScreen } from './components/AskGemma';
 import { MedicalIDScreen } from './components/MedicalID';
 import { EmergencyToolkitScreen } from './components/EmergencyToolkit';
 import { PWAInstall } from './components/PWAInstall';
-import { Menu, LayoutDashboard, History, BookOpen, Bot, HeartPulse, AlertTriangle } from 'lucide-react';
 import { analyzeIncident, generatePacket } from './engine/ai';
 import { savePacket } from './firebase';
 import { motion, AnimatePresence } from "motion/react";
-import { BrandWordmark } from './components/BrandWordmark';
 import { useAppStore } from './engine/state/useAppStore';
 import { SyncEngine } from './engine/sync';
 import { DraftReport } from './types';
@@ -37,7 +35,6 @@ export default function App() {
     setShowTutorial, 
     isMenuOpen, 
     setIsMenuOpen,
-    setMenuTab,
   } = useAppStore();
   
   const effectiveLocalMode = isLocalMode;
@@ -151,58 +148,8 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-cloud font-sans antialiased selection:bg-blue/20 flex flex-col md:flex-row">
-      {/* Desktop Sidebar */}
-      <aside className="hidden md:flex w-72 flex-col border-r border-cyan-brand/10 p-6 overscroll-contain overflow-y-auto min-h-screen bg-[#07080B]/95 shadow-[20px_0_80px_rgba(0,0,0,0.28)]">
-        <div className="flex items-center gap-3 mb-10">
-          <BrandWordmark compact />
-        </div>
-
-        <nav className="flex-1 space-y-2 mt-6">
-          <button onClick={() => resetDraft()} className={`w-full text-left px-4 py-3 rounded-xl transition-colors text-xs font-bold uppercase tracking-widest flex items-center gap-3 ${state === 'home' || state === 'new_report' || state === 'ai_review' || state === 'clarification' ? 'sidebar-active text-white' : 'text-slate hover:text-white hover:bg-mist/30'}`}>
-             <LayoutDashboard className="w-5 h-5 flex-shrink-0" />
-             <span>Dashboard</span>
-          </button>
-          <button onClick={() => setState('history')} className={`w-full text-left px-4 py-3 rounded-xl transition-colors text-xs font-bold uppercase tracking-widest flex items-center gap-3 ${state === 'history' ? 'sidebar-active text-white' : 'text-slate hover:text-white hover:bg-mist/30'}`}>
-             <History className="w-5 h-5 flex-shrink-0" />
-             <span>Packet History</span>
-          </button>
-          
-          <div className="pt-4 pb-2 px-4">
-            <span className="text-[10px] font-bold text-slate uppercase tracking-widest">Tools & AI</span>
-          </div>
-
-          <button onClick={() => setState('medical_id')} className={`w-full text-left px-4 py-3 rounded-xl transition-colors text-xs font-bold uppercase tracking-widest flex items-center gap-3 ${state === 'medical_id' ? 'sidebar-active text-white' : 'text-slate hover:text-critical hover:bg-critical/10'}`}>
-             <HeartPulse className="w-5 h-5 flex-shrink-0" />
-             <span>Emergency Profile</span>
-          </button>
-          
-          <button onClick={() => setState('emergency_toolkit')} className={`w-full text-left px-4 py-3 rounded-xl transition-colors text-xs font-bold uppercase tracking-widest flex items-center gap-3 ${state === 'emergency_toolkit' ? 'sidebar-active text-white' : 'text-slate hover:text-flare-orange hover:bg-flare-orange/10'}`}>
-             <AlertTriangle className="w-5 h-5 flex-shrink-0" />
-             <span>Readiness Toolkit</span>
-          </button>
-
-          <button onClick={() => setState('safety_guide')} className={`w-full text-left px-4 py-3 rounded-xl transition-colors text-xs font-bold uppercase tracking-widest flex items-center gap-3 ${state === 'safety_guide' ? 'sidebar-active text-white' : 'text-slate hover:text-white hover:bg-mist/30'}`}>
-             <BookOpen className="w-5 h-5 flex-shrink-0" />
-             <span>Safety Guide</span>
-          </button>
-          <button onClick={() => setState('ask_gemma')} className={`w-full text-left px-4 py-3 rounded-xl transition-colors text-xs font-bold uppercase tracking-widest flex items-center gap-3 ${state === 'ask_gemma' ? 'sidebar-active text-white' : 'text-slate hover:text-cyan-brand hover:bg-cyan-brand/10'}`}>
-             <Bot className="w-5 h-5 flex-shrink-0" />
-             <span>Guided Help</span>
-          </button>
-        </nav>
-
-        <div className="mt-auto">
-           <button onClick={() => { setMenuTab('settings'); setIsMenuOpen(true); }} className="w-full text-left px-4 py-3 rounded-xl transition-colors text-sm font-bold uppercase tracking-widest text-slate hover:text-white hover:bg-mist/30 flex items-center gap-2">
-             <Menu className="w-4 h-4" /> Settings
-           </button>
-           <div className="mt-6 pt-4 border-t border-mist/30 px-4">
-             <p className="text-[10px] text-blue font-mono opacity-80 mt-1 uppercase tracking-widest">Built by pixek.xyz</p>
-           </div>
-        </div>
-      </aside>
-
-      <div className="flex-1 flex flex-col w-full max-w-6xl mx-auto relative md:bg-[#040404]">
+    <div className="min-h-screen w-full bg-cloud font-sans antialiased selection:bg-blue/20">
+      <div className="flex min-h-screen w-full flex-col">
         {/* Global Auth Header */}
         {state !== 'packet_output' && <AuthHeader />}
 
@@ -227,6 +174,8 @@ export default function App() {
                   onViewHistory={() => setState('history')} 
                   onViewSafety={() => setState('safety_guide')}
                   onAskGemma={() => setState('ask_gemma')}
+                  onViewMedical={() => setState('medical_id')}
+                  onViewToolkit={() => setState('emergency_toolkit')}
                   onOpenDemo={() => {
                     updateDraft({ packet: demoPackets[0], stage: 'packet_output' });
                     setState('packet_output');

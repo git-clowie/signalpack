@@ -15,8 +15,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     
     // In dark mode, outline is typically a subtle border, text is white
     const variants = {
-      primary: 'bg-blue hover:bg-blue/90 text-white hover:scale-[1.02]',
-      secondary: 'bg-surface border border-mist text-white hover:bg-mist focus:ring-mist',
+      primary: 'primary-button hover:scale-[1.02] focus:ring-blue',
+      secondary: 'bg-white/[0.035] border border-white/[0.09] text-white hover:bg-white/[0.06] focus:ring-mist',
       outline: 'border border-mist text-slate hover:bg-surface hover:text-white focus:ring-mist',
       ghost: 'text-slate hover:bg-surface/50 hover:text-white focus:ring-mist',
       danger: 'bg-transparent border-critical text-critical hover:bg-critical/10 shadow-[0_0_10px_rgba(255,77,109,0.2)]',

@@ -5,8 +5,13 @@ import './index.css';
 import { registerSW } from 'virtual:pwa-register';
 import { SettingsProvider } from './SettingsContext';
 
-// Register service worker for PWA
-registerSW({ immediate: true });
+if (import.meta.env.PROD) {
+  registerSW({ immediate: true });
+} else if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then((registrations) => {
+    registrations.forEach((registration) => registration.unregister());
+  });
+}
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
