@@ -148,6 +148,8 @@ The local path is implemented as an optional **Local Ollama** runtime. The PWA c
 The generated packet includes:
 
 - `packet_id`
+- `app_version`
+- `packet_schema_version`
 - `incident_type`
 - `severity`
 - `location_text`, `lat`, `lng`

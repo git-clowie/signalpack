@@ -11,6 +11,7 @@ import {
   parseJsonObject,
   SAFETY_SOURCES,
 } from './utils';
+import { APP_VERSION, PACKET_SCHEMA_VERSION } from '../../version';
 
 interface AnalysisJson {
   incident_type?: CrisisPacket['incident_type'];
@@ -188,6 +189,8 @@ Context:
 
     return {
       ...draft.packet,
+      app_version: APP_VERSION,
+      packet_schema_version: PACKET_SCHEMA_VERSION,
       packet_id: makePacketId(),
       language: 'en',
       incident_type: draft.packet?.incident_type || 'other',

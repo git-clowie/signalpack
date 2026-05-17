@@ -1,4 +1,5 @@
 import { CrisisPacket } from './types';
+import { APP_VERSION, PACKET_SCHEMA_VERSION } from './version';
 
 const demoTrace = {
   provider: 'openrouter' as const,
@@ -17,6 +18,8 @@ const safetySources = [
 export const demoPackets: CrisisPacket[] = [
   {
     id: "demo-1",
+    app_version: APP_VERSION,
+    packet_schema_version: PACKET_SCHEMA_VERSION,
     packet_id: "demo-1",
     severity: "critical",
     incident_type: "flood",
@@ -49,6 +52,8 @@ export const demoPackets: CrisisPacket[] = [
   },
   {
     id: "demo-2",
+    app_version: APP_VERSION,
+    packet_schema_version: PACKET_SCHEMA_VERSION,
     packet_id: "demo-2",
     severity: "moderate",
     incident_type: "fire",

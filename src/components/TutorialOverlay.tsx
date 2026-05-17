@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Card, Button } from '@/src/components/ui';
-import { ShieldAlert, Image, Mic, Send, ShieldCheck, ArrowRight, Bot, Cloud, Database, Download, KeyRound, Server, X } from 'lucide-react';
+import { ShieldAlert, Image, Mic, Send, ShieldCheck, ArrowRight, Bot, Cloud, Database, Download, ExternalLink, KeyRound, Server, X } from 'lucide-react';
+import { DONATE_URL } from '../version';
 
 export function TutorialOverlay({
   onClose
@@ -123,6 +124,17 @@ export function TutorialOverlay({
               </Button>
             </div>
           </div>
+          {step === steps.length - 1 && (
+            <a
+              href={DONATE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-widest text-cyan-brand transition-colors hover:text-white"
+            >
+              Support pixek.xyz
+              <ExternalLink className="h-3.5 w-3.5" />
+            </a>
+          )}
         </div>
       </Card>
     </div>

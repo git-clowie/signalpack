@@ -331,6 +331,8 @@ export default function App() {
               <motion.div key="packet_output" initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -50 }} className="h-full">
                 <PacketOutputScreen 
                   packet={draft.packet as any}
+                  evidenceImage={draft.image}
+                  evidenceAudio={draft.audio}
                   onDone={resetDraft}
                   onNewReport={() => {
                     resetDraft();

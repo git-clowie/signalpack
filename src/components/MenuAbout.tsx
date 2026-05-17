@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from '@/src/components/ui';
-import { Cpu, Globe, HeartPulse, Play, ShieldAlert } from 'lucide-react';
+import { Cpu, ExternalLink, Globe, HeartPulse, Play, ShieldAlert } from 'lucide-react';
+import { APP_VERSION, DONATE_URL, PACKET_SCHEMA_VERSION } from '../version';
 
 export function MenuAbout({
   onClose,
@@ -16,7 +17,7 @@ export function MenuAbout({
           <ShieldAlert className="h-7 w-7" />
         </div>
         <h2 className="text-2xl font-bold text-white tracking-widest uppercase">SignalPack</h2>
-        <p className="text-xs text-slate font-mono uppercase tracking-widest mt-2 border-t border-mist/30 pt-2 inline-block">App Version 1.0.0</p>
+        <p className="text-xs text-slate font-mono uppercase tracking-widest mt-2 border-t border-mist/30 pt-2 inline-block">App v{APP_VERSION} · Packet schema v{PACKET_SCHEMA_VERSION}</p>
       </div>
 
       <div className="grid gap-4">
@@ -62,10 +63,21 @@ export function MenuAbout({
       </div>
 
       <div className="flex justify-center mt-6">
-        <Button onClick={() => { onClose(); onShowTutorial(); }} variant="secondary" className="px-8 rounded-full border border-mist shadow-xl bg-surface hover:bg-mist/30">
+        <div className="grid w-full gap-3 sm:grid-cols-2">
+        <Button onClick={() => { onClose(); onShowTutorial(); }} variant="secondary" className="rounded-xl border border-mist shadow-xl bg-surface hover:bg-mist/30">
           <Play className="w-4 h-4 mr-2 text-cyan-brand" />
           Restart Interactive Tutorial
         </Button>
+        <a
+          href={DONATE_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-cyan-brand/20 bg-cyan-brand/10 px-4 text-[10px] font-bold uppercase tracking-widest text-cyan-brand transition-colors hover:bg-cyan-brand/15"
+        >
+          Support pixek
+          <ExternalLink className="h-3.5 w-3.5" />
+        </a>
+        </div>
       </div>
     </div>
   );

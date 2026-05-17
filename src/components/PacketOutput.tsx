@@ -8,10 +8,14 @@ import { PacketAITrace } from './PacketAITrace';
 
 export function PacketOutputScreen({
   packet,
+  evidenceImage,
+  evidenceAudio,
   onDone,
   onNewReport,
 }: {
   packet?: CrisisPacket;
+  evidenceImage?: string;
+  evidenceAudio?: string;
   onDone: () => void;
   onNewReport?: () => void;
 }) {
@@ -32,9 +36,29 @@ export function PacketOutputScreen({
   const shareMsg = (language === 'en' ? packet.share_message_short : (packet.share_message_short_local || packet.share_message_short)) || 'SignalPack Crisis Packet generated. Review before sharing.';
   const markdownReport = (language === 'en' ? packet.structured_report_markdown : (packet.structured_report_markdown_local || packet.structured_report_markdown)) || '# SignalPack Crisis Packet\n\nReview packet details before sharing.';
   const displayPacketId = packet.packet_id || packet.id || 'local-pending';
+  const hasEvidence = !!evidenceImage || !!evidenceAudio || !!packet.evidence?.text_summary;
 
   const googleMapsLink = (packet.lat && packet.lng) ? `https://www.google.com/maps/search/?api=1&query=${packet.lat},${packet.lng}` : null;
   const sosMsg = `SOS! I am at ${packet.location_text}. ${packet.share_message_short} Location: ${googleMapsLink || 'Unknown'}`;
+  const emailBody = buildEmailBody({
+    packet,
+    displayPacketId,
+    shareMsg,
+    markdownReport,
+    actions: safeActions,
+    googleMapsLink,
+    hasEvidence,
+  });
+  const htmlReport = buildHtmlReport({
+    packet,
+    displayPacketId,
+    shareMsg,
+    markdownReport,
+    actions: safeActions,
+    googleMapsLink,
+    evidenceImage,
+    evidenceAudio,
+  });
 
   const handleNativeShare = async () => {
     await nativeShare('SignalPack Emergency Report', shareMsg);
@@ -50,6 +74,10 @@ export function PacketOutputScreen({
 
   const handleDownloadJSON = () => {
      downloadAsFile(`SignalPack_Report_${Date.now()}.json`, JSON.stringify(packet, null, 2), 'application/json');
+  };
+
+  const handleDownloadHTML = () => {
+    downloadAsFile(`SignalPack_Report_${Date.now()}.html`, htmlReport, 'text/html');
   };
 
   const handleFullscreen = async () => {
@@ -123,6 +151,9 @@ export function PacketOutputScreen({
                   CRISIS PACKET
                 </h1>
                 <p className="ml-4 truncate font-mono text-[10px] uppercase tracking-widest text-slate sm:text-xs">ID: {displayPacketId} • {new Date().toISOString().split('T')[0]}</p>
+                <p className="ml-4 mt-1 truncate font-mono text-[9px] uppercase tracking-widest text-slate/80 sm:text-[10px]">
+                  App v{packet.app_version || '1.0.0'} • Schema v{packet.packet_schema_version || '1.0'}
+                </p>
               </div>
               <button 
                  onClick={() => setLanguage(l => l === 'en' ? 'ro' : 'en')}
@@ -181,6 +212,45 @@ export function PacketOutputScreen({
               </Card>
            </section>
 
+           {hasEvidence && (
+             <section>
+                <h2 className="text-[10px] text-slate uppercase font-bold tracking-widest mb-3 print:text-black">Evidence</h2>
+                <Card className="overflow-hidden border-mist/50 bg-cloud rounded-2xl print:border-black print:border-2 print:bg-white print:shadow-none">
+                  {evidenceImage && (
+                    <img
+                      src={evidenceImage}
+                      alt="Incident evidence"
+                      className="h-56 w-full object-cover object-center print:h-48"
+                    />
+                  )}
+                  <div className="space-y-3 p-4">
+                    <div className="grid gap-3 sm:grid-cols-3">
+                      <div className="rounded-xl border border-mist/35 bg-surface/60 px-3 py-2 print:border-black print:bg-white">
+                        <p className="text-[9px] font-mono uppercase tracking-widest text-slate print:text-gray-600">Photo</p>
+                        <p className="mt-1 text-xs font-bold text-white print:text-black">{evidenceImage || packet.evidence?.image_present ? 'Attached' : 'Not attached'}</p>
+                      </div>
+                      <div className="rounded-xl border border-mist/35 bg-surface/60 px-3 py-2 print:border-black print:bg-white">
+                        <p className="text-[9px] font-mono uppercase tracking-widest text-slate print:text-gray-600">Audio</p>
+                        <p className="mt-1 text-xs font-bold text-white print:text-black">{evidenceAudio || packet.evidence?.audio_present ? 'Attached' : 'Not attached'}</p>
+                      </div>
+                      <div className="rounded-xl border border-mist/35 bg-surface/60 px-3 py-2 print:border-black print:bg-white">
+                        <p className="text-[9px] font-mono uppercase tracking-widest text-slate print:text-gray-600">Notes</p>
+                        <p className="mt-1 text-xs font-bold text-white print:text-black">{packet.evidence?.text_summary ? 'Included' : 'None'}</p>
+                      </div>
+                    </div>
+                    {packet.evidence?.text_summary && (
+                      <p className="rounded-xl border border-mist/35 bg-surface/60 px-3 py-2 text-xs leading-relaxed text-slate print:border-black print:bg-white print:text-black">
+                        {packet.evidence.text_summary}
+                      </p>
+                    )}
+                    {evidenceAudio && (
+                      <audio src={evidenceAudio} controls className="h-10 w-full print:hidden" />
+                    )}
+                  </div>
+                </Card>
+             </section>
+           )}
+
            <PacketAITrace packet={packet} />
 
            {/* Immediate Actions */}
@@ -221,7 +291,7 @@ export function PacketOutputScreen({
                        <svg className="w-5 h-5 text-[#25D366] group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.888-.788-1.487-1.761-1.663-2.06-.173-.299-.018-.461.13-.611.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
                        <span className="text-[#25D366] text-xs font-bold tracking-widest uppercase">WhatsApp</span>
                     </button>
-                    <button onClick={() => sendEmail('Emergency Incident Report', shareMsg + '\n\n' + markdownReport)} className="flex items-center justify-center gap-3 p-4 rounded-xl bg-blue/10 border border-blue/30 hover:bg-blue/20 transition group">
+                    <button onClick={() => sendEmail(`SignalPack ${packet.severity.toUpperCase()} Crisis Packet`, emailBody)} className="flex items-center justify-center gap-3 p-4 rounded-xl bg-blue/10 border border-blue/30 hover:bg-blue/20 transition group">
                        <Mail className="w-5 h-5 text-blue group-hover:scale-110 transition-transform" />
                        <span className="text-blue text-xs font-bold tracking-widest uppercase">Email</span>
                     </button>
@@ -266,6 +336,9 @@ export function PacketOutputScreen({
                   <button onClick={handlePrint} className="flex items-center gap-2 px-5 py-3 rounded-xl border border-mist/60 bg-surface hover:bg-mist/30 text-[10px] font-bold uppercase tracking-widest text-white transition group">
                      <Printer className="w-4 h-4 text-slate group-hover:text-white transition-colors" /> Save PDF
                   </button>
+                  <button onClick={handleDownloadHTML} className="flex items-center gap-2 px-5 py-3 rounded-xl border border-mist/60 bg-surface hover:bg-mist/30 text-[10px] font-bold uppercase tracking-widest text-white transition group">
+                     <Download className="w-4 h-4 text-slate group-hover:text-white transition-colors" /> Export .HTML
+                  </button>
                   <button onClick={handleDownloadMarkdown} className="flex items-center gap-2 px-5 py-3 rounded-xl border border-mist/60 bg-surface hover:bg-mist/30 text-[10px] font-bold uppercase tracking-widest text-white transition group">
                      <Download className="w-4 h-4 text-slate group-hover:text-white transition-colors" /> Export .MD
                   </button>
@@ -286,4 +359,180 @@ export function PacketOutputScreen({
 
     </div>
   );
+}
+
+function escapeHtml(value: unknown) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function markdownToSimpleHtml(markdown: string) {
+  return escapeHtml(markdown)
+    .replace(/^# (.*)$/gm, '<h1>$1</h1>')
+    .replace(/^## (.*)$/gm, '<h2>$1</h2>')
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .split(/\n{2,}/)
+    .map((block) => block.startsWith('<h') ? block : `<p>${block.replace(/\n/g, '<br />')}</p>`)
+    .join('');
+}
+
+function buildEmailBody({
+  packet,
+  displayPacketId,
+  shareMsg,
+  markdownReport,
+  actions,
+  googleMapsLink,
+  hasEvidence,
+}: {
+  packet: CrisisPacket;
+  displayPacketId: string;
+  shareMsg: string;
+  markdownReport: string;
+  actions: string[];
+  googleMapsLink: string | null;
+  hasEvidence: boolean;
+}) {
+  return [
+    'SIGNALPACK CRISIS PACKET',
+    '',
+    `Severity: ${packet.severity?.toUpperCase?.() || 'UNKNOWN'}`,
+    `Incident: ${(packet.incident_type || 'unclassified').replace('_', ' ')}`,
+    `Location: ${packet.location_text || 'Unknown'}`,
+    `People at risk: ${packet.people_at_risk_count ?? 'Unknown'}`,
+    `Packet ID: ${displayPacketId}`,
+    `App version: ${packet.app_version || '1.0.0'}`,
+    `Schema version: ${packet.packet_schema_version || '1.0'}`,
+    googleMapsLink ? `Map: ${googleMapsLink}` : '',
+    '',
+    'Quick share message:',
+    shareMsg,
+    '',
+    'Immediate actions:',
+    ...actions.map((action, index) => `${index + 1}. ${action}`),
+    '',
+    hasEvidence ? 'Evidence: photo/audio/context was captured in SignalPack. Use the HTML/PDF export to preserve visual evidence.' : 'Evidence: no media evidence attached.',
+    '',
+    'Detailed report:',
+    markdownReport,
+    '',
+    'AI trace:',
+    `Provider: ${packet.model_provider || 'unknown'}`,
+    `Model: ${packet.model_name || 'unknown'}`,
+    `Fallback used: ${packet.fallback_used ? 'yes' : 'no'}`,
+    '',
+    'Generated by SignalPack',
+    'https://pixek.xyz/signalpack',
+  ].filter(Boolean).join('\n');
+}
+
+function buildHtmlReport({
+  packet,
+  displayPacketId,
+  shareMsg,
+  markdownReport,
+  actions,
+  googleMapsLink,
+  evidenceImage,
+  evidenceAudio,
+}: {
+  packet: CrisisPacket;
+  displayPacketId: string;
+  shareMsg: string;
+  markdownReport: string;
+  actions: string[];
+  googleMapsLink: string | null;
+  evidenceImage?: string;
+  evidenceAudio?: string;
+}) {
+  const severity = escapeHtml(packet.severity?.toUpperCase?.() || 'UNKNOWN');
+  const incidentType = escapeHtml((packet.incident_type || 'unclassified').replace('_', ' '));
+  const actionsHtml = actions.map((action, index) => `<li><span>${String(index + 1).padStart(2, '0')}</span>${escapeHtml(action)}</li>`).join('');
+  const sourcesHtml = (packet.safety_sources || []).map((source) => `<a href="${escapeHtml(source.url)}">${escapeHtml(source.label)}</a>`).join('');
+
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SignalPack Crisis Packet ${escapeHtml(displayPacketId)}</title>
+  <style>
+    :root { color-scheme: dark; --bg:#040404; --surface:#0A0D12; --panel:#101622; --cyan:#00E6FF; --blue:#2563FF; --orange:#FF9A1F; --text:#F2F2F1; --slate:#8A8F98; --critical:#EF4444; }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--bg); color:var(--text); font-family: Arial, sans-serif; line-height:1.5; }
+    main { max-width: 900px; margin: 0 auto; padding: 32px 20px 48px; }
+    header { border:1px solid rgba(0,230,255,.25); background:linear-gradient(135deg,#101622,#040404); border-radius:22px; padding:24px; box-shadow:0 24px 70px rgba(0,0,0,.45); }
+    .eyebrow, .meta, h2 { font-family: "Arial Narrow", Arial, sans-serif; letter-spacing:.18em; text-transform:uppercase; }
+    .eyebrow { color:var(--cyan); font-size:12px; font-weight:700; }
+    h1 { margin:10px 0 8px; font-size:34px; line-height:1.05; }
+    h2 { margin:30px 0 12px; color:var(--slate); font-size:12px; }
+    .severity { display:inline-flex; margin-top:14px; border-radius:999px; padding:8px 12px; background:rgba(239,68,68,.12); color:#ff9090; border:1px solid rgba(239,68,68,.35); font-weight:700; letter-spacing:.12em; text-transform:uppercase; font-size:12px; }
+    .grid { display:grid; gap:12px; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); }
+    .card { border:1px solid rgba(138,143,152,.28); background:rgba(16,22,34,.76); border-radius:16px; padding:16px; }
+    .meta { color:var(--slate); font-size:11px; overflow-wrap:anywhere; }
+    .value { margin-top:4px; font-weight:700; color:var(--text); }
+    .share { color:var(--text); font-size:18px; font-weight:700; }
+    img.evidence { width:100%; max-height:420px; object-fit:cover; border-radius:18px; border:1px solid rgba(138,143,152,.3); }
+    ol { list-style:none; padding:0; margin:0; display:grid; gap:10px; }
+    li { border:1px solid rgba(255,154,31,.35); border-radius:14px; padding:13px 14px; background:rgba(255,154,31,.07); }
+    li span { color:var(--orange); font-family:monospace; font-weight:700; margin-right:10px; }
+    .report { color:#e8e8e6; }
+    .report h1, .report h2 { color:var(--text); letter-spacing:0; text-transform:none; font-family:Arial,sans-serif; }
+    .sources { display:flex; flex-wrap:wrap; gap:8px; }
+    .sources a { color:var(--cyan); text-decoration:none; border:1px solid rgba(0,230,255,.25); background:rgba(0,230,255,.08); border-radius:999px; padding:6px 10px; font-size:12px; }
+    footer { margin-top:32px; color:var(--slate); font-size:12px; }
+    @media print { body { background:white; color:black; } main { max-width:none; padding:0; } header,.card,li { box-shadow:none; background:white; color:black; border-color:#111; } .severity { color:#111; border-color:#111; background:white; } .meta,h2,.eyebrow,footer { color:#555; } .sources a { color:#111; border-color:#111; background:white; } }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div class="eyebrow">SignalPack Crisis Packet</div>
+      <h1>${severity} Severity Report</h1>
+      <div class="meta">Packet ${escapeHtml(displayPacketId)} · App v${escapeHtml(packet.app_version || '1.0.0')} · Schema v${escapeHtml(packet.packet_schema_version || '1.0')}</div>
+      <div class="severity">${severity}</div>
+    </header>
+
+    <h2>Incident Overview</h2>
+    <section class="grid">
+      <div class="card"><div class="meta">Location</div><div class="value">${escapeHtml(packet.location_text || 'Unknown')}</div></div>
+      <div class="card"><div class="meta">Incident Type</div><div class="value">${incidentType}</div></div>
+      <div class="card"><div class="meta">People at Risk</div><div class="value">${escapeHtml(packet.people_at_risk_count ?? 'Unknown')}</div></div>
+      ${googleMapsLink ? `<div class="card"><div class="meta">Map</div><div class="value"><a href="${escapeHtml(googleMapsLink)}">${escapeHtml(googleMapsLink)}</a></div></div>` : ''}
+    </section>
+
+    <h2>Quick Share Message</h2>
+    <section class="card share">${escapeHtml(shareMsg)}</section>
+
+    ${(evidenceImage || evidenceAudio || packet.evidence?.text_summary) ? `
+    <h2>Evidence</h2>
+    <section class="card">
+      ${evidenceImage ? `<img class="evidence" src="${evidenceImage}" alt="Incident evidence" />` : ''}
+      <p class="meta">Photo: ${evidenceImage || packet.evidence?.image_present ? 'attached' : 'not attached'} · Audio: ${evidenceAudio || packet.evidence?.audio_present ? 'attached' : 'not attached'}</p>
+      ${packet.evidence?.text_summary ? `<p>${escapeHtml(packet.evidence.text_summary)}</p>` : ''}
+    </section>` : ''}
+
+    <h2>Immediate Actions</h2>
+    <ol>${actionsHtml}</ol>
+
+    <h2>Detailed Report</h2>
+    <section class="card report">${markdownToSimpleHtml(markdownReport)}</section>
+
+    <h2>AI Trace</h2>
+    <section class="grid">
+      <div class="card"><div class="meta">Provider</div><div class="value">${escapeHtml(packet.model_provider || 'unknown')}</div></div>
+      <div class="card"><div class="meta">Model</div><div class="value">${escapeHtml(packet.model_name || 'unknown')}</div></div>
+      <div class="card"><div class="meta">Fallback Used</div><div class="value">${packet.fallback_used ? 'Yes' : 'No'}</div></div>
+    </section>
+
+    ${sourcesHtml ? `<h2>Safety Sources</h2><section class="sources">${sourcesHtml}</section>` : ''}
+
+    <footer>Generated by SignalPack · https://pixek.xyz/signalpack · Review before sharing.</footer>
+  </main>
+</body>
+</html>`;
 }

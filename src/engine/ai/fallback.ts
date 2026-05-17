@@ -1,5 +1,6 @@
 import { CrisisPacket, DraftReport, MedicalProfile } from '../../types';
 import { classifyIncident, buildEvidenceSummary, makePacketId, nowIso, SAFETY_SOURCES } from './utils';
+import { APP_VERSION, PACKET_SCHEMA_VERSION } from '../../version';
 
 function readableFallbackReason(reason: string) {
   const lower = reason.toLowerCase();
@@ -68,6 +69,8 @@ export function fallbackPacket(draft: DraftReport, reason: string, medicalProfil
 
   return {
     ...draft.packet,
+    app_version: APP_VERSION,
+    packet_schema_version: PACKET_SCHEMA_VERSION,
     packet_id: makePacketId(),
     language: 'en',
     incident_type: incidentType,

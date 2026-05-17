@@ -31,6 +31,8 @@ export interface PeopleAtRisk {
 }
 
 export interface CrisisPacket {
+  app_version?: string;
+  packet_schema_version?: string;
   packet_id?: string;
   id?: string;
   language?: 'en' | 'local';
