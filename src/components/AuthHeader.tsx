@@ -103,9 +103,9 @@ export function AuthHeader() {
           ) : (
             <button
               type="button"
-              onClick={openSettings}
-              aria-label="Open local settings"
-              title="Local settings"
+              onClick={openMenu}
+              aria-label="Open local user menu"
+              title="Local user menu"
               className="inline-flex h-8 w-7 items-center justify-center rounded-lg text-cyan-brand transition-colors hover:bg-cyan-brand/10 hover:text-white sm:h-9 sm:w-auto sm:border sm:border-mist/40 sm:bg-surface/70 sm:px-3 sm:py-2 sm:text-slate sm:hover:border-cyan-brand/40"
             >
               <UserIcon className="h-3.5 w-3.5 sm:hidden" />

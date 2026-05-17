@@ -1,7 +1,7 @@
 import { CrisisPacket, DraftReport, MedicalProfile } from '../../types';
 import { SYSTEM_PROMPTS } from './prompts';
 import { fallbackAnalysis, fallbackPacket } from './fallback';
-import { callOpenRouter } from './providers';
+import { callOllama, callOpenRouter } from './providers';
 import { getRuntimeAiSettings } from './settings';
 import {
   AnalysisResult,
@@ -55,6 +55,10 @@ async function callConfiguredModel(system: string, userContent: any, jsonMode = 
     { role: 'system' as const, content: system },
     { role: 'user' as const, content: userContent },
   ];
+
+  if (settings.provider === 'ollama') {
+    return callOllama(settings, messages, { jsonMode });
+  }
 
   return callOpenRouter(settings, messages, { jsonMode });
 }
@@ -192,7 +196,7 @@ Context:
       structured_report_markdown_local: data.structured_report_markdown_local || '',
       lat: data.lat || draft.location?.lat,
       lng: data.lng || draft.location?.lng,
-      sources_used: ['User input', 'OpenRouter Gemma 4'],
+      sources_used: ['User input', result.trace.provider === 'ollama' ? 'Local Ollama Gemma' : 'OpenRouter Gemma 4'],
       safety_sources: SAFETY_SOURCES,
       model_provider: result.trace.provider,
       model_name: result.trace.model,

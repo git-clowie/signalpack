@@ -113,7 +113,7 @@ src/
     MenuOverlay.tsx           # Mobile navigation only
   engine/
     ai/
-      providers.ts            # OpenRouter Chat Completions provider
+      providers.ts            # OpenRouter and local Ollama providers
       prompts.ts              # Safety and packet-generation prompts
       fallback.ts             # Deterministic marked fallback
       index.ts                # analyzeIncident, askGemma, generatePacket
@@ -134,13 +134,14 @@ SignalPack is API-first for the live PWA and focused on Gemma 4.
 | OpenRouter preset | `@preset/signalpack` |
 | API key storage | Browser `localStorage`, entered in Settings; hosted demo can inject a deploy-time key |
 | Public repo key | None. Users bring their own OpenRouter key. |
-| Local model target | `google/gemma-4-E2B` from Hugging Face |
+| Local runtime | Optional user-owned Ollama at `http://localhost:11434` |
+| Local model target | Configurable, default UI target `gemma4:e2b`; official reference `google/gemma-4-E2B` |
 | Fallback | Deterministic safety fallback, explicitly marked |
 | Traceability | Crisis Packet stores provider, model, AI trace, fallback flag, safety sources |
 
 The provider layer is intentionally narrow and swappable. The hosted demo path uses OpenRouter and can use a restricted demo key injected at deploy time. Settings masks the hosted demo key and lets users paste their own OpenRouter key to override it. If the free model is rate-limited upstream, SignalPack retries through the configured preset/fallback chain and records the actual route in `ai_trace`.
 
-The local path points users to the official Gemma 4 E2B model page so they can run a user-owned runtime on capable devices.
+The local path is implemented as an optional **Local Ollama** runtime. The PWA can call an Ollama server running on the user's own device at `http://localhost:11434`, but the browser cannot silently install or start a native model runtime. Users who want local inference install Ollama, pull/run a compatible Gemma small model, allow the SignalPack origin through `OLLAMA_ORIGINS`, then choose **Local** in Settings.
 
 ## Crisis Packet Schema
 
@@ -264,7 +265,32 @@ This makes the demo functional without requiring judges to paste a key first. Be
 
 ## Local Gemma Setup
 
-SignalPack exposes the local target model in Settings:
+SignalPack includes a real optional local provider path: **Settings -> Gemma 4 Engine -> Local**.
+
+What a browser PWA can do:
+
+- call `http://localhost:11434/api/chat`
+- store the local model name and URL in `localStorage`
+- mark packets as `model_provider: "ollama"` when the local call succeeds
+- fall back clearly when the local server is unavailable
+
+What a browser PWA cannot honestly do:
+
+- install Ollama by itself
+- start a native model server
+- download a multi-GB model silently in the background
+
+Recommended user-owned Ollama setup:
+
+```bash
+# Install Ollama from https://ollama.com, then allow this PWA origin:
+OLLAMA_ORIGINS=https://pixek.xyz,http://localhost:3000,http://localhost:4174 ollama serve
+
+# In another terminal, run the configured Gemma model:
+ollama run gemma4:e2b
+```
+
+The official Gemma E2B reference model is:
 
 ```txt
 google/gemma-4-E2B
@@ -276,7 +302,7 @@ Official model page:
 https://huggingface.co/google/gemma-4-E2B
 ```
 
-The web app can open the model page and copy a setup snippet, but it cannot silently install a multi-GB native model runtime from the browser. Local inference is therefore a user-owned setup path; hosted OpenRouter remains the one-click functional demo path.
+The exact Ollama model tag may depend on what the user has installed locally, so the Settings field is editable. Hosted OpenRouter remains the one-click functional demo path.
 
 ## Optional Firebase Sync
 
@@ -294,6 +320,14 @@ VITE_FIREBASE_APP_ID=
 VITE_FIREBASE_MEASUREMENT_ID=
 VITE_FIREBASE_FIRESTORE_DATABASE_ID=
 ```
+
+For the hosted demo, also add the deployed domain to Firebase Authentication authorized domains:
+
+```txt
+pixek.xyz
+```
+
+When these values are present at build time, the header/menu exposes Google sign-in and History can sync packets to Firestore under the signed-in user's document path.
 
 ## Competition Positioning
 
@@ -347,7 +381,7 @@ See [`docs/FUNCTIONAL_QA.md`](docs/FUNCTIONAL_QA.md) for the latest smoke test n
 
 - Hosted demo deployment
 - Final Kaggle write-up and demo video
-- Optional local Gemma runtime adapter
+- Hash links for dashboard subpages
 - Richer demo packets with mapped incident examples
 - Code-splitting for smaller production chunks
 - More polished packet timeline and responder handoff view

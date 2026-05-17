@@ -4,6 +4,8 @@ import {
   AI_STORAGE_KEYS,
   DEMO_OPENROUTER_API_KEY,
   DEFAULT_OPENROUTER_MODEL,
+  DEFAULT_OLLAMA_MODEL,
+  DEFAULT_OLLAMA_URL,
   RuntimeAiProvider,
 } from './engine/ai/settings';
 
@@ -20,6 +22,10 @@ interface SettingsContextType {
   setOpenRouterApiKey: (key: string) => void;
   openRouterModel: string;
   setOpenRouterModel: (model: string) => void;
+  ollamaUrl: string;
+  setOllamaUrl: (url: string) => void;
+  ollamaModel: string;
+  setOllamaModel: (model: string) => void;
 }
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
@@ -31,6 +37,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const [aiProvider, setAiProviderState] = useState<RuntimeAiProvider>('openrouter');
   const [openRouterApiKey, setOpenRouterApiKeyState] = useState(DEMO_OPENROUTER_API_KEY);
   const [openRouterModel, setOpenRouterModelState] = useState(DEFAULT_OPENROUTER_MODEL);
+  const [ollamaUrl, setOllamaUrlState] = useState(DEFAULT_OLLAMA_URL);
+  const [ollamaModel, setOllamaModelState] = useState(DEFAULT_OLLAMA_MODEL);
 
   useEffect(() => {
     const savedShape = localStorage.getItem('signalpack_logo_shape') as LogoShape;
@@ -45,10 +53,12 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     if (savedFast !== null) {
       setFastSendModeState(savedFast === 'true');
     }
-    setAiProviderState('openrouter');
-    localStorage.setItem(AI_STORAGE_KEYS.provider, 'openrouter');
+    const savedProvider = localStorage.getItem(AI_STORAGE_KEYS.provider);
+    setAiProviderState(savedProvider === 'ollama' ? 'ollama' : 'openrouter');
     setOpenRouterApiKeyState(localStorage.getItem(AI_STORAGE_KEYS.openRouterApiKey) || DEMO_OPENROUTER_API_KEY);
     setOpenRouterModelState(localStorage.getItem(AI_STORAGE_KEYS.openRouterModel) || DEFAULT_OPENROUTER_MODEL);
+    setOllamaUrlState(localStorage.getItem(AI_STORAGE_KEYS.ollamaUrl) || DEFAULT_OLLAMA_URL);
+    setOllamaModelState(localStorage.getItem(AI_STORAGE_KEYS.ollamaModel) || DEFAULT_OLLAMA_MODEL);
   }, []);
 
   const setLogoShape = (shape: LogoShape) => {
@@ -66,9 +76,9 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem('signalpack_fast_send', String(fast));
   };
 
-  const setAiProvider = (_provider: RuntimeAiProvider = 'openrouter') => {
-    setAiProviderState('openrouter');
-    localStorage.setItem(AI_STORAGE_KEYS.provider, 'openrouter');
+  const setAiProvider = (provider: RuntimeAiProvider = 'openrouter') => {
+    setAiProviderState(provider);
+    localStorage.setItem(AI_STORAGE_KEYS.provider, provider);
   };
 
   const setOpenRouterApiKey = (key: string) => {
@@ -86,6 +96,18 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const setOpenRouterModel = (model: string) => {
     setOpenRouterModelState(model);
     localStorage.setItem(AI_STORAGE_KEYS.openRouterModel, model || DEFAULT_OPENROUTER_MODEL);
+  };
+
+  const setOllamaUrl = (url: string) => {
+    const nextUrl = url.trim() || DEFAULT_OLLAMA_URL;
+    setOllamaUrlState(nextUrl);
+    localStorage.setItem(AI_STORAGE_KEYS.ollamaUrl, nextUrl);
+  };
+
+  const setOllamaModel = (model: string) => {
+    const nextModel = model.trim() || DEFAULT_OLLAMA_MODEL;
+    setOllamaModelState(nextModel);
+    localStorage.setItem(AI_STORAGE_KEYS.ollamaModel, nextModel);
   };
 
   useEffect(() => {
@@ -134,6 +156,10 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
       setOpenRouterApiKey,
       openRouterModel,
       setOpenRouterModel,
+      ollamaUrl,
+      setOllamaUrl,
+      ollamaModel,
+      setOllamaModel,
     }}>
       {children}
     </SettingsContext.Provider>

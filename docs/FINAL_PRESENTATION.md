@@ -113,7 +113,7 @@ Speaker note: "The user reviews before sharing. SignalPack helps communicate; it
 
 ### 7. Architecture
 
-Claim: API-first demo now, user-owned local Gemma path later.
+Claim: API-first demo now, user-owned local Gemma path available for advanced users.
 
 Architecture:
 
@@ -121,6 +121,7 @@ Architecture:
 React PWA
   -> localStorage / optional Firebase sync
   -> OpenRouter Gemma 4 provider
+  -> optional local Ollama provider on the user's device
   -> deterministic marked fallback
   -> Crisis Packet schema
   -> share/export surfaces
@@ -128,7 +129,7 @@ React PWA
 
 Visual: simple system diagram with OpenRouter, local history, optional Firebase, export.
 
-Speaker note: "The live demo works through OpenRouter. The repo keeps secrets out and lets users provide their own key."
+Speaker note: "The live demo works through OpenRouter. Users can bring their own key, sign in with optional Firebase sync, or point the app at a local Ollama runtime when they have Gemma running on their device."
 
 ### 8. Impact
 
@@ -207,7 +208,7 @@ Visual: architecture diagram, GitHub README, live demo URL.
 Voiceover:
 
 ```txt
-SignalPack is built as a React PWA with OpenRouter-hosted Gemma 4 for the live demo, local-first history, optional Firebase sync, and browser-native export. It is designed for global resilience: clear signals, trusted alerts, and structured action.
+SignalPack is built as a React PWA with OpenRouter-hosted Gemma 4 for the live demo, optional local Ollama routing for user-owned Gemma inference, local-first history, optional Firebase sync, and browser-native export. It is designed for global resilience: clear signals, trusted alerts, and structured action.
 ```
 
 ## Kaggle Write-Up Short Draft

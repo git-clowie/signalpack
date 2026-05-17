@@ -30,10 +30,10 @@ export function nowIso() {
   return new Date().toISOString();
 }
 
-export function createTrace(settings: RuntimeAiSettings, provider: 'openrouter'): AiTrace {
+export function createTrace(settings: RuntimeAiSettings, provider: 'openrouter' | 'ollama'): AiTrace {
   return {
     provider,
-    model: settings.openRouterModel,
+    model: provider === 'ollama' ? settings.ollamaModel : settings.openRouterModel,
     started_at: nowIso(),
   };
 }

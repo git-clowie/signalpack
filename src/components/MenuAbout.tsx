@@ -46,7 +46,7 @@ export function MenuAbout({
           </div>
           <div>
             <h3 className="text-sm font-bold text-white uppercase tracking-widest mb-1">AI Intelligence</h3>
-            <p className="text-xs text-slate leading-relaxed">Gemma 4 runs through OpenRouter for the hosted app, with a clean provider layer for future user-owned on-device inference.</p>
+            <p className="text-xs text-slate leading-relaxed">Gemma 4 runs through OpenRouter for the hosted app, with optional local Ollama routing when the user has Gemma running on their own device.</p>
           </div>
         </div>
 

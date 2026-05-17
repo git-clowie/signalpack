@@ -19,8 +19,42 @@ import { savePacket } from './firebase';
 import { motion, AnimatePresence } from "motion/react";
 import { useAppStore } from './engine/state/useAppStore';
 import { SyncEngine } from './engine/sync';
-import { DraftReport } from './types';
+import { AppState, DraftReport } from './types';
 import { demoPackets } from './demoData';
+
+const ROUTE_TO_STATE: Record<string, AppState> = {
+  '': 'home',
+  home: 'home',
+  dashboard: 'home',
+  capture: 'new_report',
+  history: 'history',
+  safety: 'safety_guide',
+  'safety-guide': 'safety_guide',
+  ask: 'ask_gemma',
+  'ask-gemma': 'ask_gemma',
+  profile: 'medical_id',
+  'medical-id': 'medical_id',
+  toolkit: 'emergency_toolkit',
+  'emergency-toolkit': 'emergency_toolkit',
+  settings: 'settings',
+  demo: 'packet_output',
+};
+
+const STATE_TO_ROUTE: Partial<Record<AppState, string>> = {
+  home: 'dashboard',
+  new_report: 'capture',
+  history: 'history',
+  safety_guide: 'safety',
+  ask_gemma: 'ask-gemma',
+  medical_id: 'profile',
+  emergency_toolkit: 'toolkit',
+  settings: 'settings',
+};
+
+function getHashRoute() {
+  if (typeof window === 'undefined') return '';
+  return window.location.hash.replace(/^#\/?/, '').split('?')[0].trim();
+}
 
 export default function App() {
   const [appNotice, setAppNotice] = React.useState('');
@@ -68,6 +102,35 @@ export default function App() {
       window.removeEventListener('offline', handleOffline);
     };
   }, [setIsLocalMode]);
+
+  useEffect(() => {
+    const applyRoute = () => {
+      const route = getHashRoute();
+      const nextState = ROUTE_TO_STATE[route];
+      if (!nextState) return;
+
+      if (route === 'demo') {
+        updateDraft({ packet: demoPackets[0], stage: 'packet_output' });
+      } else if (nextState === 'new_report') {
+        updateDraft({ stage: 'new_report' });
+      }
+
+      setState(nextState);
+    };
+
+    applyRoute();
+    window.addEventListener('hashchange', applyRoute);
+    return () => window.removeEventListener('hashchange', applyRoute);
+  }, [setState, updateDraft]);
+
+  useEffect(() => {
+    const route = STATE_TO_ROUTE[state];
+    if (!route || typeof window === 'undefined') return;
+    const nextHash = `#/${route}`;
+    if (window.location.hash !== nextHash) {
+      window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}${nextHash}`);
+    }
+  }, [state]);
 
   const handleNewReportSubmit = async (data: Partial<DraftReport>) => {
     updateDraft({ ...data, stage: 'ai_review' });

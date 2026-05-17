@@ -6,6 +6,8 @@ import { AlertTriangle, Cpu, ExternalLink } from 'lucide-react';
 export function PacketAITrace({ packet }: { packet: CrisisPacket }) {
   const providerLabel = packet.model_provider === 'openrouter'
     ? 'OpenRouter'
+    : packet.model_provider === 'ollama'
+      ? 'Local Ollama'
     : packet.model_provider === 'fallback'
       ? 'Deterministic fallback'
       : 'Unknown provider';

@@ -13,11 +13,11 @@ Core signals:
 - orange alert accent used sparingly for urgency;
 - dark tactical surface with thin borders and controlled glow.
 
-Production asset:
+Production assets:
 
-- `public/brand/signalpack-flare.svg`
+- `public/brand/signalpack-flare.png`
+- `public/brand/signalpack-logo-loop.webp`
 - React component: `src/components/Logo.tsx`
-- Wordmark component: `src/components/BrandWordmark.tsx`
 
 ## Product Narrative
 
@@ -54,5 +54,6 @@ The product should not feel like a generic emergency checklist. It should feel l
 SignalPack's live PWA provider story is intentionally simple:
 
 - OpenRouter hosted Gemma 4 for the functional demo;
+- optional user-owned local Ollama routing for capable devices;
 - deterministic fallback clearly marked when unavailable;
-- user-owned on-device Gemma as an advanced extension path, not a bundled local-server product mode.
+- no claim that the browser can install or start native local models automatically.

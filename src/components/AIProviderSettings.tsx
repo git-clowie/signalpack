@@ -1,31 +1,37 @@
 import React from 'react';
 import { Button, Card } from '@/src/components/ui';
-import { AlertTriangle, CheckCircle2, Cloud, Copy, Download, ExternalLink, KeyRound, Loader2, ShieldCheck } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, Cloud, Copy, Download, ExternalLink, KeyRound, Loader2, Server, ShieldCheck } from 'lucide-react';
 import {
   DEMO_OPENROUTER_API_KEY,
+  DEFAULT_OLLAMA_MODEL,
+  DEFAULT_OLLAMA_URL,
   DEFAULT_OPENROUTER_MODEL,
   LOCAL_GEMMA_MODEL_ID,
   LOCAL_GEMMA_MODEL_URL,
 } from '../engine/ai/settings';
 import { useSettings } from '../SettingsContext';
 import { copyText } from '../utils/export';
-import { callOpenRouter } from '../engine/ai/providers';
+import { callOllama, callOpenRouter } from '../engine/ai/providers';
 
 export function AIProviderSettings({ setIsLocalMode }: { setIsLocalMode: (value: boolean) => void }) {
   const [testState, setTestState] = React.useState<'idle' | 'testing' | 'ok' | 'error'>('idle');
   const [testMessage, setTestMessage] = React.useState('');
   const {
+    aiProvider,
+    setAiProvider,
     openRouterApiKey,
     setOpenRouterApiKey,
     openRouterModel,
     setOpenRouterModel,
-    setAiProvider,
+    ollamaUrl,
+    setOllamaUrl,
+    ollamaModel,
+    setOllamaModel,
   } = useSettings();
 
   React.useEffect(() => {
-    setAiProvider('openrouter');
-    setIsLocalMode(!navigator.onLine);
-  }, [setAiProvider, setIsLocalMode]);
+    setIsLocalMode(aiProvider === 'ollama' || !navigator.onLine);
+  }, [aiProvider, setIsLocalMode]);
 
   const isDemoKeyActive = Boolean(DEMO_OPENROUTER_API_KEY && openRouterApiKey === DEMO_OPENROUTER_API_KEY);
   const maskedKey = isDemoKeyActive
@@ -35,11 +41,20 @@ export function AIProviderSettings({ setIsLocalMode }: { setIsLocalMode: (value:
     : 'No key saved';
 
   const copyLocalSnippet = async () => {
-    await copyText(`from transformers import AutoProcessor, AutoModelForImageTextToText\n\nprocessor = AutoProcessor.from_pretrained("${LOCAL_GEMMA_MODEL_ID}")\nmodel = AutoModelForImageTextToText.from_pretrained("${LOCAL_GEMMA_MODEL_ID}")`);
+    await copyText(`# SignalPack local Gemma runtime
+# 1) Install Ollama from https://ollama.com
+# 2) Allow this PWA origin to call the local server:
+OLLAMA_ORIGINS=https://pixek.xyz,http://localhost:3000,http://localhost:4174 ollama serve
+
+# 3) Pull/run a Gemma small model exposed to Ollama as:
+ollama run ${ollamaModel || DEFAULT_OLLAMA_MODEL}
+
+# 4) In SignalPack Settings, choose Local Ollama and keep:
+${ollamaUrl || DEFAULT_OLLAMA_URL}`);
   };
 
   const handleTestConnection = async () => {
-    if (!openRouterApiKey.trim()) {
+    if (aiProvider === 'openrouter' && !openRouterApiKey.trim()) {
       setTestState('error');
       setTestMessage('Add an OpenRouter key first.');
       return;
@@ -49,19 +64,22 @@ export function AIProviderSettings({ setIsLocalMode }: { setIsLocalMode: (value:
     setTestMessage('');
 
     try {
-      const result = await callOpenRouter(
-        {
-          provider: 'openrouter',
-          openRouterApiKey,
-          openRouterModel,
-        },
+      const settings = {
+        provider: aiProvider,
+        openRouterApiKey,
+        openRouterModel,
+        ollamaUrl,
+        ollamaModel,
+      };
+      const result = await (aiProvider === 'ollama' ? callOllama : callOpenRouter)(
+        settings,
         [
           { role: 'system', content: 'Reply with exactly: SignalPack Gemma ready' },
           { role: 'user', content: 'Connection test' },
         ],
         { jsonMode: false },
       );
-      const reply = result.trace.model !== openRouterModel
+      const reply = aiProvider === 'openrouter' && result.trace.model !== openRouterModel
         ? `Connected via fallback: ${result.trace.model}`
         : result.text || 'Connected.';
       setTestState('ok');
@@ -76,6 +94,29 @@ export function AIProviderSettings({ setIsLocalMode }: { setIsLocalMode: (value:
     <section className="min-w-0">
       <h3 className="text-[10px] text-slate uppercase font-bold tracking-widest mb-3">Gemma 4 Engine</h3>
       <div className="min-w-0 space-y-3">
+        <div className="grid min-w-0 grid-cols-2 gap-2">
+          <button
+            type="button"
+            onClick={() => setAiProvider('openrouter')}
+            className={`min-w-0 rounded-xl border px-3 py-3 text-left transition-colors ${aiProvider === 'openrouter' ? 'border-blue/40 bg-blue/10 text-white' : 'border-mist/40 bg-cloud/35 text-slate hover:border-blue/30'}`}
+          >
+            <span className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest">
+              <Cloud className="h-3.5 w-3.5" /> Hosted
+            </span>
+            <span className="mt-1 block text-[11px] leading-relaxed">OpenRouter demo key or your key.</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setAiProvider('ollama')}
+            className={`min-w-0 rounded-xl border px-3 py-3 text-left transition-colors ${aiProvider === 'ollama' ? 'border-cyan-brand/40 bg-cyan-brand/10 text-white' : 'border-mist/40 bg-cloud/35 text-slate hover:border-cyan-brand/30'}`}
+          >
+            <span className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest">
+              <Server className="h-3.5 w-3.5" /> Local
+            </span>
+            <span className="mt-1 block text-[11px] leading-relaxed">User-owned Ollama runtime.</span>
+          </button>
+        </div>
+
         <div className="flex min-w-0 items-center gap-3 overflow-hidden rounded-xl border border-blue/25 bg-blue/5 p-3">
           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue/10 text-blue">
             <Cloud className="h-4 w-4" />
@@ -125,13 +166,13 @@ export function AIProviderSettings({ setIsLocalMode }: { setIsLocalMode: (value:
               disabled={testState === 'testing'}
               className="h-9 justify-center rounded-lg"
             >
-              {testState === 'testing' ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Cloud className="mr-2 h-4 w-4" />}
-              Test Gemma Connection
+              {testState === 'testing' ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : aiProvider === 'ollama' ? <Server className="mr-2 h-4 w-4" /> : <Cloud className="mr-2 h-4 w-4" />}
+              Test {aiProvider === 'ollama' ? 'Local Ollama' : 'Gemma Connection'}
             </Button>
             {testState !== 'idle' && (
               <div className={`flex items-start gap-2 rounded-lg border px-3 py-2 text-xs ${testState === 'ok' ? 'border-success/30 bg-success/5 text-success' : testState === 'error' ? 'border-warning/30 bg-warning/5 text-warning' : 'border-mist/40 bg-surface text-slate'}`}>
                 {testState === 'ok' ? <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" /> : <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />}
-                <span className="break-words leading-relaxed">{testState === 'testing' ? 'Checking OpenRouter...' : testMessage}</span>
+                <span className="break-words leading-relaxed">{testState === 'testing' ? `Checking ${aiProvider === 'ollama' ? 'local Ollama' : 'OpenRouter'}...` : testMessage}</span>
               </div>
             )}
           </div>
@@ -146,10 +187,33 @@ export function AIProviderSettings({ setIsLocalMode }: { setIsLocalMode: (value:
               <p className="text-sm font-bold text-white">Local Gemma 4 E2B</p>
               <p className="mt-1 truncate text-[10px] font-mono uppercase tracking-widest text-slate">{LOCAL_GEMMA_MODEL_ID}</p>
               <p className="mt-2 text-[11px] leading-relaxed text-slate">
-                User-owned local model path for devices that can run Gemma locally. The PWA opens the official model page; the runtime install depends on the user's device.
+                A browser PWA cannot install or start a 2GB local model by itself. For real local inference, the user runs Ollama on their device and SignalPack calls that local server.
               </p>
             </div>
           </div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <label className="block min-w-0">
+              <span className="mb-2 block text-[10px] font-bold uppercase tracking-widest text-slate">Ollama URL</span>
+              <input
+                value={ollamaUrl}
+                onChange={(event) => setOllamaUrl(event.target.value)}
+                placeholder={DEFAULT_OLLAMA_URL}
+                className="w-full min-w-0 rounded-xl border border-mist/50 bg-surface px-3 py-2 font-mono text-xs text-white focus:border-cyan-brand focus:outline-none"
+              />
+            </label>
+            <label className="block min-w-0">
+              <span className="mb-2 block text-[10px] font-bold uppercase tracking-widest text-slate">Ollama Model</span>
+              <input
+                value={ollamaModel}
+                onChange={(event) => setOllamaModel(event.target.value)}
+                placeholder={DEFAULT_OLLAMA_MODEL}
+                className="w-full min-w-0 rounded-xl border border-mist/50 bg-surface px-3 py-2 font-mono text-xs text-white focus:border-cyan-brand focus:outline-none"
+              />
+            </label>
+          </div>
+          <p className="rounded-xl border border-warning/20 bg-warning/5 px-3 py-2 text-[11px] leading-relaxed text-slate">
+            Offline switch is manual and honest: choose Local after Ollama is installed/running. Hosted PWA calls `localhost`, so Ollama must allow the app origin with `OLLAMA_ORIGINS`.
+          </p>
           <div className="grid gap-2 sm:grid-cols-2">
             <a
               href={LOCAL_GEMMA_MODEL_URL}
@@ -158,7 +222,7 @@ export function AIProviderSettings({ setIsLocalMode }: { setIsLocalMode: (value:
               className="inline-flex h-9 items-center justify-center gap-2 rounded-lg border border-cyan-brand/25 bg-cyan-brand/10 px-3 text-[10px] font-bold uppercase tracking-widest text-cyan-brand transition-colors hover:bg-cyan-brand/15"
             >
               <ExternalLink className="h-4 w-4" />
-              Download Model
+              Gemma E2B Page
             </a>
             <button
               type="button"

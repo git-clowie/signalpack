@@ -4,6 +4,7 @@ dist/
 dev-dist/
 coverage/
 outputs/
+release/
 .DS_Store
 *.log
 .env*

@@ -106,3 +106,52 @@ export async function callOpenRouter(
 
   throw new Error(`OpenRouter Gemma routing failed. ${failures.join(' | ')}`);
 }
+
+export async function callOllama(
+  settings: RuntimeAiSettings,
+  messages: ChatMessage[],
+  options: ModelCallOptions = { jsonMode: true },
+): Promise<ModelCallResult> {
+  const baseUrl = settings.ollamaUrl.trim().replace(/\/$/, '');
+  const model = settings.ollamaModel.trim();
+
+  if (!baseUrl || !model) {
+    throw new Error('Missing Ollama URL or model. Check Settings > AI Engine Routing.');
+  }
+
+  const trace = createTrace(settings, 'ollama');
+  const response = await fetch(`${baseUrl}/api/chat`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model,
+      stream: false,
+      messages: messages.map((message) => ({
+        role: message.role,
+        content: extractTextContent(message.content),
+      })),
+      format: options.jsonMode === false ? undefined : 'json',
+      options: {
+        temperature: 0.1,
+      },
+    }),
+  });
+
+  if (!response.ok) {
+    const detail = await response.text().catch(() => '');
+    throw new Error(`Local Ollama Gemma failed. ${response.status}: ${detail.slice(0, 180)}`);
+  }
+
+  const data = await response.json();
+  return {
+    text: data?.message?.content || '{}',
+    trace: completeTrace(trace, {
+      request_id: data?.created_at,
+      usage: {
+        prompt_tokens: data?.prompt_eval_count,
+        completion_tokens: data?.eval_count,
+        total_tokens: (data?.prompt_eval_count || 0) + (data?.eval_count || 0),
+      },
+    }),
+  };
+}

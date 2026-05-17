@@ -1,6 +1,6 @@
 export type IncidentType = 'flood' | 'blocked_access' | 'fire' | 'electrical_hazard' | 'other';
 export type Severity = 'low' | 'moderate' | 'high' | 'critical';
-export type AiProvider = 'openrouter' | 'fallback';
+export type AiProvider = 'openrouter' | 'ollama' | 'fallback';
 
 export interface AiTrace {
   provider: AiProvider;

@@ -25,6 +25,28 @@ Result: no document-level horizontal overflow. Settings no longer clips content 
 - Settings connection test uses the same provider path.
 - Packets include provider metadata, model name, AI trace, fallback flag, and safety-source metadata.
 - If OpenRouter or the selected model is unavailable, the app must show the marked deterministic fallback instead of presenting fallback text as model output.
+- Optional Local Ollama routing is selectable in Settings. It calls the user's own `http://localhost:11434/api/chat` runtime and records `model_provider: "ollama"` when successful.
+- A hosted PWA cannot install/start Ollama or silently download a multi-GB model. The UI and docs now state this explicitly and provide the required user-owned setup path.
+
+## Deep Links
+
+Hash routes are supported for shareable app surfaces:
+
+- `#/dashboard`
+- `#/capture`
+- `#/ask-gemma`
+- `#/history`
+- `#/safety`
+- `#/profile`
+- `#/toolkit`
+- `#/settings`
+- `#/demo`
+
+These routes preserve the static `/signalpack/` deployment path and work on normal cPanel hosting.
+
+## Optional Firebase Sync
+
+Firebase is build-time optional. Without `VITE_FIREBASE_*` values, SignalPack stays local-first and the user menu shows local mode. With Firebase values present and `pixek.xyz` authorized in Firebase Auth, Google sign-in appears and History can sync packets to Firestore.
 
 ## Packet Output
 

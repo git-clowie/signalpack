@@ -9,6 +9,9 @@ function readableFallbackReason(reason: string) {
   if (lower.includes('missing openrouter api key')) {
     return 'OpenRouter key is missing. Add a key in Settings to use hosted Gemma 4.';
   }
+  if (lower.includes('ollama') || lower.includes('localhost:11434')) {
+    return 'Local Ollama is not reachable. Start Ollama on this device, allow the app origin, or switch back to OpenRouter.';
+  }
   if (lower.includes('401') || lower.includes('403') || lower.includes('unauthorized')) {
     return 'OpenRouter rejected the key or model access. Check Settings and try again.';
   }
