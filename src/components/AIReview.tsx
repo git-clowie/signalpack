@@ -40,7 +40,7 @@ export function AIReviewScreen({
   }, [isAnalyzing]);
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)] w-full max-w-2xl mx-auto px-4 pb-6 pt-4">
+    <div className="mx-auto flex h-[calc(100vh-4rem)] w-full max-w-6xl flex-col px-4 pb-6 pt-4 md:px-6 lg:px-8">
       <div className="mb-6">
         <h1 className="text-2xl font-bold tracking-tight text-white mb-2">Gemma 4 Analysis</h1>
         <p className="text-slate text-[10px] font-mono uppercase tracking-widest">

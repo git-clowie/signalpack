@@ -55,7 +55,7 @@ export function ClarificationScreen({
 
   if (isGenerating || questions.length === 0) {
     return (
-      <div className="flex flex-col h-[calc(100vh-4rem)] w-full max-w-2xl mx-auto px-4 items-center justify-center text-center">
+      <div className="mx-auto flex h-[calc(100vh-4rem)] w-full max-w-6xl flex-col items-center justify-center px-4 text-center md:px-6 lg:px-8">
         <Loader2 className="w-12 h-12 text-blue animate-spin mb-6" />
         <h1 className="text-xl font-bold tracking-tight text-white mb-2">Building Crisis Packet</h1>
         <p className="text-slate text-[10px] font-mono uppercase tracking-widest max-w-[200px]">Organizing structured data from your conversation...</p>
@@ -83,7 +83,7 @@ export function ClarificationScreen({
   }
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)] w-full max-w-2xl mx-auto px-4 pb-4 pt-4">
+    <div className="mx-auto flex h-[calc(100vh-4rem)] w-full max-w-6xl flex-col px-4 pb-4 pt-4 md:px-6 lg:px-8">
       <div className="mb-4">
          <h1 className="text-xl font-bold tracking-tight text-white mb-1">Critical Details</h1>
          <p className="text-slate font-mono uppercase tracking-widest text-[10px]">Ask less. Capture what matters.</p>

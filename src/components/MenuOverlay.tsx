@@ -1,27 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/src/components/ui';
-import { X, User, HelpCircle, LogOut, LayoutDashboard, History, HeartPulse, AlertTriangle, BookOpen, Bot, Target, Sliders } from 'lucide-react';
+import { X, User, HelpCircle, LogOut, LayoutDashboard, History, HeartPulse, AlertTriangle, BookOpen, Bot, Settings } from 'lucide-react';
 import { auth, signInWithGoogle, logout } from '../firebase';
 import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
 import { useAppStore } from '../engine/state/useAppStore';
-import { MenuAbout } from './MenuAbout';
-import { MenuSettings } from './MenuSettings';
 
 export function MenuOverlay({
   isOpen,
   onClose,
-  setIsLocalMode,
   onShowTutorial
 }: {
   isOpen: boolean;
   onClose: () => void;
-  setIsLocalMode: (v: boolean) => void;
   onShowTutorial: () => void;
 }) {
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const [authError, setAuthError] = useState('');
-  const { setAppState, resetDraft, currentState, menuTab, setMenuTab } = useAppStore();
-  const activeTab = menuTab;
+  const { setAppState, resetDraft, currentState } = useAppStore();
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (u) => {
@@ -63,8 +58,7 @@ export function MenuOverlay({
         onClick={(e) => e.stopPropagation()}
         className="ml-auto flex h-full w-full max-w-[27rem] flex-col overflow-hidden border-l border-mist bg-surface shadow-2xl animate-in slide-in-from-right-full duration-300"
       >
-        {/* Header & Tabs */}
-        <div className="border-b border-mist/50 bg-surface/70 px-5 pb-0 pt-[calc(env(safe-area-inset-top)+1rem)] backdrop-blur-md md:pt-5">
+        <div className="border-b border-mist/50 bg-surface/70 px-5 pb-4 pt-[calc(env(safe-area-inset-top)+1rem)] backdrop-blur-md md:pt-5">
            <div className="mb-4 flex items-center justify-between">
              <div className="flex items-center gap-3">
                {user ? (
@@ -106,76 +100,59 @@ export function MenuOverlay({
              </div>
            )}
 
-           {/* Tabs */}
-           <div className="grid grid-cols-3 gap-1 border-b border-transparent">
-             <button
-               onClick={() => setMenuTab('nav')}
-               className={`relative rounded-t-lg px-2 pb-3 pt-2 text-xs font-bold uppercase tracking-widest transition-colors ${activeTab === 'nav' ? 'text-white' : 'text-slate hover:text-white'}`}
-             >
-               <span className="flex items-center justify-center gap-2"><Target className="w-4 h-4" /> Menu</span>
-               {activeTab === 'nav' && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue rounded-t-full" />}
-             </button>
-             <button
-               onClick={() => setMenuTab('settings')}
-               className={`relative rounded-t-lg px-2 pb-3 pt-2 text-xs font-bold uppercase tracking-widest transition-colors ${activeTab === 'settings' ? 'text-white' : 'text-slate hover:text-white'}`}
-             >
-               <span className="flex items-center justify-center gap-2"><Sliders className="w-4 h-4" /> Settings</span>
-               {activeTab === 'settings' && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue rounded-t-full" />}
-             </button>
-             <button
-               onClick={() => setMenuTab('about')}
-               className={`relative rounded-t-lg px-2 pb-3 pt-2 text-xs font-bold uppercase tracking-widest transition-colors ${activeTab === 'about' ? 'text-white' : 'text-slate hover:text-white'}`}
-             >
-               <span className="flex items-center justify-center gap-2"><HelpCircle className="w-4 h-4" /> About</span>
-               {activeTab === 'about' && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-cyan-brand rounded-t-full" />}
-             </button>
-           </div>
         </div>
 
         <div className="p-5 flex-1 overflow-y-auto no-scrollbar pb-[env(safe-area-inset-bottom)] md:pb-6">
-          
-          {/* TAB: NAV */}
-          {activeTab === 'nav' && (
-            <div className="space-y-6 animate-in fade-in duration-200">
-              <section className="space-y-2">
-                <button onClick={() => handleNav(resetDraft)} className={`w-full text-left px-4 py-3.5 rounded-xl transition-colors text-sm font-bold uppercase tracking-widest flex items-center gap-3 ${currentState === 'home' || currentState === 'new_report' || currentState === 'ai_review' || currentState === 'clarification' ? 'bg-mist text-white' : 'text-slate hover:text-white hover:bg-mist/30'}`}>
-                   <LayoutDashboard className="w-5 h-5 flex-shrink-0" />
-                   <span>Dashboard</span>
-                </button>
-                <button onClick={() => handleNav(() => setAppState('history'))} className={`w-full text-left px-4 py-3.5 rounded-xl transition-colors text-sm font-bold uppercase tracking-widest flex items-center gap-3 ${currentState === 'history' ? 'bg-mist text-white' : 'text-slate hover:text-white hover:bg-mist/30'}`}>
-                   <History className="w-5 h-5 flex-shrink-0" />
-                   <span>Packet History</span>
-                </button>
-                <button onClick={() => handleNav(() => setAppState('medical_id'))} className={`w-full text-left px-4 py-3.5 rounded-xl transition-colors text-sm font-bold uppercase tracking-widest flex items-center gap-3 ${currentState === 'medical_id' ? 'bg-critical/20 text-critical' : 'text-slate hover:text-critical hover:bg-critical/10'}`}>
-                   <HeartPulse className="w-5 h-5 flex-shrink-0" />
-                   <span>Emergency Profile</span>
-                </button>
-                <button onClick={() => handleNav(() => setAppState('emergency_toolkit'))} className={`w-full text-left px-4 py-3.5 rounded-xl transition-colors text-sm font-bold uppercase tracking-widest flex items-center gap-3 ${currentState === 'emergency_toolkit' ? 'bg-yellow-500/20 text-yellow-500' : 'text-slate hover:text-yellow-500 hover:bg-yellow-500/10'}`}>
-                   <AlertTriangle className="w-5 h-5 flex-shrink-0" />
-                   <span>Readiness Toolkit</span>
-                </button>
-                <button onClick={() => handleNav(() => setAppState('safety_guide'))} className={`w-full text-left px-4 py-3.5 rounded-xl transition-colors text-sm font-bold uppercase tracking-widest flex items-center gap-3 ${currentState === 'safety_guide' ? 'bg-mist text-white' : 'text-slate hover:text-white hover:bg-mist/30'}`}>
-                   <BookOpen className="w-5 h-5 flex-shrink-0" />
-                   <span>Safety Guide</span>
-                </button>
-                <button onClick={() => handleNav(() => setAppState('ask_gemma'))} className={`w-full text-left px-4 py-3.5 rounded-xl transition-colors text-sm font-bold uppercase tracking-widest flex items-center gap-3 ${currentState === 'ask_gemma' ? 'bg-cyan-brand/20 text-cyan-brand' : 'text-slate hover:text-cyan-brand hover:bg-cyan-brand/10'}`}>
-                   <Bot className="w-5 h-5 flex-shrink-0" />
-                   <span>Guided Help</span>
-                </button>
-              </section>
+          <div className="space-y-6 animate-in fade-in duration-200">
+            <section className="space-y-2">
+              <button onClick={() => handleNav(resetDraft)} className={`w-full text-left px-4 py-3.5 rounded-xl transition-colors text-sm font-bold uppercase tracking-widest flex items-center gap-3 ${currentState === 'home' || currentState === 'new_report' || currentState === 'ai_review' || currentState === 'clarification' ? 'bg-mist text-white' : 'text-slate hover:text-white hover:bg-mist/30'}`}>
+                 <LayoutDashboard className="w-5 h-5 flex-shrink-0" />
+                 <span>Dashboard</span>
+              </button>
+              <button onClick={() => handleNav(() => setAppState('history'))} className={`w-full text-left px-4 py-3.5 rounded-xl transition-colors text-sm font-bold uppercase tracking-widest flex items-center gap-3 ${currentState === 'history' ? 'bg-mist text-white' : 'text-slate hover:text-white hover:bg-mist/30'}`}>
+                 <History className="w-5 h-5 flex-shrink-0" />
+                 <span>Packet History</span>
+              </button>
+              <button onClick={() => handleNav(() => setAppState('medical_id'))} className={`w-full text-left px-4 py-3.5 rounded-xl transition-colors text-sm font-bold uppercase tracking-widest flex items-center gap-3 ${currentState === 'medical_id' ? 'bg-critical/20 text-critical' : 'text-slate hover:text-critical hover:bg-critical/10'}`}>
+                 <HeartPulse className="w-5 h-5 flex-shrink-0" />
+                 <span>Emergency Profile</span>
+              </button>
+              <button onClick={() => handleNav(() => setAppState('emergency_toolkit'))} className={`w-full text-left px-4 py-3.5 rounded-xl transition-colors text-sm font-bold uppercase tracking-widest flex items-center gap-3 ${currentState === 'emergency_toolkit' ? 'bg-warning/20 text-warning' : 'text-slate hover:text-warning hover:bg-warning/10'}`}>
+                 <AlertTriangle className="w-5 h-5 flex-shrink-0" />
+                 <span>Readiness Toolkit</span>
+              </button>
+              <button onClick={() => handleNav(() => setAppState('safety_guide'))} className={`w-full text-left px-4 py-3.5 rounded-xl transition-colors text-sm font-bold uppercase tracking-widest flex items-center gap-3 ${currentState === 'safety_guide' ? 'bg-mist text-white' : 'text-slate hover:text-white hover:bg-mist/30'}`}>
+                 <BookOpen className="w-5 h-5 flex-shrink-0" />
+                 <span>Safety Guide</span>
+              </button>
+              <button onClick={() => handleNav(() => setAppState('ask_gemma'))} className={`w-full text-left px-4 py-3.5 rounded-xl transition-colors text-sm font-bold uppercase tracking-widest flex items-center gap-3 ${currentState === 'ask_gemma' ? 'bg-cyan-brand/20 text-cyan-brand' : 'text-slate hover:text-cyan-brand hover:bg-cyan-brand/10'}`}>
+                 <Bot className="w-5 h-5 flex-shrink-0" />
+                 <span>Guided Help</span>
+              </button>
+              <button onClick={() => handleNav(() => setAppState('settings'))} className={`w-full text-left px-4 py-3.5 rounded-xl transition-colors text-sm font-bold uppercase tracking-widest flex items-center gap-3 ${currentState === 'settings' ? 'bg-cyan-brand/20 text-cyan-brand' : 'text-slate hover:text-cyan-brand hover:bg-cyan-brand/10'}`}>
+                 <Settings className="w-5 h-5 flex-shrink-0" />
+                 <span>Settings</span>
+              </button>
+            </section>
+
+            <button
+              onClick={() => {
+                onClose();
+                onShowTutorial();
+              }}
+              className="flex w-full items-center gap-3 rounded-xl border border-mist/40 bg-cloud/35 px-4 py-3 text-left text-sm font-bold uppercase tracking-widest text-slate transition-colors hover:border-cyan-brand/40 hover:text-white"
+            >
+              <HelpCircle className="h-5 w-5" />
+              About & Tutorial
+            </button>
+
+            <div className="rounded-xl border border-mist/30 bg-cloud/35 px-4 py-3">
+              <p className="text-[10px] font-mono uppercase tracking-widest text-blue">Built by pixek.xyz</p>
+              <p className="mt-1 text-[10px] font-mono uppercase tracking-widest text-slate">
+                Local-first Crisis Packets • Gemma 4 ready
+              </p>
             </div>
-          )}
-
-          {/* TAB: SETTINGS */}
-          {activeTab === 'settings' && (
-            <MenuSettings setIsLocalMode={setIsLocalMode} />
-          )}
-
-          {/* TAB: ABOUT (Merged Presentation Modal) */}
-          {activeTab === 'about' && (
-            <MenuAbout onClose={onClose} onShowTutorial={onShowTutorial} />
-          )}
-
+          </div>
         </div>
       </div>
     </div>

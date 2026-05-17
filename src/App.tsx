@@ -12,7 +12,9 @@ import { AuthHeader } from './components/AuthHeader';
 import { AskGemmaScreen } from './components/AskGemma';
 import { MedicalIDScreen } from './components/MedicalID';
 import { EmergencyToolkitScreen } from './components/EmergencyToolkit';
+import { SettingsScreen } from './components/SettingsScreen';
 import { PWAInstall } from './components/PWAInstall';
+import { AppFooter } from './components/AppFooter';
 import { analyzeIncident, generatePacket } from './engine/ai';
 import { savePacket } from './firebase';
 import { motion, AnimatePresence } from "motion/react";
@@ -154,7 +156,7 @@ export default function App() {
         {state !== 'packet_output' && <AuthHeader />}
 
         {appNotice && state !== 'packet_output' && (
-          <div className="mx-4 mt-3 rounded-xl border border-warning/30 bg-warning/5 px-3 py-2 text-xs leading-relaxed text-warning">
+          <div className="mx-auto mt-3 w-full max-w-6xl rounded-xl border border-warning/30 bg-warning/5 px-3 py-2 text-xs leading-relaxed text-warning md:px-4">
             <div className="flex items-start justify-between gap-3">
               <span>{appNotice}</span>
               <button onClick={() => setAppNotice('')} className="shrink-0 text-warning/70 hover:text-warning">Dismiss</button>
@@ -223,6 +225,12 @@ export default function App() {
               </motion.div>
             )}
 
+            {state === 'settings' && (
+              <motion.div key="settings" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="h-full">
+                <SettingsScreen onBack={() => setState('home')} setIsLocalMode={setIsLocalMode} />
+              </motion.div>
+            )}
+
             {state === 'new_report' && (
               <motion.div key="new_report" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="h-full">
                 <NewReportScreen onNext={handleNewReportSubmit} initialFastSend={!!draft.fastSend} />
@@ -268,13 +276,13 @@ export default function App() {
       <MenuOverlay 
         isOpen={isMenuOpen} 
         onClose={() => setIsMenuOpen(false)} 
-        setIsLocalMode={setIsLocalMode}
         onShowTutorial={() => setShowTutorial(true)}
       />
 
       {showTutorial && (
         <TutorialOverlay onClose={() => setShowTutorial(false)} />
       )}
+      {state !== 'packet_output' && <AppFooter />}
       <PWAInstall />
     </div>
   );

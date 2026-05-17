@@ -191,7 +191,7 @@ export function EmergencyToolkitScreen({ onBack }: { onBack: () => void }) {
   }, [oscillator, audioContext]);
 
   return (
-    <div className={`flex flex-col h-[calc(100vh-4rem)] w-full max-w-2xl mx-auto px-4 pb-6 pt-4 relative transition-colors duration-75 overflow-y-auto ${strobeState ? 'bg-white' : 'bg-cloud'}`}>
+    <div className={`mx-auto flex h-[calc(100vh-4rem)] w-full max-w-6xl flex-col px-4 pb-6 pt-4 md:px-6 lg:px-8 relative transition-colors duration-75 overflow-y-auto ${strobeState ? 'bg-white' : 'bg-cloud'}`}>
       <div className="flex items-center gap-3 mb-6 relative z-10 transition-colors">
         <button onClick={onBack} className={`p-2 rounded-full transition-colors ${strobeState ? 'bg-black/10 text-black hover:bg-black/20' : 'bg-surface/50 border border-mist/30 text-white hover:bg-mist/30'}`}>
           <ArrowLeft className="w-5 h-5" />
@@ -199,7 +199,7 @@ export function EmergencyToolkitScreen({ onBack }: { onBack: () => void }) {
         <span className={`text-[10px] font-bold uppercase tracking-[0.2em] ${strobeState ? 'text-black' : 'text-slate'}`}>Readiness Toolkit</span>
       </div>
 
-      <div className="space-y-4 relative z-10">
+      <div className="relative z-10 grid gap-4 lg:grid-cols-2">
         <Card className={`p-6 border-mist/30 flex flex-col items-center justify-center text-center transition-all ${strobeState ? 'bg-black/5' : 'bg-surface/50'}`}>
           <div className="mb-4">
             <BellRing className={`w-12 h-12 ${isSirenActive ? 'text-critical animate-pulse' : (strobeState ? 'text-black/50' : 'text-blue')}`} />

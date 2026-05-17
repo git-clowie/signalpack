@@ -44,10 +44,10 @@ export function PacketOutputScreen({ packet, onDone }: { packet?: CrisisPacket; 
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-cloud w-full max-w-3xl mx-auto pb-10 md:pt-6">
+    <div className="mx-auto flex min-h-screen w-full max-w-6xl flex-col bg-cloud px-4 pb-10 md:px-6 md:pt-6 lg:px-8">
       
       {/* Report Container */}
-      <div className="flex-1 bg-surface md:border md:border-mist/50 md:shadow-2xl md:rounded-b-3xl overflow-hidden print:bg-white print:text-black">
+      <div className="mx-auto w-full max-w-4xl flex-1 overflow-hidden bg-surface print:bg-white print:text-black md:rounded-b-3xl md:border md:border-mist/50 md:shadow-2xl">
       
         {/* Header / Severity (Print friendly) */}
         <div className={`sticky top-0 z-10 px-5 py-5 border-b print:border-b-2 print:border-black ${isCritical ? 'bg-critical text-white border-critical' : packet.severity === 'high' ? 'bg-warning text-white border-warning' : 'bg-surface text-white border-mist'}`}>
@@ -226,7 +226,7 @@ export function PacketOutputScreen({ packet, onDone }: { packet?: CrisisPacket; 
         </div>
       </div>
 
-      <div className="px-5 pt-6 mt-auto print:hidden">
+      <div className="mx-auto mt-auto w-full max-w-4xl px-5 pt-6 print:hidden">
          <Button fullWidth onClick={onDone} variant="outline" className="h-12 border-mist/60 text-slate hover:text-white uppercase tracking-widest font-bold text-xs bg-surface/50">
             Create Another Report
          </Button>

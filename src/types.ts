@@ -76,7 +76,8 @@ export type AppState =
   | 'safety_guide'
   | 'ask_gemma'
   | 'medical_id'
-  | 'emergency_toolkit';
+  | 'emergency_toolkit'
+  | 'settings';
 
 export interface MedicalProfile {
   bloodType: string;

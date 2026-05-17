@@ -33,8 +33,7 @@ export function AuthHeader() {
   };
 
   const openSettings = () => {
-    setMenuTab('settings');
-    setIsMenuOpen(true);
+    setAppState('settings');
   };
 
   const navItems = [
@@ -42,7 +41,6 @@ export function AuthHeader() {
     { label: 'History', active: currentState === 'history', action: () => setAppState('history') },
     { label: 'Safety', active: currentState === 'safety_guide', action: () => setAppState('safety_guide') },
     { label: 'Gemma', active: currentState === 'ask_gemma', action: () => setAppState('ask_gemma') },
-    { label: 'Tools', active: ['medical_id', 'emergency_toolkit'].includes(currentState), action: openMenu },
   ];
 
   return (
@@ -80,7 +78,7 @@ export function AuthHeader() {
         <div className="flex items-center gap-2">
           <button
             onClick={openSettings}
-            className="hidden h-9 items-center gap-2 rounded-lg border border-mist/40 bg-surface/70 px-3 text-[10px] font-bold uppercase tracking-widest text-slate transition-colors hover:border-cyan-brand/40 hover:text-cyan-brand md:flex"
+            className={`hidden h-9 items-center gap-2 rounded-lg border px-3 text-[10px] font-bold uppercase tracking-widest transition-colors md:flex ${currentState === 'settings' ? 'border-cyan-brand/30 bg-cyan-brand/10 text-cyan-brand' : 'border-mist/40 bg-surface/70 text-slate hover:border-cyan-brand/40 hover:text-cyan-brand'}`}
           >
             <Settings className="h-3.5 w-3.5" />
             Settings

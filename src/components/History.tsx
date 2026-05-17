@@ -80,7 +80,7 @@ export function HistoryScreen({ onBack, onSelectPacket }: { onBack: () => void, 
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)] w-full max-w-2xl mx-auto px-4 pb-6 pt-4">
+    <div className="mx-auto flex h-[calc(100vh-4rem)] w-full max-w-6xl flex-col px-4 pb-6 pt-4 md:px-6 lg:px-8">
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-white mb-1">Packet History</h1>
@@ -97,13 +97,13 @@ export function HistoryScreen({ onBack, onSelectPacket }: { onBack: () => void, 
         )}
       </div>
 
-      <div className="flex-1 space-y-4 overflow-y-auto">
+      <div className="grid flex-1 content-start gap-4 overflow-y-auto lg:grid-cols-2">
         {loading ? (
-          <div className="text-center py-10">
+          <div className="py-10 text-center lg:col-span-2">
              <p className="text-slate text-sm">Loading history...</p>
           </div>
         ) : history.length === 0 ? (
-          <div className="text-center py-10 flex flex-col items-center justify-center h-full">
+          <div className="flex min-h-80 flex-col items-center justify-center py-10 text-center lg:col-span-2">
              <Clock className="w-10 h-10 text-mist mb-4" />
              <p className="text-slate text-sm mb-6">No recent activity.</p>
              <Button variant="outline" size="sm" onClick={handleLoadDemo} className="border-blue text-blue hover:bg-blue/10">

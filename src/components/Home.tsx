@@ -27,14 +27,12 @@ export function HomeScreen({
    isLocalMode: boolean
 }) {
   const { openRouterApiKey } = useSettings();
-  const setIsMenuOpen = useAppStore(state => state.setIsMenuOpen);
-  const setMenuTab = useAppStore(state => state.setMenuTab);
+  const setAppState = useAppStore(state => state.setAppState);
   const missingOpenRouterKey = !openRouterApiKey.trim();
   const openRouterOffline = isLocalMode;
   const statusLabel = openRouterOffline ? 'Offline fallback' : 'Gemma 4 ready';
   const openSettings = () => {
-    setMenuTab('settings');
-    setIsMenuOpen(true);
+    setAppState('settings');
   };
 
   return (

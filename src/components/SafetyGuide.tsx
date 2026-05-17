@@ -188,7 +188,7 @@ export function SafetyGuideScreen({ onBack }: { onBack: () => void }) {
   }, [searchQuery, guides]);
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)] w-full max-w-2xl mx-auto px-4 pb-6 pt-4 bg-cloud">
+    <div className="mx-auto flex h-[calc(100vh-4rem)] w-full max-w-6xl flex-col bg-cloud px-4 pb-6 pt-4 md:px-6 lg:px-8">
       {/* Header */}
       <div className="mb-4 flex items-center justify-between">
         <button onClick={onBack} className="flex items-center gap-2 text-slate hover:text-white transition-colors group">
@@ -249,7 +249,7 @@ export function SafetyGuideScreen({ onBack }: { onBack: () => void }) {
         )}
 
         {/* Tactical Cards */}
-        <div className="grid gap-3">
+        <div className="grid gap-3 lg:grid-cols-2">
           {filteredGuides.map((guide) => (
             <motion.div
               layout
@@ -346,4 +346,3 @@ export function SafetyGuideScreen({ onBack }: { onBack: () => void }) {
     </div>
   );
 }
-

@@ -59,8 +59,8 @@ export function AskGemmaScreen({ onBack }: { onBack: () => void }) {
   };
 
   return (
-    <div className="flex flex-col h-full absolute inset-0 bg-cloud">
-      <div className="flex-none p-4 sticky top-0 z-50 bg-cloud/80 backdrop-blur-md border-b border-mist/30">
+    <div className="mx-auto flex h-[calc(100vh-4rem)] w-full max-w-6xl flex-col bg-cloud px-4 pb-6 pt-4 md:px-6 lg:px-8">
+      <div className="flex-none rounded-2xl border border-mist/40 bg-surface/70 p-4 backdrop-blur-md">
         <div className="flex items-center gap-3">
           <button onClick={onBack} className="p-2 -ml-2 rounded-full hover:bg-mist/30 text-slate transition-colors">
             <ArrowLeft className="w-5 h-5" />
@@ -82,7 +82,7 @@ export function AskGemmaScreen({ onBack }: { onBack: () => void }) {
         )}
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="my-4 flex-1 space-y-4 overflow-y-auto rounded-2xl border border-mist/30 bg-cloud/35 p-4">
         {messages.map((msg) => (
           <motion.div 
             initial={{ opacity: 0, y: 10 }}
@@ -113,7 +113,7 @@ export function AskGemmaScreen({ onBack }: { onBack: () => void }) {
         <div ref={endOfMessagesRef} />
       </div>
 
-      <div className="flex-none p-4 bg-surface border-t border-mist/30">
+      <div className="flex-none rounded-2xl border border-mist/40 bg-surface p-3">
         <div className="flex items-center gap-2">
           <input 
             type="text" 

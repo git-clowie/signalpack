@@ -115,7 +115,7 @@ export function NewReportScreen({
   const isValid = text.trim().length > 0 || previewImage !== null || audioBase64 !== null;
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)] w-full max-w-2xl mx-auto px-4 pb-6 pt-4">
+    <div className="mx-auto flex h-[calc(100vh-4rem)] w-full max-w-6xl flex-col px-4 pb-6 pt-4 md:px-6 lg:px-8">
       <div className="mb-6 flex justify-between items-start">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-white mb-2">Quick Capture</h1>

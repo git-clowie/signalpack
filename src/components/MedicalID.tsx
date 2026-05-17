@@ -13,7 +13,7 @@ export function MedicalIDScreen({ onBack }: { onBack: () => void }) {
   };
 
   return (
-    <div className="flex flex-col h-full w-full max-w-2xl mx-auto px-4 pb-6 pt-4 relative bg-cloud">
+    <div className="mx-auto flex h-[calc(100vh-4rem)] w-full max-w-6xl flex-col bg-cloud px-4 pb-6 pt-4 md:px-6 lg:px-8 relative">
       <div className="flex items-center gap-3 mb-6">
         <button onClick={onBack} className="p-2 rounded-full hover:bg-mist/30 text-slate hover:text-white transition-colors">
           <ArrowLeft className="w-5 h-5" />
@@ -25,8 +25,8 @@ export function MedicalIDScreen({ onBack }: { onBack: () => void }) {
         This optional context can be attached to Crisis Packets when it helps others understand risk faster.
       </p>
 
-      <div className="space-y-4 overflow-y-auto pb-24">
-        <Card className="p-4 bg-surface/50 border-mist/30">
+      <div className="grid gap-4 overflow-y-auto pb-24 lg:grid-cols-2">
+        <Card className="p-4 bg-surface/50 border-mist/30 lg:col-span-2">
           <div className="flex items-center gap-3 mb-4 text-critical">
             <Droplets className="w-5 h-5" />
             <h2 className="text-sm font-bold uppercase tracking-widest">Blood Type</h2>
@@ -81,7 +81,7 @@ export function MedicalIDScreen({ onBack }: { onBack: () => void }) {
         </Card>
       </div>
 
-      <div className="absolute bottom-6 left-4 right-4">
+      <div className="absolute bottom-6 left-4 right-4 md:left-6 md:right-6 lg:left-8 lg:right-8">
         <Button onClick={handleSave} className="w-full bg-blue text-white hover:bg-blue/80 h-12 text-sm uppercase tracking-widest font-bold">
           <Save className="w-4 h-4 mr-2" />
           Save & Return
