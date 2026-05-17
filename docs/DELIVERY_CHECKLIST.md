@@ -40,9 +40,11 @@ Note: real file downloads should be manually clicked in Chrome/Safari during fin
 - [x] Presentation kit added
 - [x] Functional QA notes added
 - [x] Logo asset instructions updated
-- [x] Secret grep for `sk-or-v1` and `AIza` is clean
+- [x] Secret grep for OpenRouter and Google key patterns is clean
 - [x] `npm run lint` passed
 - [x] `npm run build` passed
+- [x] `npm run build:signalpack` passed
+- [x] Production preview works at `/signalpack/`
 - [x] `git diff --check` passed
 
 ## Presentation
@@ -57,6 +59,7 @@ Note: real file downloads should be manually clicked in Chrome/Safari during fin
 ## Final Human Steps
 
 - [ ] Deploy current build to `https://pixek.xyz/signalpack`
+- [ ] Build deploy artifact with `npm run build:signalpack`
 - [ ] Confirm deployed demo has restricted OpenRouter demo key configured
 - [ ] Open deployed app in Chrome/Safari and manually click `Export .MD`, `JSON Dump`, and `Save PDF`
 - [ ] Record 3-minute demo video using `docs/FINAL_PRESENTATION.md`

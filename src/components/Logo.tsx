@@ -1,5 +1,6 @@
 import React from 'react';
 import { cn } from '@/src/lib/utils';
+import { assetPath } from '../utils/assetPath';
 
 export type LogoShape = 'Flare' | 'S' | 'Shield' | 'Hexagon' | 'Wave';
 
@@ -23,9 +24,9 @@ export function Logo({ shape = 'Flare', size = 'md', className, containerClassNa
 
   const renderFlare = () => (
     <picture className="block h-full w-full">
-      {animated && <source srcSet="/brand/signalpack-logo-loop.webp" type="image/webp" />}
+      {animated && <source srcSet={assetPath('brand/signalpack-logo-loop.webp')} type="image/webp" />}
       <img
-        src="/brand/signalpack-flare.png"
+        src={assetPath('brand/signalpack-flare.png')}
         alt="SignalPack signal flare logo"
         className={cn('h-full w-full object-cover object-center', className)}
       />

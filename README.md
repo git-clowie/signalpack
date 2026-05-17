@@ -225,6 +225,12 @@ Build:
 npm run build
 ```
 
+Build for the hosted demo subpath:
+
+```bash
+npm run build:signalpack
+```
+
 Type-check:
 
 ```bash
@@ -248,8 +254,11 @@ The user-entered key is stored only in the current browser. It is not committed 
 For the hosted demo at `https://pixek.xyz/signalpack`, deploy with:
 
 ```bash
+VITE_BASE_PATH=/signalpack/
 VITE_SIGNALPACK_DEMO_OPENROUTER_KEY=<restricted-demo-key>
 ```
+
+Then publish the generated `dist/` directory at the `/signalpack/` path.
 
 This makes the demo functional without requiring judges to paste a key first. Because SignalPack is a frontend PWA, any `VITE_` demo key is visible in the shipped browser bundle; use a restricted/rotatable demo key and do not commit it to Git. A server-side proxy is the cleaner long-term upgrade.
 

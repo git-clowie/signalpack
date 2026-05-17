@@ -6,7 +6,10 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig(({mode}) => {
   const env = loadEnv(mode, '.', '');
+  const base = env.VITE_BASE_PATH || '/';
+
   return {
+    base,
     plugins: [
       react(), 
       tailwindcss(),
@@ -18,15 +21,17 @@ export default defineConfig(({mode}) => {
           short_name: 'SignalPack',
           theme_color: '#040404',
           background_color: '#040404',
+          start_url: base,
+          scope: base,
           display: 'standalone',
           icons: [
             {
-              src: '/icon.png',
+              src: 'icon.png',
               sizes: '192x192',
               type: 'image/png'
             },
             {
-              src: '/icon.png',
+              src: 'icon.png',
               sizes: '512x512',
               type: 'image/png',
               purpose: 'any maskable'

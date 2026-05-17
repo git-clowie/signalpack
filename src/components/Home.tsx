@@ -6,6 +6,7 @@ import { useSettings } from '../SettingsContext';
 import { vibrate } from '../lib/utils';
 import { MapComponent } from './MapComponent';
 import { useAppStore } from '../engine/state/useAppStore';
+import { assetPath } from '../utils/assetPath';
 
 export function HomeScreen({ 
    onStartReport, 
@@ -42,8 +43,8 @@ export function HomeScreen({
           <div className="absolute inset-x-4 top-0 h-px signal-sweep opacity-70" />
           <div className="pointer-events-none absolute right-0 top-0 h-60 w-full overflow-hidden bg-[#040404] opacity-100 sm:h-72 md:h-full md:w-[45%] lg:w-[46%]">
             <picture className="hero-logo-frame absolute right-1/2 top-3 block h-52 w-52 translate-x-1/2 sm:top-4 sm:h-60 sm:w-60 md:right-12 md:top-1/2 md:h-80 md:w-80 md:-translate-y-1/2 md:translate-x-0 lg:right-16 lg:h-[22rem] lg:w-[22rem]">
-              <source srcSet="/brand/signalpack-logo-loop.webp" type="image/webp" />
-              <img src="/brand/signalpack-flare.png" alt="" className="hero-logo-crop opacity-100" />
+              <source srcSet={assetPath('brand/signalpack-logo-loop.webp')} type="image/webp" />
+              <img src={assetPath('brand/signalpack-flare.png')} alt="" className="hero-logo-crop opacity-100" />
             </picture>
           </div>
 
