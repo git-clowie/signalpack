@@ -96,7 +96,7 @@ export function HomeScreen({
 
       <section className="mt-5">
         <h2 className="mb-3 px-1 text-[10px] font-bold uppercase tracking-widest text-slate">Quick Capture</h2>
-        <div className="grid grid-cols-3 gap-2.5 sm:gap-3">
+        <div className="mobile-safe-card-grid grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-3">
           <button type="button" className="glass-panel group flex h-28 cursor-pointer flex-col items-center justify-center rounded-xl px-2 py-3 text-center transition-all hover:border-blue/50 hover:bg-blue/5 sm:h-32 sm:p-4" onClick={() => onStartReport()}>
             <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-blue/10 text-blue transition-transform group-hover:scale-105 sm:h-11 sm:w-11">
               <Camera className="h-5 w-5" />
@@ -112,7 +112,7 @@ export function HomeScreen({
             <span className="text-[10px] font-bold uppercase tracking-widest text-slate transition-colors group-hover:text-white">Audio</span>
             <span className="mt-1 hidden text-[10px] leading-snug text-slate/80 sm:block">Record a short voice note.</span>
           </button>
-          <button type="button" className="glass-panel group flex h-28 cursor-pointer flex-col items-center justify-center rounded-xl px-2 py-3 text-center transition-all hover:border-blue/50 hover:bg-blue/5 sm:h-32 sm:p-4" onClick={onAskGemma}>
+          <button type="button" className="glass-panel group col-span-2 flex h-24 cursor-pointer flex-col items-center justify-center rounded-xl px-2 py-3 text-center transition-all hover:border-blue/50 hover:bg-blue/5 sm:col-span-1 sm:h-32 sm:p-4" onClick={onAskGemma}>
             <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-blue/10 text-blue transition-transform group-hover:scale-105 sm:h-11 sm:w-11">
               <MessageCircle className="h-5 w-5" />
             </div>
@@ -124,7 +124,7 @@ export function HomeScreen({
 
       <section className="mt-5">
         <h2 className="mb-3 px-1 text-[10px] font-bold uppercase tracking-widest text-slate">Review & Prepare</h2>
-        <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-6 sm:gap-3">
+        <div className="mobile-safe-card-grid grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-6 sm:gap-3">
           <button type="button" className="glass-panel group flex h-24 cursor-pointer flex-col items-center justify-center rounded-xl px-2 py-3 text-center transition-all hover:border-slate/80 sm:h-28 sm:p-4" onClick={onViewHistory}>
             <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-mist/30 text-slate transition-transform group-hover:scale-105">
                <History className="h-5 w-5" />

@@ -100,15 +100,26 @@ export function MapComponent({ onSelectPacket, height = '300px', className = '' 
 
   return (
     <div className={`w-full bg-surface border border-mist/30 rounded-2xl overflow-hidden relative z-0 ${className}`} style={{ height }}>
+      <div className="absolute inset-0 flex items-center justify-center bg-cloud md:hidden">
+        <div className="absolute inset-0 opacity-25" style={{ backgroundImage: 'radial-gradient(circle at center, rgba(0,230,255,.65) 1px, transparent 1px)', backgroundSize: '18px 18px' }} />
+        <div className="relative z-10 mx-4 rounded-xl border border-cyan-brand/15 bg-surface/85 px-4 py-3 text-center shadow-xl">
+          <p className="text-[10px] font-mono uppercase tracking-widest text-cyan-brand">
+            {packets.length ? `${packets.length} mapped packet${packets.length === 1 ? '' : 's'}` : 'No mapped packets yet'}
+          </p>
+          <p className="mt-1 text-xs leading-relaxed text-slate">
+            Live map is optimized for wider screens. Location still saves with each Crisis Packet.
+          </p>
+        </div>
+      </div>
       {!loading && packets.length === 0 && (
-        <div className="pointer-events-none absolute inset-x-4 top-4 z-[900] rounded-xl border border-cyan-brand/15 bg-cloud/70 px-3 py-2 text-left backdrop-blur-sm">
+        <div className="pointer-events-none absolute inset-x-4 top-4 z-20 hidden rounded-xl border border-cyan-brand/15 bg-cloud/70 px-3 py-2 text-left backdrop-blur-sm md:block">
           <p className="text-[10px] font-mono uppercase tracking-widest text-cyan-brand">No mapped packets yet</p>
           <p className="mt-1 text-xs text-slate">Add location to a Crisis Packet to place it on the tactical map.</p>
         </div>
       )}
 
       {loading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-cloud/50 backdrop-blur-sm z-[1000]">
+        <div className="absolute inset-0 z-30 hidden items-center justify-center bg-cloud/50 backdrop-blur-sm md:flex">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue"></div>
         </div>
       )}
@@ -116,6 +127,7 @@ export function MapComponent({ onSelectPacket, height = '300px', className = '' 
       <MapContainer 
         center={[center.lat, center.lng]} 
         zoom={12} 
+        className="hidden md:block"
         style={{ width: '100%', height: '100%', zIndex: 1 }}
         zoomControl={false}
       >

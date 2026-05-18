@@ -74,6 +74,9 @@
 }
 
 .glass-panel {
+  position: relative;
+  isolation: isolate;
+  contain: paint;
   background:
     linear-gradient(180deg, rgba(16, 22, 34, 0.78), rgba(7, 8, 11, 0.9)),
     radial-gradient(circle at 20% 0%, rgba(0, 230, 255, 0.08), transparent 38%);
@@ -99,6 +102,9 @@
 }
 
 .glass-panel-strong {
+  position: relative;
+  isolation: isolate;
+  contain: paint;
   background:
     radial-gradient(circle at 78% 24%, rgba(0, 230, 255, 0.12), transparent 28%),
     radial-gradient(circle at 92% 82%, rgba(144, 89, 243, 0.12), transparent 34%),
@@ -229,4 +235,16 @@ audio.custom-audio::-webkit-media-controls-time-remaining-display {
 input, textarea {
   -webkit-user-select: auto;
   user-select: auto;
+}
+
+.mobile-safe-card-grid {
+  position: relative;
+  isolation: isolate;
+  contain: layout paint;
+}
+
+.mobile-safe-card-grid > * {
+  min-width: 0;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
