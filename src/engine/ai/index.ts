@@ -97,7 +97,9 @@ export async function analyzeIncident(
 
 Return a JSON object only with:
 incident_type, hazards, uncertainties, clarification_questions.
-Ask at most 3 short clarification questions.${profileContext}`;
+Ask at most 3 short clarification questions.
+Each question must be contextual, life-safety relevant, and answerable with Yes / No / Not sure.
+Skip questions that would not change the packet or emergency-call decision.${profileContext}`;
 
   try {
     const result = await callConfiguredModel(system, buildUserContent(text, imageBase64, audioBase64));

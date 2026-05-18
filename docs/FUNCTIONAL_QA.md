@@ -23,6 +23,8 @@ Result: no document-level horizontal overflow. Settings no longer clips content 
 
 - Ask Gemma responds through the OpenRouter/Gemma 4 route in the UI.
 - Gemma prompts now include explicit 112/911 triage rules: call now for immediate danger, injury, trapped people, fire/smoke/gas, rising water, downed power, violence, or life-threatening medical signs; use monitoring/non-emergency guidance for minor, informational, or already-safe situations.
+- Gemma analysis prompts now require contextual clarification questions only when the answer can change severity, the 112/911 decision, immediate actions, location/access, or people-at-risk count.
+- AI Review now shows a compact analysis dashboard: incident type, detected hazards, people at risk, uncertainty meter, and inline `Yes / No / Not sure` answers for Gemma-generated questions.
 - Ask Gemma is instructed to stay supportive and concise, avoid diagnosis, ask at most one focused follow-up question, and avoid over-escalating every answer to 112.
 - Settings connection test uses the same provider path.
 - Packets include provider metadata, model name, AI trace, fallback flag, and safety-source metadata.
@@ -93,7 +95,7 @@ Recommended path:
 2. Start Alert
 3. Send to Gemma 4
 4. Review AI analysis
-5. Answer clarification if asked
+5. Answer contextual Gemma clarification questions inline or use the guided chat
 6. Generate Crisis Packet
 7. Show AI trace and safety sources
 8. Export/share the packet

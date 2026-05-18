@@ -310,6 +310,7 @@ export default function App() {
               <motion.div key="ai_review" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.05 }} className="h-full">
                 <AIReviewScreen 
                   report={draft}
+                  onInlineComplete={handleClarificationComplete}
                   onNext={async () => {
                     if (draft.clarificationQuestions && draft.clarificationQuestions.length > 0) {
                       setState('clarification');

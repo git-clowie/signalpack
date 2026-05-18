@@ -25,6 +25,8 @@ Last verified: May 18, 2026.
 - [x] Deterministic fallback is marked when provider routing fails
 - [x] Crisis Packet includes model provider, model name, AI trace, fallback flag, safety sources
 - [x] Gemma prompts include a clear 112/911 decision policy and concise supportive guidance
+- [x] Gemma clarification questions are constrained to contextual, life-safety-relevant yes/no/not-sure prompts
+- [x] AI Review screen shows inline analysis cards, hazard chips, uncertainty meter, and quick clarification answers
 - [x] Optional local Ollama provider is selectable in Settings
 - [x] Local Gemma instructions are honest: the PWA calls a user-owned local runtime; it does not pretend to install native models automatically
 

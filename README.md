@@ -32,6 +32,7 @@ SignalPack is a working emergency reporting PWA for the **Gemma 4 Good Hackathon
 It turns text, photo, audio, and location context into a reviewable **Crisis Packet** with:
 
 - Gemma 4 hazard extraction and missing-detail questions
+- contextual yes/no/not-sure clarification inside the Gemma 4 Analysis screen
 - a clear 112/911 emergency-call decision, without over-escalating minor cases
 - evidence-first report layout with photo/audio status near the top
 - immediate actions, uncertainty, safety sources, and AI trace
@@ -70,7 +71,7 @@ Prepare -> Alert -> Understand -> Act
 | --- | --- | --- |
 | Prepare | Emergency Profile, Safety Guide, Settings, PWA install | Keep useful context ready before stress hits. |
 | Alert | Start Alert, Rapid Packet, Quick Capture | Capture the signal quickly by text, photo, audio, and GPS. |
-| Understand | Gemma 4 Analysis, clarification questions, AI trace | Structure risk, missing details, and uncertainty. |
+| Understand | Gemma 4 Analysis, inline clarification, AI trace | Structure risk, missing details, uncertainty, and emergency-call decision. |
 | Act | Crisis Packet, share text, export, map, history | Review, copy, export, or share a concise packet. |
 
 ## Demo Flow

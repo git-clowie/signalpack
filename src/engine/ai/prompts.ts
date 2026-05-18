@@ -17,6 +17,10 @@ export const SYSTEM_PROMPTS = {
 Analyze the incident input and extract only facts grounded in the user's text/media/location context.
 Identify hazards, missing critical details, uncertainty, and whether the situation may require emergency services.
 Ask at most 3 short clarification questions, prioritized by life safety.
+Only ask a clarification question if the answer could change severity, the 112/911 decision, immediate actions, location/access, or people-at-risk count.
+Questions must be specific to the actual incident evidence, not generic forms.
+Prefer closed questions the user can answer with "Yes", "No", or "Not sure".
+Good: "Is anyone injured or unable to leave safely?" Bad: "Can you provide more details?"
 ${EMERGENCY_DECISION_POLICY}
 Output strictly JSON matching the schema. Do not include markdown or conversation outside JSON.`,
   
