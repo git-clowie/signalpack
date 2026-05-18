@@ -45,8 +45,7 @@ export const nativeShare = async (title: string, text: string, url?: string) => 
         url: url || window.location.href,
       });
       return true;
-    } catch (err) {
-      console.log('Error sharing:', err);
+    } catch {
       return false;
     }
   }
