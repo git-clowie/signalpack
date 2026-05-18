@@ -12,6 +12,8 @@
 <p align="center">
   <strong>Live demo:</strong> <a href="https://pixek.xyz/signalpack">pixek.xyz/signalpack</a> ·
   <strong>Demo route:</strong> <a href="https://pixek.xyz/signalpack/#/demo">#/demo</a><br />
+  <strong>Kaggle submission:</strong> <a href="https://www.kaggle.com/competitions/gemma-4-good-hackathon/writeups/signalpack-ai-emergency-alerts-and-crisis-packets">writeup</a> ·
+  <strong>Presentation video:</strong> <a href="https://youtu.be/nLdU5ryIld8">YouTube</a><br />
   <a href="#demo-flow">Demo Flow</a> ·
   <a href="#architecture">Architecture</a> ·
   <a href="#gemma-4-ai-layer">Gemma 4 AI Layer</a> ·
