@@ -131,7 +131,9 @@ export async function askGemma(
 
   const system = `${SYSTEM_PROMPTS.FIRST_AID_ASSISTANT}
 
-Do not diagnose. Give immediate, short safety steps. If the situation sounds life-threatening, tell the user to call emergency services first.`;
+Do not diagnose. Give immediate, short safety steps.
+Do not over-escalate every question to 112. Only make 112/911 the first instruction when the emergency-call policy is triggered.
+When uncertain, be conditional and practical: tell the user exactly what detail would change the decision.`;
 
   try {
     const result = await callConfiguredModel(system, `${transcript}\n\nUser: ${message}`, false);
@@ -167,6 +169,10 @@ Rules:
 - Do not invent facts.
 - Mark uncertainty clearly.
 - Keep action steps concise and safe.
+- The first immediate action must be either a clear 112/911 instruction when criteria are met, or conditional guidance when danger is unclear.
+- Do not tell users to call 112/911 for minor, informational, or already-safe reports unless a life-safety trigger is present.
+- If the input says Romania/EU or local language is Romanian, use 112 in emergency-call wording.
+- structured_report_markdown must be concise and include: Situation, Emergency call decision, Immediate actions, Location/evidence, Uncertainty, Share note.
 - Target local language ISO: ${localTarget}.`;
 
   const prompt = `Initial report:

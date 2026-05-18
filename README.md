@@ -141,6 +141,8 @@ SignalPack is API-first for the live PWA and focused on Gemma 4.
 
 The provider layer is intentionally narrow and swappable. The hosted demo path uses OpenRouter and can use a restricted demo key injected at deploy time. Settings masks the hosted demo key and lets users paste their own OpenRouter key to override it. If the free model is rate-limited upstream, SignalPack retries through the configured preset/fallback chain and records the actual route in `ai_trace`.
 
+Prompting is safety-oriented, not generic chat. Gemma 4 is instructed to be calm, concise, and supportive; to distinguish immediate 112/911 situations from non-urgent readiness or monitoring cases; to mark uncertainty; and to never claim SignalPack contacted emergency services. Crisis Packet reports include an emergency-call decision, immediate actions, evidence, uncertainty, and a share note for human review.
+
 The local path is implemented as an optional **Local Ollama** runtime. The PWA can call an Ollama server running on the user's own device at `http://localhost:11434`, but the browser cannot silently install or start a native model runtime. Users who want local inference install Ollama, pull/run a compatible Gemma small model, allow the SignalPack origin through `OLLAMA_ORIGINS`, then choose **Local** in Settings.
 
 ## Crisis Packet Schema
@@ -155,6 +157,7 @@ The generated packet includes:
 - `location_text`, `lat`, `lng`
 - `people_at_risk`
 - `hazards`
+- `evidence`
 - `uncertainties`
 - `immediate_actions`
 - `share_message_short`
@@ -175,6 +178,7 @@ Final Crisis Packets can be:
 - opened in the user's email client
 - shared through the native mobile share sheet when supported
 - printed or saved as PDF
+- exported as standalone HTML with top evidence image when a photo is attached
 - exported as Markdown
 - exported as JSON for audit/reuse
 

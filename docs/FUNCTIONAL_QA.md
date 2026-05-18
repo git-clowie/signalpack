@@ -1,6 +1,6 @@
 # SignalPack Functional QA
 
-Verified on May 17, 2026 against the local Vite app on `http://127.0.0.1:3007/`.
+Verified on May 18, 2026 against the local production preview on `http://127.0.0.1:4174/signalpack/`.
 
 ## Responsive Fit
 
@@ -22,6 +22,8 @@ Result: no document-level horizontal overflow. Settings no longer clips content 
 ## AI Flow
 
 - Ask Gemma responds through the OpenRouter/Gemma 4 route in the UI.
+- Gemma prompts now include explicit 112/911 triage rules: call now for immediate danger, injury, trapped people, fire/smoke/gas, rising water, downed power, violence, or life-threatening medical signs; use monitoring/non-emergency guidance for minor, informational, or already-safe situations.
+- Ask Gemma is instructed to stay supportive and concise, avoid diagnosis, ask at most one focused follow-up question, and avoid over-escalating every answer to 112.
 - Settings connection test uses the same provider path.
 - Packets include provider metadata, model name, AI trace, fallback flag, and safety-source metadata.
 - If OpenRouter or the selected model is unavailable, the app must show the marked deterministic fallback instead of presenting fallback text as model output.
@@ -54,6 +56,8 @@ Verified packet output surfaces:
 
 - Crisis Packet header and severity
 - incident overview
+- top evidence photo/audio/status block
+- 112 decision status block
 - AI trace
 - safety sources
 - immediate actions
@@ -61,6 +65,7 @@ Verified packet output surfaces:
 - quick share text
 - WhatsApp / email / native share controls
 - print / PDF route
+- HTML export with top evidence image when attached
 - Markdown export
 - JSON export
 

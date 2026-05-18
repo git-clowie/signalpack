@@ -1,6 +1,6 @@
 # SignalPack Delivery Checklist
 
-Last verified: May 17, 2026.
+Last verified: May 18, 2026.
 
 ## App
 
@@ -10,6 +10,7 @@ Last verified: May 17, 2026.
 - [x] Start Alert and Rapid Packet open the capture flow
 - [x] Demo packet opens the final Crisis Packet output
 - [x] Packet output exposes AI trace, safety sources, actions, report, share, and export controls
+- [x] Demo Crisis Packet shows evidence image near the top of the mobile/desktop report
 - [x] Mobile menu fits and includes Dashboard, History, Profile, Toolkit, Safety, Ask Gemma, Settings, About
 - [x] Footer no longer overlays desktop CTA/buttons
 - [x] Hash links are available for `#/dashboard`, `#/capture`, `#/ask-gemma`, `#/history`, `#/safety`, `#/profile`, `#/toolkit`, `#/settings`, `#/demo`
@@ -23,6 +24,7 @@ Last verified: May 17, 2026.
 - [x] User-provided key can override demo key locally
 - [x] Deterministic fallback is marked when provider routing fails
 - [x] Crisis Packet includes model provider, model name, AI trace, fallback flag, safety sources
+- [x] Gemma prompts include a clear 112/911 decision policy and concise supportive guidance
 - [x] Optional local Ollama provider is selectable in Settings
 - [x] Local Gemma instructions are honest: the PWA calls a user-owned local runtime; it does not pretend to install native models automatically
 
@@ -34,6 +36,7 @@ Last verified: May 17, 2026.
 - [x] Native share helper is wired for supported mobile browsers
 - [x] Markdown export helper generates browser Blob download
 - [x] JSON export helper generates browser Blob download
+- [x] HTML export includes evidence near the top when a photo is attached
 - [x] PDF path uses browser print/save flow
 
 Note: real file downloads should be manually clicked in Chrome/Safari during final recording because the Codex in-app browser does not expose a native download manager.

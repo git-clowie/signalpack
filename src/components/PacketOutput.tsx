@@ -37,6 +37,14 @@ export function PacketOutputScreen({
   const markdownReport = (language === 'en' ? packet.structured_report_markdown : (packet.structured_report_markdown_local || packet.structured_report_markdown)) || '# SignalPack Crisis Packet\n\nReview packet details before sharing.';
   const displayPacketId = packet.packet_id || packet.id || 'local-pending';
   const hasEvidence = !!evidenceImage || !!evidenceAudio || !!packet.evidence?.text_summary;
+  const shouldCallNow = isCritical || safeActions.some((action) => /112|911|emergency services now|call emergency/i.test(action));
+  const emergencyDecision = shouldCallNow
+    ? (language === 'ro'
+      ? 'Sunați la 112 acum dacă cineva este rănit, blocat, nu poate pleca în siguranță sau pericolul crește.'
+      : 'Call 112/911 now if anyone is injured, trapped, unable to leave safely, or the danger is escalating.')
+    : (language === 'ro'
+      ? 'Dacă toată lumea este în siguranță, monitorizați și apelați 112 doar dacă pericolul crește.'
+      : 'If everyone is safe, monitor and call 112/911 only if danger escalates.');
 
   const googleMapsLink = (packet.lat && packet.lng) ? `https://www.google.com/maps/search/?api=1&query=${packet.lat},${packet.lng}` : null;
   const sosMsg = `SOS! I am at ${packet.location_text}. ${packet.share_message_short} Location: ${googleMapsLink || 'Unknown'}`;
@@ -164,6 +172,64 @@ export function PacketOutputScreen({
               </button>
            </div>
 
+           {hasEvidence && (
+             <section>
+                <h2 className="text-[10px] text-slate uppercase font-bold tracking-widest mb-3 print:text-black">Evidence</h2>
+                <Card className="overflow-hidden border-mist/50 bg-cloud rounded-2xl print:border-black print:border-2 print:bg-white print:shadow-none">
+                  {evidenceImage && (
+                    <img
+                      src={evidenceImage}
+                      alt="Incident evidence"
+                      className="h-56 w-full object-cover object-center sm:h-64 print:h-48"
+                    />
+                  )}
+                  <div className="space-y-3 p-4">
+                    <div className="grid gap-3 sm:grid-cols-3">
+                      <div className="rounded-xl border border-mist/35 bg-surface/60 px-3 py-2 print:border-black print:bg-white">
+                        <p className="text-[9px] font-mono uppercase tracking-widest text-slate print:text-gray-600">Photo</p>
+                        <p className="mt-1 text-xs font-bold text-white print:text-black">{evidenceImage || packet.evidence?.image_present ? 'Attached' : 'Not attached'}</p>
+                      </div>
+                      <div className="rounded-xl border border-mist/35 bg-surface/60 px-3 py-2 print:border-black print:bg-white">
+                        <p className="text-[9px] font-mono uppercase tracking-widest text-slate print:text-gray-600">Audio</p>
+                        <p className="mt-1 text-xs font-bold text-white print:text-black">{evidenceAudio || packet.evidence?.audio_present ? 'Attached' : 'Not attached'}</p>
+                      </div>
+                      <div className="rounded-xl border border-mist/35 bg-surface/60 px-3 py-2 print:border-black print:bg-white">
+                        <p className="text-[9px] font-mono uppercase tracking-widest text-slate print:text-gray-600">Review</p>
+                        <p className="mt-1 text-xs font-bold text-white print:text-black">{packet.review_required ? 'Required' : 'Ready'}</p>
+                      </div>
+                    </div>
+                    {packet.evidence?.text_summary && (
+                      <p className="rounded-xl border border-mist/35 bg-surface/60 px-3 py-2 text-xs leading-relaxed text-slate print:border-black print:bg-white print:text-black">
+                        {packet.evidence.text_summary}
+                      </p>
+                    )}
+                    {evidenceAudio && (
+                      <audio src={evidenceAudio} controls className="h-10 w-full print:hidden" />
+                    )}
+                  </div>
+                </Card>
+             </section>
+           )}
+
+           <section>
+              <h2 className="text-[10px] text-slate uppercase font-bold tracking-widest mb-3 print:text-black">Status</h2>
+              <Card className="border-mist/50 bg-cloud p-4 rounded-2xl print:border-black print:border-2 print:bg-white print:shadow-none">
+                <div className="grid gap-3 sm:grid-cols-[1fr_1fr_auto] sm:items-center">
+                  <div>
+                    <p className="font-mono text-[9px] uppercase tracking-widest text-slate print:text-gray-600">Packet state</p>
+                    <p className="mt-1 text-sm font-bold text-white print:text-black">Open / review required</p>
+                  </div>
+                  <div>
+                    <p className="font-mono text-[9px] uppercase tracking-widest text-slate print:text-gray-600">112 decision</p>
+                    <p className="mt-1 text-sm font-semibold leading-snug text-white/90 print:text-black">{emergencyDecision}</p>
+                  </div>
+                  <Badge className={`w-fit border-none ${shouldCallNow ? 'bg-critical text-white' : 'bg-blue/15 text-blue'}`}>
+                    {shouldCallNow ? 'Urgent' : 'Monitor'}
+                  </Badge>
+                </div>
+              </Card>
+           </section>
+
            {/* Summary Section */}
            <section className="print:mt-6">
               <h2 className="text-[10px] text-slate uppercase font-bold tracking-widest mb-3 print:text-black">Incident Overview</h2>
@@ -211,45 +277,6 @@ export function PacketOutputScreen({
                  )}
               </Card>
            </section>
-
-           {hasEvidence && (
-             <section>
-                <h2 className="text-[10px] text-slate uppercase font-bold tracking-widest mb-3 print:text-black">Evidence</h2>
-                <Card className="overflow-hidden border-mist/50 bg-cloud rounded-2xl print:border-black print:border-2 print:bg-white print:shadow-none">
-                  {evidenceImage && (
-                    <img
-                      src={evidenceImage}
-                      alt="Incident evidence"
-                      className="h-56 w-full object-cover object-center print:h-48"
-                    />
-                  )}
-                  <div className="space-y-3 p-4">
-                    <div className="grid gap-3 sm:grid-cols-3">
-                      <div className="rounded-xl border border-mist/35 bg-surface/60 px-3 py-2 print:border-black print:bg-white">
-                        <p className="text-[9px] font-mono uppercase tracking-widest text-slate print:text-gray-600">Photo</p>
-                        <p className="mt-1 text-xs font-bold text-white print:text-black">{evidenceImage || packet.evidence?.image_present ? 'Attached' : 'Not attached'}</p>
-                      </div>
-                      <div className="rounded-xl border border-mist/35 bg-surface/60 px-3 py-2 print:border-black print:bg-white">
-                        <p className="text-[9px] font-mono uppercase tracking-widest text-slate print:text-gray-600">Audio</p>
-                        <p className="mt-1 text-xs font-bold text-white print:text-black">{evidenceAudio || packet.evidence?.audio_present ? 'Attached' : 'Not attached'}</p>
-                      </div>
-                      <div className="rounded-xl border border-mist/35 bg-surface/60 px-3 py-2 print:border-black print:bg-white">
-                        <p className="text-[9px] font-mono uppercase tracking-widest text-slate print:text-gray-600">Notes</p>
-                        <p className="mt-1 text-xs font-bold text-white print:text-black">{packet.evidence?.text_summary ? 'Included' : 'None'}</p>
-                      </div>
-                    </div>
-                    {packet.evidence?.text_summary && (
-                      <p className="rounded-xl border border-mist/35 bg-surface/60 px-3 py-2 text-xs leading-relaxed text-slate print:border-black print:bg-white print:text-black">
-                        {packet.evidence.text_summary}
-                      </p>
-                    )}
-                    {evidenceAudio && (
-                      <audio src={evidenceAudio} controls className="h-10 w-full print:hidden" />
-                    )}
-                  </div>
-                </Card>
-             </section>
-           )}
 
            <PacketAITrace packet={packet} />
 
@@ -497,6 +524,14 @@ function buildHtmlReport({
       <div class="severity">${severity}</div>
     </header>
 
+    ${(evidenceImage || evidenceAudio || packet.evidence?.text_summary) ? `
+    <h2>Evidence</h2>
+    <section class="card">
+      ${evidenceImage ? `<img class="evidence" src="${evidenceImage}" alt="Incident evidence" />` : ''}
+      <p class="meta">Photo: ${evidenceImage || packet.evidence?.image_present ? 'attached' : 'not attached'} · Audio: ${evidenceAudio || packet.evidence?.audio_present ? 'attached' : 'not attached'} · Review: ${packet.review_required ? 'required' : 'ready'}</p>
+      ${packet.evidence?.text_summary ? `<p>${escapeHtml(packet.evidence.text_summary)}</p>` : ''}
+    </section>` : ''}
+
     <h2>Incident Overview</h2>
     <section class="grid">
       <div class="card"><div class="meta">Location</div><div class="value">${escapeHtml(packet.location_text || 'Unknown')}</div></div>
@@ -507,14 +542,6 @@ function buildHtmlReport({
 
     <h2>Quick Share Message</h2>
     <section class="card share">${escapeHtml(shareMsg)}</section>
-
-    ${(evidenceImage || evidenceAudio || packet.evidence?.text_summary) ? `
-    <h2>Evidence</h2>
-    <section class="card">
-      ${evidenceImage ? `<img class="evidence" src="${evidenceImage}" alt="Incident evidence" />` : ''}
-      <p class="meta">Photo: ${evidenceImage || packet.evidence?.image_present ? 'attached' : 'not attached'} · Audio: ${evidenceAudio || packet.evidence?.audio_present ? 'attached' : 'not attached'}</p>
-      ${packet.evidence?.text_summary ? `<p>${escapeHtml(packet.evidence.text_summary)}</p>` : ''}
-    </section>` : ''}
 
     <h2>Immediate Actions</h2>
     <ol>${actionsHtml}</ol>

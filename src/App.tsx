@@ -21,6 +21,7 @@ import { useAppStore } from './engine/state/useAppStore';
 import { SyncEngine } from './engine/sync';
 import { AppState, DraftReport } from './types';
 import { demoPackets } from './demoData';
+import { assetPath } from './utils/assetPath';
 
 const ROUTE_TO_STATE: Record<string, AppState> = {
   '': 'home',
@@ -52,6 +53,8 @@ const STATE_TO_ROUTE: Partial<Record<AppState, string>> = {
   emergency_toolkit: 'toolkit',
   settings: 'settings',
 };
+
+const demoEvidenceImage = assetPath('demo/flood-evidence.svg');
 
 function getHashRoute() {
   if (typeof window === 'undefined') return '';
@@ -112,9 +115,9 @@ export default function App() {
       if (!nextState) return;
 
       if (route === 'demo') {
-        updateDraft({ packet: demoPackets[0], stage: 'packet_output' });
+        updateDraft({ packet: demoPackets[0], image: demoEvidenceImage, stage: 'packet_output' });
       } else if (nextState === 'packet_output' && !useAppStore.getState().draft.packet) {
-        updateDraft({ packet: demoPackets[0], stage: 'packet_output' });
+        updateDraft({ packet: demoPackets[0], image: demoEvidenceImage, stage: 'packet_output' });
       } else if (nextState === 'new_report') {
         updateDraft({ stage: 'new_report' });
       }
@@ -245,7 +248,7 @@ export default function App() {
                   onViewMedical={() => setState('medical_id')}
                   onViewToolkit={() => setState('emergency_toolkit')}
                   onOpenDemo={() => {
-                    updateDraft({ packet: demoPackets[0], stage: 'packet_output' });
+                    updateDraft({ packet: demoPackets[0], image: demoEvidenceImage, stage: 'packet_output' });
                     setState('packet_output');
                   }}
                   isLocalMode={effectiveLocalMode}

@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-label="Demo incident evidence: flooded street at night">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#05070b"/>
+      <stop offset="0.46" stop-color="#0a0d12"/>
+      <stop offset="1" stop-color="#111827"/>
+    </linearGradient>
+    <linearGradient id="water" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#06121c"/>
+      <stop offset="0.5" stop-color="#0b1b2d"/>
+      <stop offset="1" stop-color="#101622"/>
+    </linearGradient>
+    <radialGradient id="lamp" cx="50%" cy="45%" r="55%">
+      <stop offset="0" stop-color="#ffbd5a" stop-opacity="0.95"/>
+      <stop offset="0.28" stop-color="#ff9a1f" stop-opacity="0.36"/>
+      <stop offset="1" stop-color="#ff9a1f" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="signal" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#00e6ff" stop-opacity="0.7"/>
+      <stop offset="1" stop-color="#2563ff" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft">
+      <feGaussianBlur stdDeviation="14"/>
+    </filter>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer>
+        <feFuncA type="table" tableValues="0 0.08"/>
+      </feComponentTransfer>
+      <feBlend mode="screen" in2="SourceGraphic"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="720" fill="url(#sky)"/>
+  <rect width="1200" height="720" fill="url(#grain)" opacity="0.45"/>
+
+  <ellipse cx="820" cy="208" rx="250" ry="190" fill="url(#lamp)" filter="url(#soft)"/>
+  <ellipse cx="350" cy="300" rx="260" ry="190" fill="url(#signal)" filter="url(#soft)" opacity="0.42"/>
+
+  <g opacity="0.86">
+    <path d="M0 490 C210 435 420 426 612 456 C802 486 975 451 1200 408 L1200 720 L0 720 Z" fill="url(#water)"/>
+    <path d="M0 548 C220 506 416 504 600 532 C820 565 1024 514 1200 492" fill="none" stroke="#00e6ff" stroke-opacity="0.16" stroke-width="5"/>
+    <path d="M60 612 C260 578 478 584 650 606 C850 633 980 602 1160 585" fill="none" stroke="#f2f2f1" stroke-opacity="0.11" stroke-width="3"/>
+    <path d="M120 665 C352 632 560 650 748 670 C910 688 1036 662 1178 640" fill="none" stroke="#ff9a1f" stroke-opacity="0.15" stroke-width="4"/>
+  </g>
+
+  <g opacity="0.72">
+    <path d="M100 210 L215 175 L300 720 L60 720 Z" fill="#07080b"/>
+    <path d="M900 190 L1068 232 L1128 720 L855 720 Z" fill="#07080b"/>
+    <path d="M235 220 L365 202 L420 720 L188 720 Z" fill="#0a0d12"/>
+    <path d="M760 215 L890 198 L916 720 L700 720 Z" fill="#0a0d12"/>
+    <g fill="#ffbd5a" opacity="0.8">
+      <rect x="142" y="252" width="44" height="60" rx="3"/>
+      <rect x="230" y="276" width="38" height="52" rx="3"/>
+      <rect x="803" y="258" width="44" height="56" rx="3"/>
+      <rect x="984" y="292" width="46" height="68" rx="3"/>
+    </g>
+  </g>
+
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <path d="M245 428 C370 370 505 352 632 388 C752 422 862 420 988 370" fill="none" stroke="#2b1d10" stroke-width="46"/>
+    <path d="M250 420 C382 366 498 354 630 390 C752 424 870 420 986 374" fill="none" stroke="#6d4320" stroke-width="24"/>
+    <path d="M456 382 C428 312 402 268 350 225" fill="none" stroke="#3a2616" stroke-width="16"/>
+    <path d="M616 388 C662 330 724 290 802 260" fill="none" stroke="#3a2616" stroke-width="14"/>
+    <path d="M730 412 C800 386 856 354 925 292" fill="none" stroke="#3a2616" stroke-width="13"/>
+    <path d="M340 390 C300 338 256 302 196 272" fill="none" stroke="#3a2616" stroke-width="11"/>
+  </g>
+
+  <g opacity="0.78">
+    <path d="M580 93 L580 400" stroke="#1d4ed8" stroke-width="4"/>
+    <path d="M580 93 C635 126 650 164 642 220 C634 268 660 309 720 352" fill="none" stroke="#8a8f98" stroke-opacity="0.32" stroke-width="5"/>
+    <circle cx="580" cy="93" r="10" fill="#ff9a1f"/>
+    <circle cx="580" cy="93" r="54" fill="url(#lamp)" opacity="0.8"/>
+  </g>
+
+  <g opacity="0.52">
+    <path d="M116 125 L280 630" stroke="#00e6ff" stroke-width="2"/>
+    <path d="M170 110 L350 640" stroke="#00e6ff" stroke-width="1.4"/>
+    <path d="M1010 92 L862 650" stroke="#9059f3" stroke-width="1.8"/>
+    <path d="M1060 110 L948 640" stroke="#9059f3" stroke-width="1.4"/>
+  </g>
+
+  <g opacity="0.85">
+    <rect x="32" y="36" width="310" height="50" rx="25" fill="#040404" fill-opacity="0.55" stroke="#00e6ff" stroke-opacity="0.22"/>
+    <circle cx="64" cy="61" r="6" fill="#ef4444"/>
+    <text x="84" y="66" fill="#f2f2f1" font-family="Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="3">DEMO EVIDENCE</text>
+  </g>
+
+  <rect width="1200" height="720" fill="none" stroke="#00e6ff" stroke-opacity="0.12"/>
+</svg>

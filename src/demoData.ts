@@ -37,11 +37,16 @@ export const demoPackets: CrisisPacket[] = [
     share_message_short: "CRITICAL: Flooding at Sector 4, Sos. Berceni. 2 adults trapped. Water rising fast. Need boat evacuation.",
     share_message_short_local: "CRITIC: Inundație în Sector 4, Sos. Berceni. 2 adulți blocați. Apa crește rapid. E nevoie de evacuare cu barca.",
     share_message_detailed: "CRITICAL: Flooding at Sector 4, Sos. Berceni. 2 adults trapped. Water rising fast. Need boat evacuation.",
-    structured_report_markdown: "# Incident Report\n**Severity**: Critical\n**Location**: Sector 4, Sos. Berceni\n\nWater has breached the ground floor. Electrical system compromised.",
-    structured_report_markdown_local: "# Raport Incident\n**Severitate**: Critic\n**Locație**: Sector 4, Sos. Berceni\n\nApa a intrat la parter. Sistemul electric afectat.",
+    structured_report_markdown: "# Incident Report\n\n## Situation\nWater has breached the ground floor in Sector 4, Sos. Berceni. Two adults are reported trapped and water is rising quickly.\n\n## Emergency call decision\nCall 112 now if the adults cannot evacuate safely, if water continues rising, or if electrical systems are exposed.\n\n## Immediate actions\nMove to the highest safe floor. Avoid electrical appliances, outlets, and exposed wires. Keep phone battery for location sharing.\n\n## Location / Evidence\nPhoto evidence attached. Location reported as Sector 4, Sos. Berceni.\n\n## Uncertainty\nBuilding structural integrity and exact access route are unknown.\n\n## Share note\nReview details before sharing with responders or trusted contacts.",
+    structured_report_markdown_local: "# Raport Incident\n\n## Situație\nApa a intrat la parter în Sector 4, Șos. Berceni. Doi adulți sunt raportați blocați, iar nivelul apei crește rapid.\n\n## Decizie apel 112\nSunați la 112 acum dacă adulții nu pot evacua în siguranță, dacă apa continuă să crească sau dacă există instalații electrice expuse.\n\n## Acțiuni imediate\nUrcați la cel mai înalt etaj sigur. Evitați aparatele electrice, prizele și cablurile expuse. Păstrați bateria telefonului pentru partajarea locației.\n\n## Locație / dovezi\nFotografie atașată. Locație raportată: Sector 4, Șos. Berceni.\n\n## Incertitudine\nIntegritatea clădirii și ruta exactă de acces sunt necunoscute.\n\n## Notă de share\nVerificați detaliile înainte de trimitere către intervenție sau contacte de încredere.",
     sources_used: ["User voice note", "OpenRouter hosted Gemma 4"],
     uncertainties: ["Structural integrity of the building."],
     hazards: ["Electrocution risk", "Rapid water rising"],
+    evidence: {
+      image_present: true,
+      audio_present: true,
+      text_summary: "Demo evidence includes a visual scene and voice context for a flood evacuation scenario."
+    },
     help_needed: ["Evacuation team", "Medical unit"],
     model_provider: "openrouter",
     model_name: "google/gemma-4-31b-it:free@preset/signalpack",
