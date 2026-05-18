@@ -5,12 +5,13 @@
 </p>
 
 <p align="center">
-  <strong>Turn chaos into clarity.</strong><br />
-  Gemma 4-powered emergency capture, structure, review, and sharing.
+  <strong>AI emergency alerts and Crisis Packets powered by Gemma 4.</strong><br />
+  Capture messy crisis signals, let Gemma 4 structure the risk, then review and share a clear report.
 </p>
 
 <p align="center">
-  <strong>Demo:</strong> <a href="https://pixek.xyz/signalpack">pixek.xyz/signalpack</a><br />
+  <strong>Live demo:</strong> <a href="https://pixek.xyz/signalpack">pixek.xyz/signalpack</a> ·
+  <strong>Demo route:</strong> <a href="https://pixek.xyz/signalpack/#/demo">#/demo</a><br />
   <a href="#demo-flow">Demo Flow</a> ·
   <a href="#architecture">Architecture</a> ·
   <a href="#gemma-4-ai-layer">Gemma 4 AI Layer</a> ·
@@ -24,6 +25,25 @@
 
 ---
 
+## Competition Snapshot
+
+SignalPack is a working emergency reporting PWA for the **Gemma 4 Good Hackathon**.
+
+It turns text, photo, audio, and location context into a reviewable **Crisis Packet** with:
+
+- Gemma 4 hazard extraction and missing-detail questions
+- a clear 112/911 emergency-call decision, without over-escalating minor cases
+- evidence-first report layout with photo/audio status near the top
+- immediate actions, uncertainty, safety sources, and AI trace
+- WhatsApp, email, native share, PDF/print, HTML, Markdown, and JSON export
+- local-first history, optional Firebase sync, and optional user-owned local Gemma routing
+
+SignalPack does **not** dispatch responders or replace emergency services. It helps a person communicate clearly, quickly, and with human review.
+
+<p align="center">
+  <img src="docs/media/05-packet-output-desktop.png" alt="SignalPack Crisis Packet desktop report" width="100%" />
+</p>
+
 ## What Is SignalPack?
 
 SignalPack is a local-first PWA for moments when people need to turn messy emergency information into a clear, reviewable packet.
@@ -36,6 +56,7 @@ The app captures text, photo, voice notes, and GPS context, then uses **Gemma 4 
 - what is uncertain
 - what immediate actions are reasonable
 - what message can be shared safely
+- whether the facts suggest calling 112/911 now or monitoring/preparing details
 
 SignalPack is not a dispatch system and does not replace emergency services. It is a human-controlled reporting layer: users review before sharing, and fallback mode is clearly marked when AI is unavailable.
 
@@ -69,14 +90,14 @@ Water entered the ground floor. Two elderly people are inside. Exit may be block
 Recommended demo path:
 
 1. Open SignalPack.
-2. Press **Start Alert**.
+2. Press **Start Alert** or open `#/demo` for the prepared packet.
 3. Add the scenario text, optionally attach a photo or voice note.
 4. Send to **Gemma 4**.
-5. Review detected hazards and missing critical details.
+5. Review hazards, missing details, and the 112/911 decision logic.
 6. Answer clarification questions if shown.
-7. Generate the **Crisis Packet**.
+7. Generate the **Crisis Packet** with evidence photo near the top.
 8. Show `model_provider`, `model_name`, `ai_trace`, `fallback_used`, and `safety_sources`.
-9. Export or share the packet.
+9. Export/share via WhatsApp, email, PDF, HTML, Markdown, or JSON.
 
 ## Architecture
 
@@ -385,9 +406,8 @@ See [`docs/FUNCTIONAL_QA.md`](docs/FUNCTIONAL_QA.md) for the latest smoke test n
 
 ## Roadmap
 
-- Hosted demo deployment
-- Final Kaggle write-up and demo video
-- Hash links for dashboard subpages
+- Record final Kaggle demo video
+- Keep demo API key restricted and rotated
 - Richer demo packets with mapped incident examples
 - Code-splitting for smaller production chunks
 - More polished packet timeline and responder handoff view
