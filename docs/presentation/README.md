@@ -15,5 +15,7 @@ Recommended recording path:
 
 1. Open the live demo at `https://pixek.xyz/signalpack`.
 2. Use the flooding scenario from `FINAL_PRESENTATION.md`.
-3. Show Start Alert, Gemma 4 analysis, Crisis Packet output, AI trace, and export/share controls.
+3. Show Start Alert, Gemma 4 analysis, 112 decision logic, Crisis Packet output with evidence photo at the top, AI trace, and export/share controls.
 4. End on: `Trusted alerts. Structured action. Powered by Gemma 4.`
+
+Latest source notes are in `docs/FINAL_PRESENTATION.md`. Regenerate the editable PPTX if the slide file must exactly match the latest 112/evidence-report wording.

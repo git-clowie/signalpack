@@ -16,6 +16,8 @@ Most emergency tools assume calm users, complete forms, and stable conditions. S
 
 Gemma 4 is not used as a generic chatbot. It acts as the structuring layer that turns incomplete text, photo, audio, and location context into a reviewable communication object.
 
+The AI layer is prompted for practical triage, not panic. It recommends calling 112/911 only when immediate danger signals are present, gives conditional guidance when facts are uncertain, and keeps the user in control.
+
 ## 8-Slide Deck
 
 ### 1. Title
@@ -85,6 +87,7 @@ Show:
 - people at risk
 - hazards
 - uncertainties
+- 112/911 emergency-call decision
 - immediate actions
 - clarification questions
 - `model_provider`, `model_name`, `ai_trace`, `fallback_used`
@@ -100,6 +103,8 @@ Claim: The output is a usable object, not just an answer.
 Show:
 
 - severity
+- top evidence photo/audio block
+- 112 decision status
 - incident overview
 - safety sources
 - immediate actions
@@ -107,9 +112,9 @@ Show:
 - quick share text
 - WhatsApp, email, PDF, Markdown, JSON export
 
-Visual: Packet Output screen.
+Visual: Packet Output screen with the evidence photo at the top, then status, actions, report, and share/export controls.
 
-Speaker note: "The user reviews before sharing. SignalPack helps communicate; it does not pretend to dispatch services."
+Speaker note: "The user reviews before sharing. SignalPack helps communicate; it does not pretend to dispatch services. The report keeps the photo, the 112 decision, uncertainty, and shareable message together."
 
 ### 7. Architecture
 
@@ -188,7 +193,7 @@ Visual: AI analysis result and clarification.
 Voiceover:
 
 ```txt
-Gemma 4 identifies the likely incident, extracts hazards and people at risk, and flags what is missing. When the model route is unavailable, SignalPack marks fallback output clearly.
+Gemma 4 identifies the likely incident, extracts hazards and people at risk, flags what is missing, and gives a clear emergency-call decision. It knows when to recommend 112 now, and when to tell the user to monitor or prepare details instead.
 ```
 
 ### 1:55-2:30 Crisis Packet
@@ -198,7 +203,7 @@ Visual: final packet with trace, actions, report, share/export controls.
 Voiceover:
 
 ```txt
-The result is not just a chatbot answer. It is a structured packet: severity, location, risks, immediate actions, uncertainty, and a shareable message the user reviews before sending.
+The result is not just a chatbot answer. It is a structured packet with evidence photo, severity, location, risks, immediate actions, uncertainty, and a shareable message the user reviews before sending.
 ```
 
 ### 2:30-3:00 Architecture + Close
@@ -219,19 +224,19 @@ SignalPack: AI Emergency Alerts and Crisis Packets Powered by Gemma 4
 
 ### Overview
 
-SignalPack is a local-first emergency readiness and reporting PWA that turns messy emergency input into structured Crisis Packets. Users can capture text, photo, audio, and location context; Gemma 4 then helps identify hazards, missing details, immediate actions, and a shareable message.
+SignalPack is a local-first emergency readiness and reporting PWA that turns messy emergency input into structured Crisis Packets. Users can capture text, photo, audio, and location context; Gemma 4 then helps identify hazards, missing details, emergency-call guidance, immediate actions, and a shareable message.
 
 ### Why Gemma 4
 
-Gemma 4 is the intelligence layer. It is used to structure incomplete signals, ask focused clarification questions, and generate a Crisis Packet schema that can be reviewed, exported, and shared. SignalPack also exposes provider metadata and fallback state so judges can inspect how the AI layer behaved.
+Gemma 4 is the intelligence layer. It is used to structure incomplete signals, ask focused clarification questions, decide whether the facts indicate a 112/911-level situation, and generate a Crisis Packet schema that can be reviewed, exported, and shared. SignalPack also exposes provider metadata and fallback state so judges can inspect how the AI layer behaved.
 
 ### Technical Architecture
 
-SignalPack is built with React, TypeScript, Vite, Tailwind CSS, Zustand, Vite PWA, Leaflet, optional Firebase sync, and OpenRouter Chat Completions for the hosted Gemma 4 path. Public users bring their own OpenRouter key; the private hosted demo can use a restricted deploy-time key. The app stores non-login data locally and supports Markdown, JSON, PDF/print, WhatsApp, email, native share, and copy flows.
+SignalPack is built with React, TypeScript, Vite, Tailwind CSS, Zustand, Vite PWA, Leaflet, optional Firebase sync, and OpenRouter Chat Completions for the hosted Gemma 4 path. Public users bring their own OpenRouter key; the private hosted demo can use a restricted deploy-time key. The app stores non-login data locally and supports HTML, Markdown, JSON, PDF/print, WhatsApp, email, native share, and copy flows.
 
 ### Safety
 
-SignalPack does not replace emergency services, dispatch responders, or provide medical diagnosis. It keeps the user in control, requires review before sharing, marks uncertainty, and labels deterministic fallback output when the AI provider is unavailable.
+SignalPack does not replace emergency services, dispatch responders, or provide medical diagnosis. It keeps the user in control, requires review before sharing, marks uncertainty, and labels deterministic fallback output when the AI provider is unavailable. The AI is instructed to recommend 112/911 for immediate danger, trapped or injured people, fire/smoke/gas, rising floodwater, downed power, violence, or life-threatening medical signs, and to avoid over-escalating minor or informational cases.
 
 ### Demo Links
 
@@ -243,6 +248,7 @@ SignalPack does not replace emergency services, dispatch responders, or provide 
 - Use Chrome or Safari, not the Codex in-app browser, for final download/export recording.
 - Start from a clean dashboard.
 - Confirm Ask Gemma responds before recording.
+- Open `#/demo` once to show the final packet with evidence photo at the top.
 - Keep one fallback screenshot ready in case OpenRouter is rate-limited.
 - Show the README animated logo and architecture section for repo polish.
 - End on the final line: "Trusted alerts. Structured action. Powered by Gemma 4."
